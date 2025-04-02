@@ -56,7 +56,7 @@ class UppaalConverter:
                         break
             
             if is_after_decision:
-                y = self.current_y_offset + 100  # Locations after decision nodes are placed higher
+                y = self.current_y_offset + 150  # Locations after decision nodes are placed higher
                 self.current_y_offset = y  # Update current y offset
             else:
                 y = self.current_y_offset  # Use current y offset for regular nodes
@@ -118,10 +118,13 @@ class UppaalConverter:
             else:
                 decision_var = "Is_Success"
 
-            if edge_label == "Yes":
-                ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var} == 1"
-            elif edge_label == "No":
-                ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var} == 0"
+            # Check condition from [IsSuccess=Yes] or [IsSuccess=No] format
+            if edge_label and "=" in edge_label:
+                condition = edge_label.strip("[]").split("=")[1].strip().lower()
+                if condition == "yes":
+                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var}==Yes"
+                elif condition == "no":
+                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var}==No"
 
             if target_type == "uml:DecisionNode":
                 var_name = f"i{template['id_counter']}"
