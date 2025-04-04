@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>clock t;
+int IsSuccess;
+
+broadcast chan fork;
+bool Done_TemPlate1;
+bool Done_TemPlate2;
+</declaration>
+	<template>
+		<name>Template</name>
+		<declaration>// Local declarations\nclock t;</declaration>
+		<location id="id0" x="-102" y="76">
+			<name x="-153" y="42">InitialNode</name>
+		</location>
+		<location id="id1" x="518" y="646">
+			<name x="459" y="663">ActivityFinalNode</name>
+		</location>
+		<location id="id2" x="76" y="76">
+			<name x="-2" y="42">Complete_the_order</name>
+		</location>
+		<location id="id3" x="518" y="76">
+			<name x="508" y="42">Re_Order</name>
+		</location>
+		<location id="id4" x="255" y="76">
+			<name x="221" y="42">Is_Success</name>
+		</location>
+		<location id="id5" x="255" y="238">
+			<name x="153" y="204">Save_order</name>
+		</location>
+		<location id="id6" x="518" y="238">
+			<name x="552" y="212">MergeNode</name>
+		</location>
+		<location id="id7" x="518" y="348">
+			<name x="552" y="331">ForkNode</name>
+		</location>
+		<location id="id8" x="518" y="493">
+			<name x="552" y="476">JoinNode</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="id9">
+			<source ref="id8"/>
+			<target ref="id1"/>
+			<label kind="guard" x="535" y="535">Done_TemPlate1==true &amp;&amp;
+Done_TemPlate2==true</label>
+		</transition>
+		<transition id="id10">
+			<source ref="id7"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="535" y="399">fork!</label>
+		</transition>
+		<transition id="id11">
+			<source ref="id6"/>
+			<target ref="id7"/>
+		</transition>
+		<transition id="id12">
+			<source ref="id3"/>
+			<target ref="id6"/>
+			<label kind="guard" x="518" y="123">t&gt;5</label>
+			<label kind="assignment" x="518" y="157">t:=0</label>
+		</transition>
+		<transition id="id13">
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="guard" x="273" y="204">t&gt;7</label>
+			<label kind="assignment" x="273" y="238">t:=0</label>
+		</transition>
+		<transition id="id14">
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="guard" x="331" y="51">IsSuccess == 0</label>
+		</transition>
+		<transition id="id15">
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="guard" x="263" y="110">IsSuccess ==1</label>
+		</transition>
+		<transition id="id16">
+			<source ref="id0"/>
+			<target ref="id2"/>
+		</transition>
+		<transition id="id17">
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="select" x="127" y="119">i: int[0,1]</label>
+			<label kind="guard" x="127" y="51">t&gt;10</label>
+			<label kind="assignment" x="127" y="76">t:=0,
+IsSuccess = i</label>
+		</transition>
+	</template>
+	<template>
+		<name>Template1</name>
+		<declaration>clock t1;</declaration>
+		<location id="id18" x="-289" y="-119">
+			<name x="-365" y="-161">InitialNode_Template1</name>
+		</location>
+		<location id="id19" x="-59" y="-119">
+			<name x="-101" y="-153">Process1</name>
+		</location>
+		<location id="id20" x="229" y="-119">
+			<name x="161" y="-161">JoinNode_Template1</name>
+		</location>
+		<init ref="id18"/>
+		<transition id="id21">
+			<source ref="id19"/>
+			<target ref="id20"/>
+			<label kind="guard" x="8" y="-153">t1&gt;12</label>
+			<label kind="assignment" x="-8" y="-119">t1:=0,
+Done_TemPlate1 = true</label>
+		</transition>
+		<transition id="id22">
+			<source ref="id18"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-212" y="-119">fork?</label>
+		</transition>
+	</template>
+	<template>
+		<name>Template2</name>
+		<declaration>clock t2;</declaration>
+		<location id="id23" x="318" y="30">
+			<name x="276" y="-4">Process2</name>
+		</location>
+		<location id="id24" x="606" y="30">
+			<name x="538" y="-12">JoinNode_Template2</name>
+		</location>
+		<location id="id25" x="88" y="30">
+			<name x="12" y="-12">InitialNode_Template2</name>
+		</location>
+		<init ref="id25"/>
+		<transition id="id26">
+			<source ref="id23"/>
+			<target ref="id24"/>
+			<label kind="guard" x="385" y="-4">t2&gt;15</label>
+			<label kind="assignment" x="369" y="30">t2:=0,
+Done_TemPlate2 = true</label>
+		</transition>
+		<transition id="id27">
+			<source ref="id25"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="165" y="30">fork?</label>
+		</transition>
+	</template>
+	<system>T0 = Template();
+T1 = Template1();
+T2 = Template2();
+system T0,T1,T2;</system>
+	<queries>
+		<query>
+			<formula/>
+			<comment/>
+		</query>
+	</queries>
+</nta>

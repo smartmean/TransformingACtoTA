@@ -122,9 +122,9 @@ class UppaalConverter:
             if edge_label and "=" in edge_label:
                 condition = edge_label.strip("[]").split("=")[1].strip().lower()
                 if condition == "yes":
-                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var}==Yes"
+                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var}==1"
                 elif condition == "no":
-                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var}==No"
+                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var}==0"
 
             if target_type == "uml:DecisionNode":
                 var_name = f"i{template['id_counter']}"
