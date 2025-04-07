@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+  <declaration>bool Done_ForkNode;
+broadcast chan fork_ForkNode;
+clock t;
+int Is_Success;</declaration>
+  <template>
+    <name>Template</name>
+    <declaration>// Local declarations
+clock t;</declaration>
+    <location id="_PZfWwAgSEfCZsMCbbT0p_Q" x="0" y="100">
+      <name x="-50" y="70">InitialNode</name>
+      </location>
+    <location id="_VxqZwAgSEfCZsMCbbT0p_Q" x="300" y="100">
+      <name x="250" y="70">Complete_the_order</name>
+      </location>
+    <location id="_qvhY4AjEEfC6auwq1Ibwow" x="600" y="200">
+      <name x="550" y="170">Is_Success_Decision</name>
+      </location>
+    <location id="_GNx-QA_rEfCGO5BaHxXytA" x="900" y="200">
+      <name x="850" y="170">Save_order</name>
+      </location>
+    <location id="_z09TYAjEEfC6auwq1Ibwow" x="1200" y="200">
+      <name x="1150" y="170">Re_order</name>
+      </location>
+    <location id="_A8rRAA_rEfCGO5BaHxXytA" x="1500" y="200">
+      <name x="1450" y="170">MergeNode</name>
+      </location>
+    <location id="_TVYLgBE8EfCgidtTHikwVg" x="1800" y="300">
+      <name x="1750" y="270">ForkNode_Fork</name>
+      </location>
+    <location id="_Yv6hkBE8EfCgidtTHikwVg" x="2100" y="300">
+      <name x="2050" y="270">Process1</name>
+      </location>
+    <location id="_bbU-8BE8EfCgidtTHikwVg" x="2400" y="300">
+      <name x="2350" y="270">Process2</name>
+      </location>
+    <location id="_iFnFoBE8EfCgidtTHikwVg" x="2700" y="400">
+      <name x="2650" y="370">JoinNode_Join</name>
+      </location>
+    <location id="_czUeoAgSEfCZsMCbbT0p_Q" x="3000" y="400">
+      <name x="2950" y="370">ActivityFinalNode</name>
+      </location>
+    <init ref="_PZfWwAgSEfCZsMCbbT0p_Q" />
+    <transition id="_PZfWwAgSEfCZsMCbbT0p_Q__VxqZwAgSEfCZsMCbbT0p_Q">
+      <source ref="_PZfWwAgSEfCZsMCbbT0p_Q" />
+      <target ref="_VxqZwAgSEfCZsMCbbT0p_Q" />
+      </transition>
+    <transition id="_qvhY4AjEEfC6auwq1Ibwow__GNx-QA_rEfCGO5BaHxXytA">
+      <source ref="_qvhY4AjEEfC6auwq1Ibwow" />
+      <target ref="_GNx-QA_rEfCGO5BaHxXytA" />
+      <label kind="guard" x="750" y="120">Is_Success==1</label>
+      </transition>
+    <transition id="_VxqZwAgSEfCZsMCbbT0p_Q__qvhY4AjEEfC6auwq1Ibwow">
+      <source ref="_VxqZwAgSEfCZsMCbbT0p_Q" />
+      <target ref="_qvhY4AjEEfC6auwq1Ibwow" />
+      <label kind="guard" x="450" y="90">t&gt;10</label>
+      <label kind="assignment" x="450" y="110">t:=0, Is_Success = i14</label>
+      <label kind="select" x="450" y="50">i14: int[0,1]</label>
+      </transition>
+    <transition id="_qvhY4AjEEfC6auwq1Ibwow__z09TYAjEEfC6auwq1Ibwow">
+      <source ref="_qvhY4AjEEfC6auwq1Ibwow" />
+      <target ref="_z09TYAjEEfC6auwq1Ibwow" />
+      <label kind="guard" x="900" y="120">Is_Success==0</label>
+      </transition>
+    <transition id="_z09TYAjEEfC6auwq1Ibwow__A8rRAA_rEfCGO5BaHxXytA">
+      <source ref="_z09TYAjEEfC6auwq1Ibwow" />
+      <target ref="_A8rRAA_rEfCGO5BaHxXytA" />
+      <label kind="guard" x="1350" y="140">t&gt;5</label>
+      <label kind="assignment" x="1350" y="160">t:=0</label>
+      </transition>
+    <transition id="_GNx-QA_rEfCGO5BaHxXytA__A8rRAA_rEfCGO5BaHxXytA">
+      <source ref="_GNx-QA_rEfCGO5BaHxXytA" />
+      <target ref="_A8rRAA_rEfCGO5BaHxXytA" />
+      <label kind="guard" x="1200" y="140">t&gt;7</label>
+      <label kind="assignment" x="1200" y="160">t:=0</label>
+      </transition>
+    <transition id="_A8rRAA_rEfCGO5BaHxXytA__TVYLgBE8EfCgidtTHikwVg">
+      <source ref="_A8rRAA_rEfCGO5BaHxXytA" />
+      <target ref="_TVYLgBE8EfCgidtTHikwVg" />
+      </transition>
+    <transition id="_TVYLgBE8EfCgidtTHikwVg__Yv6hkBE8EfCgidtTHikwVg">
+      <source ref="_TVYLgBE8EfCgidtTHikwVg" />
+      <target ref="_Yv6hkBE8EfCgidtTHikwVg" />
+      </transition>
+    <transition id="_TVYLgBE8EfCgidtTHikwVg__bbU-8BE8EfCgidtTHikwVg">
+      <source ref="_TVYLgBE8EfCgidtTHikwVg" />
+      <target ref="_bbU-8BE8EfCgidtTHikwVg" />
+      </transition>
+    <transition id="_Yv6hkBE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
+      <source ref="_Yv6hkBE8EfCgidtTHikwVg" />
+      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <label kind="guard" x="2400" y="290">t&gt;12</label>
+      <label kind="assignment" x="2400" y="310">t:=0</label>
+      <label kind="guard" x="2400" y="270">Done_ForkNode==true &amp;&amp; Done_ForkNode1==true &amp;&amp; Done_ForkNode2==true</label>
+      </transition>
+    <transition id="_bbU-8BE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
+      <source ref="_bbU-8BE8EfCgidtTHikwVg" />
+      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <label kind="guard" x="2550" y="290">t&gt;15</label>
+      <label kind="assignment" x="2550" y="310">t:=0</label>
+      <label kind="guard" x="2550" y="270">Done_ForkNode==true &amp;&amp; Done_ForkNode1==true &amp;&amp; Done_ForkNode2==true</label>
+      </transition>
+    <transition id="_iFnFoBE8EfCgidtTHikwVg__czUeoAgSEfCZsMCbbT0p_Q">
+      <source ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <target ref="_czUeoAgSEfCZsMCbbT0p_Q" />
+      </transition>
+    </template>
+  <template>
+    <name>ForkNode_Process</name>
+    <declaration>// Local declarations
+clock t1;</declaration>
+    <location id="fork_ForkNode" x="0" y="400">
+      <name x="-50" y="370">InitialNode_ForkNode</name>
+      </location>
+    <location id="_Yv6hkBE8EfCgidtTHikwVg" x="300" y="400">
+      <name x="250" y="370">Process1</name>
+      </location>
+    <location id="_VxqZwAgSEfCZsMCbbT0p_Q" x="600" y="400">
+      <name x="550" y="370">Complete_the_order</name>
+      </location>
+    <init ref="fork_ForkNode" />
+    <transition id="fork_ForkNode__Yv6hkBE8EfCgidtTHikwVg">
+      <source ref="fork_ForkNode" />
+      <target ref="_Yv6hkBE8EfCgidtTHikwVg" />
+      </transition>
+    <transition id="_Yv6hkBE8EfCgidtTHikwVg__VxqZwAgSEfCZsMCbbT0p_Q">
+      <source ref="_Yv6hkBE8EfCgidtTHikwVg" />
+      <target ref="_VxqZwAgSEfCZsMCbbT0p_Q" />
+      <label kind="guard" x="450" y="340">t1&gt;12</label>
+      <label kind="assignment" x="450" y="360">t1:=0</label>
+      </transition>
+    </template>
+  <template>
+    <name>ForkNode_Process1</name>
+    <declaration>// Local declarations
+clock t2;</declaration>
+    <location id="fork_ForkNode" x="0" y="400">
+      <name x="-50" y="370">InitialNode_ForkNode</name>
+      </location>
+    <location id="_bbU-8BE8EfCgidtTHikwVg" x="300" y="400">
+      <name x="250" y="370">Process2</name>
+      </location>
+    <location id="_VxqZwAgSEfCZsMCbbT0p_Q" x="600" y="400">
+      <name x="550" y="370">Complete_the_order</name>
+      </location>
+    <init ref="fork_ForkNode" />
+    <transition id="fork_ForkNode__bbU-8BE8EfCgidtTHikwVg">
+      <source ref="fork_ForkNode" />
+      <target ref="_bbU-8BE8EfCgidtTHikwVg" />
+      </transition>
+    <transition id="_bbU-8BE8EfCgidtTHikwVg__VxqZwAgSEfCZsMCbbT0p_Q">
+      <source ref="_bbU-8BE8EfCgidtTHikwVg" />
+      <target ref="_VxqZwAgSEfCZsMCbbT0p_Q" />
+      <label kind="guard" x="450" y="340">t2&gt;15</label>
+      <label kind="assignment" x="450" y="360">t2:=0</label>
+      </transition>
+    </template>
+  <template>
+    <name>ForkNode_Process2</name>
+    <declaration>// Local declarations
+clock t3;</declaration>
+    <location id="fork_ForkNode" x="0" y="400">
+      <name x="-50" y="370">InitialNode_ForkNode</name>
+      </location>
+    <location id="_bbU-8BE8EfCgidtTHikwVg" x="300" y="400">
+      <name x="250" y="370">Process2</name>
+      </location>
+    <location id="_VxqZwAgSEfCZsMCbbT0p_Q" x="600" y="400">
+      <name x="550" y="370">Complete_the_order</name>
+      </location>
+    <init ref="fork_ForkNode" />
+    <transition id="fork_ForkNode__bbU-8BE8EfCgidtTHikwVg">
+      <source ref="fork_ForkNode" />
+      <target ref="_bbU-8BE8EfCgidtTHikwVg" />
+      </transition>
+    <transition id="_bbU-8BE8EfCgidtTHikwVg__VxqZwAgSEfCZsMCbbT0p_Q">
+      <source ref="_bbU-8BE8EfCgidtTHikwVg" />
+      <target ref="_VxqZwAgSEfCZsMCbbT0p_Q" />
+      <label kind="guard" x="450" y="340">t3&gt;15</label>
+      <label kind="assignment" x="450" y="360">t3:=0</label>
+      </transition>
+    </template>
+  <system>T1 = Template();
+T2 = ForkNode_Process();
+T3 = ForkNode_Process1();
+T4 = ForkNode_Process2();
+system T1, T2, T3, T4;</system>
+  <queries>
+    <query>
+      <formula>A[] not deadlock</formula>
+      <comment>Check for deadlocks</comment>
+      </query>
+    </queries>
+  </nta>

@@ -1,7 +1,6 @@
 from fastapi import FastAPI, File, UploadFile  # type: ignore
 import xml.etree.ElementTree as ET
 from fastapi.responses import Response  # type: ignore
-import json
 
 app = FastAPI()
 
@@ -341,58 +340,12 @@ class UppaalConverter:
         ET.SubElement(query, "formula").text = "A[] not deadlock"
         ET.SubElement(query, "comment").text = "Check for deadlocks"
 
-        # Generate final XML with proper indentation
-        def indent(elem, level=0):
-            i = "\n" + level*"  "
-            if len(elem):
-                if not elem.text or not elem.text.strip():
-                    elem.text = i + "  "
-                if not elem.tail or not elem.tail.strip():
-                    elem.tail = i
-                for subelem in elem:
-                    indent(subelem, level+1)
-                if not elem.tail or not elem.tail.strip():
-                    elem.tail = i
-            else:
-                if level and (not elem.tail or not elem.tail.strip()):
-                    elem.tail = i
-
-        indent(self.nta)
+        # Generate final XML
         raw_xml = ET.tostring(self.nta, encoding="utf-8", method="xml").decode()
         header = '<?xml version="1.0" encoding="utf-8"?>\n'
         doctype = "<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>\n"
         return header + doctype + raw_xml
 
-    def xml_to_json(self, xml_string):
-        root = ET.fromstring(xml_string)
-        
-        def _xml_to_dict(element):
-            result = {}
-            
-            # Add attributes
-            if element.attrib:
-                result['@attributes'] = element.attrib
-                
-            # Add text content if it exists and is not just whitespace
-            if element.text and element.text.strip():
-                result['#text'] = element.text.strip()
-                
-            # Process child elements
-            for child in element:
-                child_data = _xml_to_dict(child)
-                child_tag = child.tag
-                
-                if child_tag in result:
-                    if isinstance(result[child_tag], list):
-                        result[child_tag].append(child_data)
-                    else:
-                        result[child_tag] = [result[child_tag], child_data]
-                else:
-                    result[child_tag] = child_data
-                    
-            return result
-            
-        return _xml_to_dict(root)
 
 @app.post("/convert-xml")
 async def convert_xml(file: UploadFile = File(...)):
@@ -455,12 +408,9 @@ async def convert_xml(file: UploadFile = File(...)):
 if __name__ == "__main__":
     import os
     
-    # Define input and output folders
-    input_file = "Example_XML/ForkJoin.xml"
-    output_file = "Result/Result_ForkJoin.xml"
-    
-    # Create Result directory if it doesn't exist
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    # Read input file
+    input_file = "test02.xml"
+    output_file = "res02.xml"
     
     try:
         # Read the input XML file
