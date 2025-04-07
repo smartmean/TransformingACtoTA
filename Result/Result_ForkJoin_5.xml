@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+  <declaration>bool Done_ForkNode_Fork;
+broadcast chan fork_ForkNode;
+clock t;
+int Is_Success;</declaration>
+  <template>
+    <name>Template</name>
+    <declaration>// Local declarations
+clock t;</declaration>
+    <location id="_PZfWwAgSEfCZsMCbbT0p_Q" x="0" y="100">
+      <name x="-50" y="70">InitialNode</name>
+      </location>
+    <location id="_qvhY4AjEEfC6auwq1Ibwow" x="300" y="200">
+      <name x="250" y="170">Is_Success_Decision</name>
+      </location>
+    <location id="_A8rRAA_rEfCGO5BaHxXytA" x="600" y="200">
+      <name x="550" y="170">MergeNode</name>
+      </location>
+    <location id="_TVYLgBE8EfCgidtTHikwVg" x="900" y="300">
+      <name x="850" y="270">ForkNode_Fork</name>
+      </location>
+    <location id="_iFnFoBE8EfCgidtTHikwVg" x="1200" y="400">
+      <name x="1150" y="370">JoinNode_Join</name>
+      </location>
+    <location id="_czUeoAgSEfCZsMCbbT0p_Q" x="1500" y="400">
+      <name x="1450" y="370">ActivityFinalNode</name>
+      </location>
+    <init ref="_PZfWwAgSEfCZsMCbbT0p_Q" />
+    <transition id="_A8rRAA_rEfCGO5BaHxXytA__TVYLgBE8EfCgidtTHikwVg">
+      <source ref="_A8rRAA_rEfCGO5BaHxXytA" />
+      <target ref="_TVYLgBE8EfCgidtTHikwVg" />
+      </transition>
+    <transition id="_iFnFoBE8EfCgidtTHikwVg__czUeoAgSEfCZsMCbbT0p_Q">
+      <source ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <target ref="_czUeoAgSEfCZsMCbbT0p_Q" />
+      </transition>
+    </template>
+  <system>T1 = Template();
+system T1;</system>
+  <queries>
+    <query>
+      <formula>A[] not deadlock</formula>
+      <comment>Check for deadlocks</comment>
+      </query>
+    </queries>
+  </nta>

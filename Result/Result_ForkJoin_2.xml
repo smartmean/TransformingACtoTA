@@ -83,12 +83,22 @@ clock t;</declaration>
     <transition id="_TVYLgBE8EfCgidtTHikwVg__Yv6hkBE8EfCgidtTHikwVg">
       <source ref="_TVYLgBE8EfCgidtTHikwVg" />
       <target ref="_Yv6hkBE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="1950" y="220">fork_ForkNode!</label>
+      <label kind="synchronisation" x="1950" y="220">fork!</label>
+      </transition>
+    <transition id="_TVYLgBE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
+      <source ref="_TVYLgBE8EfCgidtTHikwVg" />
+      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <label kind="synchronisation" x="2250" y="270">fork!</label>
       </transition>
     <transition id="_TVYLgBE8EfCgidtTHikwVg__bbU-8BE8EfCgidtTHikwVg">
       <source ref="_TVYLgBE8EfCgidtTHikwVg" />
       <target ref="_bbU-8BE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="2100" y="220">fork_ForkNode!</label>
+      <label kind="synchronisation" x="2100" y="220">fork!</label>
+      </transition>
+    <transition id="_TVYLgBE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
+      <source ref="_TVYLgBE8EfCgidtTHikwVg" />
+      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <label kind="synchronisation" x="2250" y="270">fork!</label>
       </transition>
     <transition id="_Yv6hkBE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
       <source ref="_Yv6hkBE8EfCgidtTHikwVg" />
@@ -129,7 +139,12 @@ clock t1;</declaration>
     <transition id="fork_ForkNode__Yv6hkBE8EfCgidtTHikwVg">
       <source ref="fork_ForkNode" />
       <target ref="_Yv6hkBE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="150" y="320">fork_!</label>
+      <label kind="synchronisation" x="150" y="320">fork!</label>
+      </transition>
+    <transition id="fork_ForkNode__iFnFoBE8EfCgidtTHikwVg">
+      <source ref="fork_ForkNode" />
+      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <label kind="synchronisation" x="300" y="370">fork!</label>
       </transition>
     <transition id="_Yv6hkBE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
       <source ref="_Yv6hkBE8EfCgidtTHikwVg" />
@@ -163,7 +178,12 @@ clock t2;</declaration>
     <transition id="fork_ForkNode__bbU-8BE8EfCgidtTHikwVg">
       <source ref="fork_ForkNode" />
       <target ref="_bbU-8BE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="150" y="520">fork_!</label>
+      <label kind="synchronisation" x="150" y="520">fork!</label>
+      </transition>
+    <transition id="fork_ForkNode__iFnFoBE8EfCgidtTHikwVg">
+      <source ref="fork_ForkNode" />
+      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <label kind="synchronisation" x="300" y="570">fork!</label>
       </transition>
     <transition id="_bbU-8BE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
       <source ref="_bbU-8BE8EfCgidtTHikwVg" />

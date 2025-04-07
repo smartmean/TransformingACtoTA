@@ -22,18 +22,19 @@ class UppaalConverter:
         self.node_info = {}
         self.node_types = {}
         self.fork_channels = {}
-        self.fork_counter = 0  # Add counter for fork channels
 
     def add_declaration(self, text):
         """Adds a declaration to the UPPAAL model."""
-        if text not in self.declarations:
-            self.declarations.append(text)
+        self.declarations.append(text)
 
     def create_template(self, name="Template"):
         """Creates a new template with unique name and clock."""
         # Check if template name already exists
-        if any(t["name"] == name for t in self.templates):
-            return next(t for t in self.templates if t["name"] == name)
+        base_name = name
+        counter = 1
+        while any(t["name"] == name for t in self.templates):
+            name = f"{base_name}{counter}"
+            counter += 1
 
         # Generate unique clock name
         clock_name = "t" if self.clock_counter == 0 else f"t{self.clock_counter}"
@@ -106,19 +107,13 @@ class UppaalConverter:
         template['id_counter'] += 1
         template['x_offset'] += 300
 
-    def create_fork_template(self, template_name, fork_id, outgoing_edge, node_info, node_types):
+    def create_fork_template(self, fork_name, fork_id, outgoing_edge, node_info, node_types):
         """Creates a new template for forked processes."""
-        # Create template with exact name (no counter suffix)
-        fork_template = self.create_template(template_name)
-        if fork_template not in self.fork_templates:
-            self.fork_templates.append(fork_template)
+        fork_template = self.create_template(f"{fork_name}_Process")
+        self.fork_templates.append(fork_template)
         
-        # If template already exists, return it without modifying
-        if len(fork_template["state_map"]) > 0:
-            return fork_template
-        
-        initial_id = f"fork_{template_name}"
-        self.add_location(fork_template, initial_id, f"InitialNode_{template_name}", "InitialNode")
+        initial_id = f"fork_{fork_name}"
+        self.add_location(fork_template, initial_id, f"InitialNode_{fork_name}", "InitialNode")
         
         current_node = outgoing_edge
         processed_nodes = set()
@@ -151,20 +146,7 @@ class UppaalConverter:
             source_name = node_info.get(source, "")
             target_name = node_info.get(target, "")
             target_type = node_types.get(target, "")
-            
-            # Add fork? synchronization to initial transition with specific fork channel
-            if source == initial_id:
-                transition = ET.SubElement(fork_template["element"], "transition")
-                ET.SubElement(transition, "source", ref=source)
-                ET.SubElement(transition, "target", ref=target)
-                x1, y1 = fork_template["position_map"].get(source, (0, 0))
-                x2, y2 = fork_template["position_map"].get(target, (0, 0))
-                x_mid = (x1 + x2) // 2
-                y_mid = (y1 + y2) // 2
-                fork_channel = self.fork_channels.get(fork_id, "fork1")  # Get specific fork channel
-                ET.SubElement(transition, "label", kind="synchronisation", x=str(x_mid), y=str(y_mid - 80)).text = f"{fork_channel}?"
-            else:
-                self.add_transition(fork_template, source, target, source_name, target_name, target_type)
+            self.add_transition(fork_template, source, target, source_name, target_name, target_type)
         
         return fork_template
 
@@ -172,71 +154,17 @@ class UppaalConverter:
         """Adds a transition between two locations in the template."""
         source = template["state_map"].get(source_id)
         target = template["state_map"].get(target_id)
-        
         if source and target:
             trans_id = f"{source_id}_{target_id}"
             transition = ET.SubElement(template["element"], "transition", id=trans_id)
             ET.SubElement(transition, "source", ref=source)
             ET.SubElement(transition, "target", ref=target)
+            template['id_counter'] += 1
 
             x1, y1 = template["position_map"].get(source_id, (0, 0))
             x2, y2 = template["position_map"].get(target_id, (0, 0))
             x_mid = (x1 + x2) // 2
             y_mid = (y1 + y2) // 2
-
-            source_type = self.get_node_type(source_id)
-            if source_type in ("uml:ForkNode", "ForkNode"):
-                # Create new fork channel if not exists for this ForkNode
-                if source_id not in self.fork_channels:
-                    self.fork_counter += 1
-                    fork_channel = f"fork{self.fork_counter}"
-                    self.fork_channels[source_id] = fork_channel
-                    self.add_declaration(f"broadcast chan {fork_channel};")
-                else:
-                    fork_channel = self.fork_channels[source_id]
-                
-                # Count outgoing edges from ForkNode
-                outgoing_edges = []
-                for edge in self.activity_root.findall(".//{*}edge"):
-                    if edge.get("source") == source_id:
-                        outgoing_edges.append(edge.get("target"))
-                
-                # Add Done variables for each outgoing edge
-                for i in range(len(outgoing_edges)):
-                    template_name = f"Template{i+1}"
-                    self.add_declaration(f"bool Done_{template_name};")
-                
-                # Create fork templates for each outgoing edge
-                for i, outgoing_edge in enumerate(outgoing_edges):
-                    template_name = f"Template{i+1}"
-                    if not any(t["name"] == template_name for t in self.fork_templates):
-                        self.create_fork_template(template_name, source_id, outgoing_edge, self.node_info, self.node_types)
-                
-                # Add synchronisation label with specific fork channel
-                ET.SubElement(transition, "label", kind="synchronisation", x=str(x_mid), y=str(y_mid - 80)).text = f"{fork_channel}!"
-
-                # Find corresponding JoinNode and create direct transition
-                join_node = None
-                for edge in self.activity_root.findall(".//{*}edge"):
-                    target_node = edge.get("target")
-                    if target_node and self.get_node_type(target_node) in ("uml:JoinNode", "JoinNode"):
-                        join_node = target_node
-                        break
-                
-                if join_node:
-                    # Create direct transition from ForkNode to JoinNode
-                    join_transition = ET.SubElement(template["element"], "transition")
-                    ET.SubElement(join_transition, "source", ref=source)
-                    ET.SubElement(join_transition, "target", ref=template["state_map"][join_node])
-                    
-                    # Add guard conditions for all templates
-                    guard_conditions = []
-                    for i in range(len(outgoing_edges)):
-                        template_name = f"Template{i+1}"
-                        guard_conditions.append(f"Done_{template_name}==true")
-                    
-                    if guard_conditions:
-                        ET.SubElement(join_transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = " && ".join(guard_conditions)
 
             if "," in source_name and "t=" in source_name:
                 try:
@@ -244,10 +172,6 @@ class UppaalConverter:
                     clock_name = template["clock_name"]
                     ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 60)).text = f"{clock_name}>{time_val}"
                     ET.SubElement(transition, "label", kind="assignment", x=str(x_mid), y=str(y_mid - 40)).text = f"{clock_name}:=0"
-                    
-                    # Add Done variable assignment only for fork templates
-                    if template["name"].startswith("Template") and template in self.fork_templates:
-                        ET.SubElement(transition, "label", kind="assignment", x=str(x_mid), y=str(y_mid - 40)).text = f"{clock_name}:=0,\nDone_{template['name']} = true"
                 except ValueError:
                     pass
 
@@ -273,6 +197,56 @@ class UppaalConverter:
                 else:
                     clock_name = template["clock_name"]
                     ET.SubElement(transition, "label", kind="assignment", x=str(x_mid), y=str(y_mid - 40)).text = f"{clock_name}:=0, {decision_var} = {var_name}"
+            
+            # Handle Fork and Join
+            source_type = self.get_node_type(source_id)
+            if source_type in ("uml:ForkNode", "ForkNode"):
+                # Get all outgoing edges for this fork node
+                fork_edges = []
+                join_node = None
+                
+                # First find the JoinNode that this fork connects to
+                for edge in self.activity_root.findall(".//{*}edge"):
+                    target_node = edge.get("target")
+                    if target_node and self.node_types.get(target_node) in ("uml:JoinNode", "JoinNode"):
+                        join_node = target_node
+                        break
+                
+                # Get outgoing edges for fork templates
+                for edge in self.activity_root.findall(".//{*}edge"):
+                    if edge.get("source") == source_id and edge.get("target") != join_node:
+                        fork_edges.append(edge.get("target"))
+                
+                # Create fork template for each outgoing edge
+                fork_name = source_name.split(",")[0].strip().replace(" ", "_").replace("-", "_").replace(".", "_")
+                
+                # Only create templates if they don't exist and match outgoing edge count
+                existing_templates = [t for t in self.fork_templates if t["name"].startswith(f"{fork_name}_Process")]
+                if len(existing_templates) < len(fork_edges):
+                    template_index = len(existing_templates) + 1
+                    outgoing_edge = fork_edges[template_index - 1]
+                    template_name = f"{fork_name}_Process{template_index}"
+                    if not any(t["name"] == template_name for t in self.fork_templates):
+                        self.create_fork_template(fork_name, source_id, outgoing_edge, self.node_info, self.node_types)
+                
+                # In main template, create direct transition from Fork to Join
+                if join_node:
+                    # Add synchronisation label for fork
+                    ET.SubElement(transition, "label", kind="synchronisation", x=str(x_mid), y=str(y_mid - 80)).text = f"fork_{fork_name}!"
+                    
+                    # Create transition to join node if target is not the join node
+                    if target_id != join_node:
+                        return
+            
+            if target_type in ("uml:JoinNode", "JoinNode"):
+                # Add guard to check if all forked processes are done
+                guard_conditions = []
+                for fork_template in self.fork_templates:
+                    fork_name = fork_template["name"].split("_Process")[0]
+                    done_var_name = f"Done_{fork_name}_Fork"
+                    guard_conditions.append(f"{done_var_name}==true")
+                if guard_conditions:
+                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = " && ".join(guard_conditions)
 
     def get_node_type(self, node_id):
         """Returns the type of node ('uml:DecisionNode', 'uml:ForkNode', 'uml:JoinNode', or '') based on its ID."""
@@ -458,17 +432,10 @@ if __name__ == "__main__":
     
     # Define input and output folders
     input_file = "Example_XML/ForkJoin.xml"
-    base_output_file = "Result/Result_ForkJoin"
+    output_file = "Result/Result_ForkJoin.xml"
     
     # Create Result directory if it doesn't exist
-    os.makedirs("Result", exist_ok=True)
-    
-    # Find next available file number
-    counter = 1
-    while os.path.exists(f"{base_output_file}_{counter}.xml"):
-        counter += 1
-    
-    output_file = f"{base_output_file}_{counter}.xml"
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
     
     try:
         # Read the input XML file
