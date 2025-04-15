@@ -180,6 +180,8 @@ class UppaalConverter:
             trans_key = (source_id, target_id)
             if trans_key in self.created_transitions:
                 return  # ข้ามการสร้างถ้า transition นี้ได้ถูกสร้างแล้ว
+            #print(f"trans_key: {trans_key};")
+            # ทำเครื่องหมายว่า transition นี้ได้ถูกสร้างแล้ว
             self.created_transitions.add(trans_key)
 
             source_type = self.get_node_type(source_id)
@@ -216,18 +218,6 @@ class UppaalConverter:
             x_mid = (x1 + x2) // 2
             y_mid = (y1 + y2) // 2
 
-            # Check if the source is a JoinNode
-            if self.node_types.get(source_id) == "uml:JoinNode":
-                print(f"Source ID {source_id} is a JoinNode")
-                guard_conditions = []
-                # Construct guard conditions based on templates
-                for i, template in enumerate(self.fork_templates):
-                    template_name = template["name"]
-                    guard_conditions.append(f"Done_{template_name}==true")
-                
-                if guard_conditions:
-                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = " && ".join(guard_conditions)
-
             if source_type in ("uml:ForkNode", "ForkNode"):
                 # Create new fork channel if not exists for this ForkNode
                 if source_id not in self.fork_channels:
@@ -244,6 +234,7 @@ class UppaalConverter:
                 for edge in self.activity_root.findall(".//{*}edge"):
                     if edge.get("source") == source_id:
                         outgoing_edges.append(edge.get("target"))
+                        #print(f"outgoing_edges: {outgoing_edges};")
                 
                 # Add Done variables for each outgoing edge
                 for i in range(len(outgoing_edges)):
@@ -258,6 +249,24 @@ class UppaalConverter:
                 
                 # Add synchronisation label with specific fork channel
                 ET.SubElement(transition, "label", kind="synchronisation", x=str(x_mid), y=str(y_mid - 80)).text = f"{fork_channel}!"
+                #print(f"transition: {transition};")
+
+                # Add guard conditions for all templates if target is JoinNode
+                if self.node_types.get(edge_target) == "uml:JoinNode":
+                    print(f"Target ID {edge_target} is a JoinNode")
+                    guard_conditions = []
+                    #print(f"Checking guard conditions for target_id: {target_id}, type: {self.node_types.get(target_id)}")
+                    #print(f"Outgoing edges: {outgoing_edges}")
+
+                    for i in range(len(outgoing_edges)):
+                        template_name = f"Template{i+1}"
+                        if f"bool Done_{template_name};" not in self.declarations:
+                            print(f"Error: Done_{template_name} is not declared before use")
+                        guard_conditions.append(f"Done_{template_name}==true")
+                        print(f"guard_conditions: {guard_conditions};")
+                    
+                    if guard_conditions:
+                        ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = " && ".join(guard_conditions)
 
             if "," in source_name and "t=" in source_name:
                 try:

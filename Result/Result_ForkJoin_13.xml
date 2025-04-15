@@ -2,16 +2,13 @@
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
 <nta>
   <declaration>bool Done_ForkNode_Fork;
-bool Done_Template__TVYLgBE8EfCgidtTHikwVg_1;
-bool Done_Template__TVYLgBE8EfCgidtTHikwVg_2;
+bool Done_Template1;
+bool Done_Template2;
 broadcast chan fork_ForkNode;
-broadcast chan fork__TVYLgBE8EfCgidtTHikwVg;
-clock t;
 int Is_Success;</declaration>
   <template>
     <name>Template</name>
-    <declaration>// Local declarations
-clock t;</declaration>
+    <declaration>clock t;</declaration>
     <location id="_PZfWwAgSEfCZsMCbbT0p_Q" x="0" y="100">
       <name x="-50" y="70">InitialNode</name>
       </location>
@@ -85,39 +82,25 @@ clock t;</declaration>
       </transition>
     <transition id="_TVYLgBE8EfCgidtTHikwVg__Yv6hkBE8EfCgidtTHikwVg">
       <source ref="_TVYLgBE8EfCgidtTHikwVg" />
-      <target ref="_Yv6hkBE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="1950" y="220">fork__TVYLgBE8EfCgidtTHikwVg!</label>
+      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <label kind="synchronisation" x="1950" y="220">fork_ForkNode!</label>
       </transition>
     <transition id="_TVYLgBE8EfCgidtTHikwVg__bbU-8BE8EfCgidtTHikwVg">
       <source ref="_TVYLgBE8EfCgidtTHikwVg" />
-      <target ref="_bbU-8BE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="2100" y="220">fork__TVYLgBE8EfCgidtTHikwVg!</label>
-      </transition>
-    <transition id="_Yv6hkBE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
-      <source ref="_Yv6hkBE8EfCgidtTHikwVg" />
       <target ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <label kind="guard" x="2400" y="270">Done_Template__TVYLgBE8EfCgidtTHikwVg_1==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_2==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_1==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_2==true</label>
-      <label kind="guard" x="2400" y="290">t&gt;12</label>
-      <label kind="assignment" x="2400" y="310">t:=0</label>
-      </transition>
-    <transition id="_bbU-8BE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
-      <source ref="_bbU-8BE8EfCgidtTHikwVg" />
-      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <label kind="guard" x="2550" y="270">Done_Template__TVYLgBE8EfCgidtTHikwVg_1==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_2==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_1==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_2==true</label>
-      <label kind="guard" x="2550" y="290">t&gt;15</label>
-      <label kind="assignment" x="2550" y="310">t:=0</label>
+      <label kind="synchronisation" x="2100" y="220">fork_ForkNode!</label>
       </transition>
     <transition id="_iFnFoBE8EfCgidtTHikwVg__czUeoAgSEfCZsMCbbT0p_Q">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
       <target ref="_czUeoAgSEfCZsMCbbT0p_Q" />
+      <label kind="guard" x="2850" y="320">Done/_Template1==true &amp;&amp; Done/_Template2==true</label>
       </transition>
     </template>
   <template>
-    <name>Template__TVYLgBE8EfCgidtTHikwVg_1</name>
-    <declaration>// Local declarations
-clock t1;</declaration>
-    <location id="fork_Template__TVYLgBE8EfCgidtTHikwVg_1" x="0" y="400">
-      <name x="-50" y="370">InitialNode_Template__TVYLgBE8EfCgidtTHikwVg_1</name>
+    <name>Template1</name>
+    <declaration>clock t1;</declaration>
+    <location id="fork_Template1" x="0" y="400">
+      <name x="-50" y="370">InitialNode_Template1</name>
       </location>
     <location id="_Yv6hkBE8EfCgidtTHikwVg" x="300" y="400">
       <name x="250" y="370">Process1</name>
@@ -125,35 +108,34 @@ clock t1;</declaration>
     <location id="_iFnFoBE8EfCgidtTHikwVg" x="600" y="500">
       <name x="550" y="470">JoinNode_Join</name>
       </location>
-    <location id="join_JoinNode_Template__TVYLgBE8EfCgidtTHikwVg_1" x="900" y="600">
-      <name x="850" y="570">JoinNode_Template__TVYLgBE8EfCgidtTHikwVg_1_Join</name>
+    <location id="join_JoinNode_Template1" x="900" y="600">
+      <name x="850" y="570">JoinNode_Template1_Join</name>
       </location>
-    <init ref="fork_Template__TVYLgBE8EfCgidtTHikwVg_1" />
+    <init ref="fork_Template1" />
     <transition>
-      <source ref="fork_Template__TVYLgBE8EfCgidtTHikwVg_1" />
+      <source ref="fork_Template1" />
       <target ref="_Yv6hkBE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="150" y="320">fork?</label>
+      <label kind="synchronisation" x="150" y="320">fork_ForkNode?</label>
       </transition>
     <transition id="_Yv6hkBE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
       <source ref="_Yv6hkBE8EfCgidtTHikwVg" />
       <target ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <label kind="guard" x="450" y="370">Done_Template__TVYLgBE8EfCgidtTHikwVg_1==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_2==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_1==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_2==true</label>
       <label kind="guard" x="450" y="390">t1&gt;12</label>
       <label kind="assignment" x="450" y="410">t1:=0</label>
       <label kind="assignment" x="450" y="410">t1:=0,
-Done_Template__TVYLgBE8EfCgidtTHikwVg_1 = true</label>
+Done_Template1 = true</label>
       </transition>
-    <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template__TVYLgBE8EfCgidtTHikwVg_1">
+    <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template1">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <target ref="join_JoinNode_Template__TVYLgBE8EfCgidtTHikwVg_1" />
+      <target ref="join_JoinNode_Template1" />
+      <label kind="guard" x="750" y="470">Done/_Template1==true</label>
       </transition>
     </template>
   <template>
-    <name>Template__TVYLgBE8EfCgidtTHikwVg_2</name>
-    <declaration>// Local declarations
-clock t2;</declaration>
-    <location id="fork_Template__TVYLgBE8EfCgidtTHikwVg_2" x="0" y="600">
-      <name x="-50" y="570">InitialNode_Template__TVYLgBE8EfCgidtTHikwVg_2</name>
+    <name>Template2</name>
+    <declaration>clock t2;</declaration>
+    <location id="fork_Template2" x="0" y="600">
+      <name x="-50" y="570">InitialNode_Template2</name>
       </location>
     <location id="_bbU-8BE8EfCgidtTHikwVg" x="300" y="600">
       <name x="250" y="570">Process2</name>
@@ -161,32 +143,32 @@ clock t2;</declaration>
     <location id="_iFnFoBE8EfCgidtTHikwVg" x="600" y="700">
       <name x="550" y="670">JoinNode_Join</name>
       </location>
-    <location id="join_JoinNode_Template__TVYLgBE8EfCgidtTHikwVg_2" x="900" y="800">
-      <name x="850" y="770">JoinNode_Template__TVYLgBE8EfCgidtTHikwVg_2_Join</name>
+    <location id="join_JoinNode_Template2" x="900" y="800">
+      <name x="850" y="770">JoinNode_Template2_Join</name>
       </location>
-    <init ref="fork_Template__TVYLgBE8EfCgidtTHikwVg_2" />
+    <init ref="fork_Template2" />
     <transition>
-      <source ref="fork_Template__TVYLgBE8EfCgidtTHikwVg_2" />
+      <source ref="fork_Template2" />
       <target ref="_bbU-8BE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="150" y="520">fork?</label>
+      <label kind="synchronisation" x="150" y="520">fork_ForkNode?</label>
       </transition>
     <transition id="_bbU-8BE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
       <source ref="_bbU-8BE8EfCgidtTHikwVg" />
       <target ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <label kind="guard" x="450" y="570">Done_Template__TVYLgBE8EfCgidtTHikwVg_1==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_2==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_1==true &amp;&amp; Done_Template__TVYLgBE8EfCgidtTHikwVg_2==true</label>
       <label kind="guard" x="450" y="590">t2&gt;15</label>
       <label kind="assignment" x="450" y="610">t2:=0</label>
       <label kind="assignment" x="450" y="610">t2:=0,
-Done_Template__TVYLgBE8EfCgidtTHikwVg_2 = true</label>
+Done_Template2 = true</label>
       </transition>
-    <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template__TVYLgBE8EfCgidtTHikwVg_2">
+    <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template2">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <target ref="join_JoinNode_Template__TVYLgBE8EfCgidtTHikwVg_2" />
+      <target ref="join_JoinNode_Template2" />
+      <label kind="guard" x="750" y="670">Done/_Template1==true &amp;&amp; Done/_Template2==true</label>
       </transition>
     </template>
   <system>T1 = Template();
-T2 = Template__TVYLgBE8EfCgidtTHikwVg_1();
-T3 = Template__TVYLgBE8EfCgidtTHikwVg_2();
+T2 = Template1();
+T3 = Template2();
 system T1, T2, T3;</system>
   <queries>
     <query>
