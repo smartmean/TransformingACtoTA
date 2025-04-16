@@ -12,7 +12,7 @@
     <node xmi:type="uml:InitialNode" xmi:id="_PZfWwAgSEfCZsMCbbT0p_Q" name="InitialNode" outgoing="_adsrEAgSEfCZsMCbbT0p_Q"/>
     <node xmi:type="uml:OpaqueAction" xmi:id="_VxqZwAgSEfCZsMCbbT0p_Q" name="Complete the order, t=10" incoming="_adsrEAgSEfCZsMCbbT0p_Q __6p54AjEEfC6auwq1Ibwow" outgoing="_tyVpoAjEEfC6auwq1Ibwow"/>
     <node xmi:type="uml:ActivityFinalNode" xmi:id="_czUeoAgSEfCZsMCbbT0p_Q" name="ActivityFinalNode" incoming="_f6S2oAgSEfCZsMCbbT0p_Q"/>
-    <node xmi:type="uml:DecisionNode" xmi:id="_qvhY4AjEEfC6auwq1Ibwow" name="IsSuccess" incoming="_tyVpoAjEEfC6auwq1Ibwow" outgoing="_f6S2oAgSEfCZsMCbbT0p_Q _07000AjEEfC6auwq1Ibwow"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_qvhY4AjEEfC6auwq1Ibwow" name="IsOK" incoming="_tyVpoAjEEfC6auwq1Ibwow" outgoing="_f6S2oAgSEfCZsMCbbT0p_Q _07000AjEEfC6auwq1Ibwow"/>
     <node xmi:type="uml:OpaqueAction" xmi:id="_z09TYAjEEfC6auwq1Ibwow" name="Re order, t=5" incoming="_07000AjEEfC6auwq1Ibwow" outgoing="__6p54AjEEfC6auwq1Ibwow"/>
   </packagedElement>
 </uml:Model>

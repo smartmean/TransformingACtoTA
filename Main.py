@@ -278,7 +278,7 @@ class UppaalConverter:
             if target_type == "uml:DecisionNode":
                 decision_var = target_name.split(",")[0].strip().replace(" ", "_").replace("-", "_").replace(".", "_")
             else:
-                decision_var = "Is_Success"
+                decision_var = source_name.split(",")[0].strip().replace(" ", "_").replace("-", "_").replace(".", "_")
 
             if edge_label and "=" in edge_label:
                 condition = edge_label.strip("[]").split("=")[1].strip().lower()

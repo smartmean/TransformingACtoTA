@@ -30,12 +30,6 @@ int Is_Success;</declaration>
     <location id="_TVYLgBE8EfCgidtTHikwVg" x="1800" y="300">
       <name x="1750" y="270">ForkNode_Fork</name>
       </location>
-    <location id="_Yv6hkBE8EfCgidtTHikwVg" x="2100" y="300">
-      <name x="2050" y="270">Process1</name>
-      </location>
-    <location id="_bbU-8BE8EfCgidtTHikwVg" x="2400" y="300">
-      <name x="2350" y="270">Process2</name>
-      </location>
     <location id="_iFnFoBE8EfCgidtTHikwVg" x="2700" y="400">
       <name x="2650" y="370">JoinNode_Join</name>
       </location>
@@ -50,7 +44,7 @@ int Is_Success;</declaration>
     <transition id="_qvhY4AjEEfC6auwq1Ibwow__GNx-QA_rEfCGO5BaHxXytA">
       <source ref="_qvhY4AjEEfC6auwq1Ibwow" />
       <target ref="_GNx-QA_rEfCGO5BaHxXytA" />
-      <label kind="guard" x="750" y="120">Is_Success==1</label>
+      <label kind="guard" x="750" y="120">Is Success==1</label>
       </transition>
     <transition id="_VxqZwAgSEfCZsMCbbT0p_Q__qvhY4AjEEfC6auwq1Ibwow">
       <source ref="_VxqZwAgSEfCZsMCbbT0p_Q" />
@@ -62,7 +56,7 @@ int Is_Success;</declaration>
     <transition id="_qvhY4AjEEfC6auwq1Ibwow__z09TYAjEEfC6auwq1Ibwow">
       <source ref="_qvhY4AjEEfC6auwq1Ibwow" />
       <target ref="_z09TYAjEEfC6auwq1Ibwow" />
-      <label kind="guard" x="900" y="120">Is_Success==0</label>
+      <label kind="guard" x="900" y="120">Is Success==0</label>
       </transition>
     <transition id="_z09TYAjEEfC6auwq1Ibwow__A8rRAA_rEfCGO5BaHxXytA">
       <source ref="_z09TYAjEEfC6auwq1Ibwow" />
@@ -84,11 +78,6 @@ int Is_Success;</declaration>
       <source ref="_TVYLgBE8EfCgidtTHikwVg" />
       <target ref="_iFnFoBE8EfCgidtTHikwVg" />
       <label kind="synchronisation" x="1950" y="220">fork_ForkNode!</label>
-      </transition>
-    <transition id="_TVYLgBE8EfCgidtTHikwVg__bbU-8BE8EfCgidtTHikwVg">
-      <source ref="_TVYLgBE8EfCgidtTHikwVg" />
-      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="2100" y="220">fork_ForkNode!</label>
       </transition>
     <transition id="_iFnFoBE8EfCgidtTHikwVg__czUeoAgSEfCZsMCbbT0p_Q">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
@@ -128,7 +117,6 @@ Done_Template1 = true</label>
     <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template1">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
       <target ref="join_JoinNode_Template1" />
-      <label kind="guard" x="750" y="470">Done_Template1==true</label>
       </transition>
     </template>
   <template>
@@ -163,7 +151,6 @@ Done_Template2 = true</label>
     <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template2">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
       <target ref="join_JoinNode_Template2" />
-      <label kind="guard" x="750" y="670">Done_Template1==true &amp;&amp; Done_Template2==true</label>
       </transition>
     </template>
   <system>T1 = Template();
