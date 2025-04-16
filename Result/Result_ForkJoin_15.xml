@@ -82,18 +82,17 @@ int Is_Success;</declaration>
       </transition>
     <transition id="_TVYLgBE8EfCgidtTHikwVg__Yv6hkBE8EfCgidtTHikwVg">
       <source ref="_TVYLgBE8EfCgidtTHikwVg" />
-      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <target ref="_Yv6hkBE8EfCgidtTHikwVg" />
       <label kind="synchronisation" x="1950" y="220">fork_ForkNode!</label>
       </transition>
     <transition id="_TVYLgBE8EfCgidtTHikwVg__bbU-8BE8EfCgidtTHikwVg">
       <source ref="_TVYLgBE8EfCgidtTHikwVg" />
-      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <target ref="_bbU-8BE8EfCgidtTHikwVg" />
       <label kind="synchronisation" x="2100" y="220">fork_ForkNode!</label>
       </transition>
     <transition id="_iFnFoBE8EfCgidtTHikwVg__czUeoAgSEfCZsMCbbT0p_Q">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
       <target ref="_czUeoAgSEfCZsMCbbT0p_Q" />
-      <label kind="guard" x="2850" y="320">Done_Template1==true &amp;&amp; Done_Template2==true</label>
       </transition>
     </template>
   <template>
@@ -120,6 +119,7 @@ int Is_Success;</declaration>
     <transition id="_Yv6hkBE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
       <source ref="_Yv6hkBE8EfCgidtTHikwVg" />
       <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <label kind="guard" x="450" y="370">Done_Template1==true</label>
       <label kind="guard" x="450" y="390">t1&gt;12</label>
       <label kind="assignment" x="450" y="410">t1:=0</label>
       <label kind="assignment" x="450" y="410">t1:=0,
@@ -155,6 +155,7 @@ Done_Template1 = true</label>
     <transition id="_bbU-8BE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
       <source ref="_bbU-8BE8EfCgidtTHikwVg" />
       <target ref="_iFnFoBE8EfCgidtTHikwVg" />
+      <label kind="guard" x="450" y="570">Done_Template2==true</label>
       <label kind="guard" x="450" y="590">t2&gt;15</label>
       <label kind="assignment" x="450" y="610">t2:=0</label>
       <label kind="assignment" x="450" y="610">t2:=0,
@@ -163,7 +164,7 @@ Done_Template2 = true</label>
     <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template2">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
       <target ref="join_JoinNode_Template2" />
-      <label kind="guard" x="750" y="670">Done_Template1==true &amp;&amp; Done_Template2==true</label>
+      <label kind="guard" x="750" y="670">Done_Template2==true</label>
       </transition>
     </template>
   <system>T1 = Template();

@@ -166,11 +166,11 @@ class UppaalConverter:
                 fork_channel = self.fork_channels.get(fork_id, "fork1")  # Get specific fork channel
                 ET.SubElement(transition, "label", kind="synchronisation", x=str(x_mid), y=str(y_mid - 80)).text = f"{fork_channel}?"
             else:
-                self.add_transition(fork_template, source, target, source_name, target_name, target_type)
+                self.add_transition(fork_template, source, target, source_name, target_name, target_type,from_fork_template=True)
         
         return fork_template
 
-    def add_transition(self, template, source_id, target_id, source_name="", target_name="", target_type=""):
+    def add_transition(self, template, source_id, target_id, source_name="", target_name="", target_type="", from_fork_template=False):
         """Adds a transition between two locations in the template."""
         source = template["state_map"].get(source_id)
         target = template["state_map"].get(target_id)
@@ -198,7 +198,7 @@ class UppaalConverter:
                     edge_target = edge.get("target")
                     if (edge_source == target_id and  # OpaqueAction is the source
                         self.node_types.get(edge_target) == "uml:JoinNode"):  # Target is JoinNode
-                        print(f"JoinNode: {edge_target}")
+                        #print(f"JoinNode: {edge_target}")
                         join_node = edge_target
                         break
                 
@@ -225,8 +225,9 @@ class UppaalConverter:
                     template_name = template["name"]
                     guard_conditions.append(f"Done_{template_name}==true")
                 
-                if guard_conditions:
+                if guard_conditions and not from_fork_template:
                     ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = " && ".join(guard_conditions)
+
 
             if source_type in ("uml:ForkNode", "ForkNode"):
                 # Create new fork channel if not exists for this ForkNode
@@ -269,6 +270,7 @@ class UppaalConverter:
                     # Add Done variable assignment only for fork templates
                     if template["name"].startswith("Template") and template in self.fork_templates:
                         ET.SubElement(transition, "label", kind="assignment", x=str(x_mid), y=str(y_mid - 40)).text = f"{clock_name}:=0,\nDone_{template['name']} = true"
+                        #print(f"Done_{template['name']} = true")
                 except ValueError:
                     pass
 
@@ -294,6 +296,7 @@ class UppaalConverter:
                 else:
                     clock_name = template["clock_name"]
                     ET.SubElement(transition, "label", kind="assignment", x=str(x_mid), y=str(y_mid - 40)).text = f"{clock_name}:=0, {decision_var} = {var_name}"
+                    
 
     def get_node_type(self, node_id):
         """Returns the type of node ('uml:DecisionNode', 'uml:ForkNode', 'uml:JoinNode', or '') based on its ID."""

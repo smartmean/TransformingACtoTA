@@ -2,8 +2,6 @@
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
 <nta>
   <declaration>bool Done_ForkNode_Fork;
-bool Done_Template1;
-bool Done_Template2;
 broadcast chan fork_ForkNode;
 int Is_Success;</declaration>
   <template>
@@ -50,31 +48,22 @@ int Is_Success;</declaration>
     <transition id="_qvhY4AjEEfC6auwq1Ibwow__GNx-QA_rEfCGO5BaHxXytA">
       <source ref="_qvhY4AjEEfC6auwq1Ibwow" />
       <target ref="_GNx-QA_rEfCGO5BaHxXytA" />
-      <label kind="guard" x="750" y="120">Is_Success==1</label>
       </transition>
     <transition id="_VxqZwAgSEfCZsMCbbT0p_Q__qvhY4AjEEfC6auwq1Ibwow">
       <source ref="_VxqZwAgSEfCZsMCbbT0p_Q" />
       <target ref="_qvhY4AjEEfC6auwq1Ibwow" />
-      <label kind="guard" x="450" y="90">t&gt;10</label>
-      <label kind="assignment" x="450" y="110">t:=0, Is_Success = i11</label>
-      <label kind="select" x="450" y="50">i11: int[0,1]</label>
       </transition>
     <transition id="_qvhY4AjEEfC6auwq1Ibwow__z09TYAjEEfC6auwq1Ibwow">
       <source ref="_qvhY4AjEEfC6auwq1Ibwow" />
       <target ref="_z09TYAjEEfC6auwq1Ibwow" />
-      <label kind="guard" x="900" y="120">Is_Success==0</label>
       </transition>
     <transition id="_z09TYAjEEfC6auwq1Ibwow__A8rRAA_rEfCGO5BaHxXytA">
       <source ref="_z09TYAjEEfC6auwq1Ibwow" />
       <target ref="_A8rRAA_rEfCGO5BaHxXytA" />
-      <label kind="guard" x="1350" y="140">t&gt;5</label>
-      <label kind="assignment" x="1350" y="160">t:=0</label>
       </transition>
     <transition id="_GNx-QA_rEfCGO5BaHxXytA__A8rRAA_rEfCGO5BaHxXytA">
       <source ref="_GNx-QA_rEfCGO5BaHxXytA" />
       <target ref="_A8rRAA_rEfCGO5BaHxXytA" />
-      <label kind="guard" x="1200" y="140">t&gt;7</label>
-      <label kind="assignment" x="1200" y="160">t:=0</label>
       </transition>
     <transition id="_A8rRAA_rEfCGO5BaHxXytA__TVYLgBE8EfCgidtTHikwVg">
       <source ref="_A8rRAA_rEfCGO5BaHxXytA" />
@@ -82,94 +71,27 @@ int Is_Success;</declaration>
       </transition>
     <transition id="_TVYLgBE8EfCgidtTHikwVg__Yv6hkBE8EfCgidtTHikwVg">
       <source ref="_TVYLgBE8EfCgidtTHikwVg" />
-      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="1950" y="220">fork_ForkNode!</label>
+      <target ref="_Yv6hkBE8EfCgidtTHikwVg" />
       </transition>
     <transition id="_TVYLgBE8EfCgidtTHikwVg__bbU-8BE8EfCgidtTHikwVg">
       <source ref="_TVYLgBE8EfCgidtTHikwVg" />
-      <target ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="2100" y="220">fork_ForkNode!</label>
-      </transition>
-    <transition id="_iFnFoBE8EfCgidtTHikwVg__czUeoAgSEfCZsMCbbT0p_Q">
-      <source ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <target ref="_czUeoAgSEfCZsMCbbT0p_Q" />
-      <label kind="guard" x="2850" y="320">Done_Template1==true &amp;&amp; Done_Template2==true</label>
-      </transition>
-    </template>
-  <template>
-    <name>Template1</name>
-    <declaration>clock t1;</declaration>
-    <location id="fork_Template1" x="0" y="400">
-      <name x="-50" y="370">InitialNode_Template1</name>
-      </location>
-    <location id="_Yv6hkBE8EfCgidtTHikwVg" x="300" y="400">
-      <name x="250" y="370">Process1</name>
-      </location>
-    <location id="_iFnFoBE8EfCgidtTHikwVg" x="600" y="500">
-      <name x="550" y="470">JoinNode_Join</name>
-      </location>
-    <location id="join_JoinNode_Template1" x="900" y="600">
-      <name x="850" y="570">JoinNode_Template1_Join</name>
-      </location>
-    <init ref="fork_Template1" />
-    <transition>
-      <source ref="fork_Template1" />
-      <target ref="_Yv6hkBE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="150" y="320">fork_ForkNode?</label>
+      <target ref="_bbU-8BE8EfCgidtTHikwVg" />
       </transition>
     <transition id="_Yv6hkBE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
       <source ref="_Yv6hkBE8EfCgidtTHikwVg" />
       <target ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <label kind="guard" x="450" y="390">t1&gt;12</label>
-      <label kind="assignment" x="450" y="410">t1:=0</label>
-      <label kind="assignment" x="450" y="410">t1:=0,
-Done_Template1 = true</label>
-      </transition>
-    <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template1">
-      <source ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <target ref="join_JoinNode_Template1" />
-      <label kind="guard" x="750" y="470">Done_Template1==true</label>
-      </transition>
-    </template>
-  <template>
-    <name>Template2</name>
-    <declaration>clock t2;</declaration>
-    <location id="fork_Template2" x="0" y="600">
-      <name x="-50" y="570">InitialNode_Template2</name>
-      </location>
-    <location id="_bbU-8BE8EfCgidtTHikwVg" x="300" y="600">
-      <name x="250" y="570">Process2</name>
-      </location>
-    <location id="_iFnFoBE8EfCgidtTHikwVg" x="600" y="700">
-      <name x="550" y="670">JoinNode_Join</name>
-      </location>
-    <location id="join_JoinNode_Template2" x="900" y="800">
-      <name x="850" y="770">JoinNode_Template2_Join</name>
-      </location>
-    <init ref="fork_Template2" />
-    <transition>
-      <source ref="fork_Template2" />
-      <target ref="_bbU-8BE8EfCgidtTHikwVg" />
-      <label kind="synchronisation" x="150" y="520">fork_ForkNode?</label>
       </transition>
     <transition id="_bbU-8BE8EfCgidtTHikwVg__iFnFoBE8EfCgidtTHikwVg">
       <source ref="_bbU-8BE8EfCgidtTHikwVg" />
       <target ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <label kind="guard" x="450" y="590">t2&gt;15</label>
-      <label kind="assignment" x="450" y="610">t2:=0</label>
-      <label kind="assignment" x="450" y="610">t2:=0,
-Done_Template2 = true</label>
       </transition>
-    <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template2">
+    <transition id="_iFnFoBE8EfCgidtTHikwVg__czUeoAgSEfCZsMCbbT0p_Q">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
-      <target ref="join_JoinNode_Template2" />
-      <label kind="guard" x="750" y="670">Done_Template1==true &amp;&amp; Done_Template2==true</label>
+      <target ref="_czUeoAgSEfCZsMCbbT0p_Q" />
       </transition>
     </template>
   <system>T1 = Template();
-T2 = Template1();
-T3 = Template2();
-system T1, T2, T3;</system>
+system T1;</system>
   <queries>
     <query>
       <formula>A[] not deadlock</formula>

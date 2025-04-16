@@ -128,7 +128,6 @@ Done_Template1 = true</label>
     <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template1">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
       <target ref="join_JoinNode_Template1" />
-      <label kind="guard" x="750" y="470">Done_Template1==true</label>
       </transition>
     </template>
   <template>
@@ -163,7 +162,6 @@ Done_Template2 = true</label>
     <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template2">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
       <target ref="join_JoinNode_Template2" />
-      <label kind="guard" x="750" y="670">Done_Template1==true &amp;&amp; Done_Template2==true</label>
       </transition>
     </template>
   <system>T1 = Template();

@@ -94,6 +94,7 @@ int Is_Success;</declaration>
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
       <target ref="_czUeoAgSEfCZsMCbbT0p_Q" />
       <label kind="guard" x="2850" y="320">Done_Template1==true &amp;&amp; Done_Template2==true</label>
+      <label kind="guard" x="2850" y="320">Done_Template2==true</label>
       </transition>
     </template>
   <template>
@@ -124,10 +125,12 @@ int Is_Success;</declaration>
       <label kind="assignment" x="450" y="410">t1:=0</label>
       <label kind="assignment" x="450" y="410">t1:=0,
 Done_Template1 = true</label>
+      <label kind="guard" x="450" y="370">Done_Template1==true</label>
       </transition>
     <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template1">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
       <target ref="join_JoinNode_Template1" />
+      <label kind="guard" x="750" y="470">Done_Template1==true</label>
       <label kind="guard" x="750" y="470">Done_Template1==true</label>
       </transition>
     </template>
@@ -159,11 +162,13 @@ Done_Template1 = true</label>
       <label kind="assignment" x="450" y="610">t2:=0</label>
       <label kind="assignment" x="450" y="610">t2:=0,
 Done_Template2 = true</label>
+      <label kind="guard" x="450" y="570">Done_Template2==true</label>
       </transition>
     <transition id="_iFnFoBE8EfCgidtTHikwVg_join_JoinNode_Template2">
       <source ref="_iFnFoBE8EfCgidtTHikwVg" />
       <target ref="join_JoinNode_Template2" />
       <label kind="guard" x="750" y="670">Done_Template1==true &amp;&amp; Done_Template2==true</label>
+      <label kind="guard" x="750" y="670">Done_Template2==true</label>
       </transition>
     </template>
   <system>T1 = Template();
