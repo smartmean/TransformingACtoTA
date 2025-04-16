@@ -218,7 +218,7 @@ class UppaalConverter:
 
             # Check if the source is a JoinNode
             if self.node_types.get(source_id) == "uml:JoinNode":
-                print(f"Source ID {source_id} is a JoinNode")
+                #print(f"Source ID {source_id} is a JoinNode")
                 guard_conditions = []
                 # Construct guard conditions based on templates
                 for i, template in enumerate(self.fork_templates):
@@ -417,6 +417,31 @@ class UppaalConverter:
             
         return _xml_to_dict(root)
 
+    def clean_result(self):
+        """Removes entire transitions with duplicate synchronisation labels in the main template, keeping only one instance of each unique label. Also removes locations with no transitions connected to them."""
+        for template in self.templates:
+            if template["name"] == "Template":  # Check if it's the main template
+                transitions = template["element"].findall(".//transition")
+                seen_labels = set()
+                connected_locations = set()
+                for transition in transitions:
+                    source_ref = transition.find("source").get("ref")
+                    target_ref = transition.find("target").get("ref")
+                    connected_locations.update([source_ref, target_ref])
+                    labels = transition.findall("label[@kind='synchronisation']")
+                    for label in labels:
+                        label_text = label.text
+                        if label_text in seen_labels:
+                            template["element"].remove(transition)  # Remove entire transition
+                            break  # Exit the label loop since the transition is removed
+                        else:
+                            seen_labels.add(label_text)
+                # Remove locations not connected by any transitions
+                locations = template["element"].findall(".//location")
+                for location in locations:
+                    if location.get("id") not in connected_locations:
+                        template["element"].remove(location)
+
 @app.post("/convert-xml")
 async def convert_xml(file: UploadFile = File(...)):
     try:
@@ -468,6 +493,8 @@ async def convert_xml(file: UploadFile = File(...)):
                 target_name=converter.node_info.get(tgt, ""),
                 target_type=converter.node_types.get(tgt, "")
             )
+
+        converter.clean_result()
 
         uppaal_xml = converter.generate_xml()
         return Response(content=uppaal_xml, media_type="application/xml")
@@ -551,6 +578,8 @@ if __name__ == "__main__":
                 target_name=converter.node_info.get(tgt, ""),
                 target_type=converter.node_types.get(tgt, "")
             )
+        
+        converter.clean_result()
         
         # Generate UPPAAL XML
         uppaal_xml = converter.generate_xml()
