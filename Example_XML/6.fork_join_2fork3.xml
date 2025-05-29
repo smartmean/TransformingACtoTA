@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_G1TvMAgSEfCZsMCbbT0p_Q" name="Demomind">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_G44noAgSEfCZsMCbbT0p_Q">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Activity" xmi:id="_MmBwoAgSEfCZsMCbbT0p_Q" name="dicision" node="_PZfWwAgSEfCZsMCbbT0p_Q _VxqZwAgSEfCZsMCbbT0p_Q _czUeoAgSEfCZsMCbbT0p_Q _TVYLgBE8EfCgidtTHikwVg _Yv6hkBE8EfCgidtTHikwVg _bbU-8BE8EfCgidtTHikwVg _iFnFoBE8EfCgidtTHikwVg _VU2kIBupEfCm5tBcO2re2g _bsKEcBupEfCm5tBcO2re2g _rVOEABupEfCm5tBcO2re2g _x_pUoBupEfCm5tBcO2re2g">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_adsrEAgSEfCZsMCbbT0p_Q" target="_VxqZwAgSEfCZsMCbbT0p_Q" source="_PZfWwAgSEfCZsMCbbT0p_Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_eAqpgBE8EfCgidtTHikwVg" target="_Yv6hkBE8EfCgidtTHikwVg" source="_TVYLgBE8EfCgidtTHikwVg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_fC_pMBE8EfCgidtTHikwVg" target="_bbU-8BE8EfCgidtTHikwVg" source="_TVYLgBE8EfCgidtTHikwVg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_kkgJ8BE8EfCgidtTHikwVg" target="_VU2kIBupEfCm5tBcO2re2g" source="_Yv6hkBE8EfCgidtTHikwVg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_lHUjIBE8EfCgidtTHikwVg" target="_iFnFoBE8EfCgidtTHikwVg" source="_bbU-8BE8EfCgidtTHikwVg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_l7o8ABE8EfCgidtTHikwVg" target="_czUeoAgSEfCZsMCbbT0p_Q" source="_iFnFoBE8EfCgidtTHikwVg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_S9Bt8BulEfCm5tBcO2re2g" target="_TVYLgBE8EfCgidtTHikwVg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_uUNksBupEfCm5tBcO2re2g" target="_bsKEcBupEfCm5tBcO2re2g" source="_VU2kIBupEfCm5tBcO2re2g"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_u4YBsBupEfCm5tBcO2re2g" target="_rVOEABupEfCm5tBcO2re2g" source="_VU2kIBupEfCm5tBcO2re2g"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0zJ-EBupEfCm5tBcO2re2g" target="_x_pUoBupEfCm5tBcO2re2g" source="_bsKEcBupEfCm5tBcO2re2g"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_118QwBupEfCm5tBcO2re2g" target="_x_pUoBupEfCm5tBcO2re2g" source="_rVOEABupEfCm5tBcO2re2g"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_2gsd8BupEfCm5tBcO2re2g" target="_iFnFoBE8EfCgidtTHikwVg" source="_x_pUoBupEfCm5tBcO2re2g"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_tHwJ4BuvEfCRDKL_I6Xkcw" target="_TVYLgBE8EfCgidtTHikwVg" source="_VxqZwAgSEfCZsMCbbT0p_Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_PZfWwAgSEfCZsMCbbT0p_Q" name="InitialNode" outgoing="_adsrEAgSEfCZsMCbbT0p_Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_VxqZwAgSEfCZsMCbbT0p_Q" name="Complete the order, t=10" incoming="_adsrEAgSEfCZsMCbbT0p_Q" outgoing="_tHwJ4BuvEfCRDKL_I6Xkcw"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_czUeoAgSEfCZsMCbbT0p_Q" name="ActivityFinalNode" incoming="_l7o8ABE8EfCgidtTHikwVg"/>
+    <node xmi:type="uml:ForkNode" xmi:id="_TVYLgBE8EfCgidtTHikwVg" name="ForkNode" incoming="_S9Bt8BulEfCm5tBcO2re2g _tHwJ4BuvEfCRDKL_I6Xkcw" outgoing="_eAqpgBE8EfCgidtTHikwVg _fC_pMBE8EfCgidtTHikwVg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_Yv6hkBE8EfCgidtTHikwVg" name="Process1, t=12" incoming="_eAqpgBE8EfCgidtTHikwVg" outgoing="_kkgJ8BE8EfCgidtTHikwVg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_bbU-8BE8EfCgidtTHikwVg" name="Process2, t=15" incoming="_fC_pMBE8EfCgidtTHikwVg" outgoing="_lHUjIBE8EfCgidtTHikwVg"/>
+    <node xmi:type="uml:JoinNode" xmi:id="_iFnFoBE8EfCgidtTHikwVg" name="JoinNode" incoming="_lHUjIBE8EfCgidtTHikwVg _2gsd8BupEfCm5tBcO2re2g" outgoing="_l7o8ABE8EfCgidtTHikwVg"/>
+    <node xmi:type="uml:ForkNode" xmi:id="_VU2kIBupEfCm5tBcO2re2g" name="ForkNode35" incoming="_kkgJ8BE8EfCgidtTHikwVg" outgoing="_uUNksBupEfCm5tBcO2re2g _u4YBsBupEfCm5tBcO2re2g"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_bsKEcBupEfCm5tBcO2re2g" name="Process3, t=13" incoming="_uUNksBupEfCm5tBcO2re2g" outgoing="_0zJ-EBupEfCm5tBcO2re2g"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_rVOEABupEfCm5tBcO2re2g" name="Process4, t=14" incoming="_u4YBsBupEfCm5tBcO2re2g" outgoing="_118QwBupEfCm5tBcO2re2g"/>
+    <node xmi:type="uml:JoinNode" xmi:id="_x_pUoBupEfCm5tBcO2re2g" name="JoinNode40" incoming="_0zJ-EBupEfCm5tBcO2re2g _118QwBupEfCm5tBcO2re2g" outgoing="_2gsd8BupEfCm5tBcO2re2g"/>
+  </packagedElement>
+</uml:Model>

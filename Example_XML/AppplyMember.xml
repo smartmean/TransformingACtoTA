@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_dRHlcC6UEfCrMfxJ_VLWMw" name="Master">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_dR5okC6UEfCrMfxJ_VLWMw">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Activity" xmi:id="_e6A14C6UEfCrMfxJ_VLWMw" name="[Payment valid = pass]" node="_gOYAwC6UEfCrMfxJ_VLWMw _ivmAUC6UEfCrMfxJ_VLWMw _Bw35EDQREfCaFZ5nMamzng _cV7sIDQREfCaFZ5nMamzng _KQ_e4DWkEfCaMaUVnFP1TQ _ZsT9YDWkEfCaMaUVnFP1TQ _tgfSgDWkEfCaMaUVnFP1TQ _ygWewDWkEfCaMaUVnFP1TQ _mXjEcDWlEfCaMaUVnFP1TQ _Biqx8DWmEfCaMaUVnFP1TQ _HDA1EDWmEfCaMaUVnFP1TQ _IwFa4DWmEfCaMaUVnFP1TQ _b5910DWmEfCaMaUVnFP1TQ _LDVacDWnEfCaMaUVnFP1TQ _GxXuoDWqEfCaMaUVnFP1TQ _mx3aMDWrEfCaMaUVnFP1TQ _BuCFsDWsEfCaMaUVnFP1TQ _u7ewMDWsEfCaMaUVnFP1TQ _ptkrcDWtEfCaMaUVnFP1TQ _qOaHoDWtEfCaMaUVnFP1TQ _UU3zEDWuEfCaMaUVnFP1TQ">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_zqurwC6UEfCrMfxJ_VLWMw" target="_cV7sIDQREfCaFZ5nMamzng" source="_gOYAwC6UEfCrMfxJ_VLWMw"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_Fbr98DQREfCaFZ5nMamzng" target="_Bw35EDQREfCaFZ5nMamzng" source="_ivmAUC6UEfCrMfxJ_VLWMw"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_Y_Co0DQREfCaFZ5nMamzng" source="_Bw35EDQREfCaFZ5nMamzng"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_UU5z0DWkEfCaMaUVnFP1TQ" target="_ivmAUC6UEfCrMfxJ_VLWMw" source="_cV7sIDQREfCaFZ5nMamzng"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_YLzz8DWkEfCaMaUVnFP1TQ" name="[Info valid = No]" target="_ZsT9YDWkEfCaMaUVnFP1TQ" source="_KQ_e4DWkEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_eVwNsDWkEfCaMaUVnFP1TQ" target="_cV7sIDQREfCaFZ5nMamzng" source="_ZsT9YDWkEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_gWsKsDWkEfCaMaUVnFP1TQ" target="_KQ_e4DWkEfCaMaUVnFP1TQ" source="_Bw35EDQREfCaFZ5nMamzng"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_7YdH4DWkEfCaMaUVnFP1TQ" name="[Info valid = Yes]" target="_ygWewDWkEfCaMaUVnFP1TQ" source="_KQ_e4DWkEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_tUTbMDWlEfCaMaUVnFP1TQ" target="_mXjEcDWlEfCaMaUVnFP1TQ" source="_ygWewDWkEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_2pHOcDWlEfCaMaUVnFP1TQ" name="[Payment valid  = No]" target="_tgfSgDWkEfCaMaUVnFP1TQ" source="_mXjEcDWlEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_5bE_wDWlEfCaMaUVnFP1TQ" target="_ygWewDWkEfCaMaUVnFP1TQ" source="_tgfSgDWkEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_EiYrYDWmEfCaMaUVnFP1TQ" name="[Payment valid = Yes]" target="_LDVacDWnEfCaMaUVnFP1TQ" source="_mXjEcDWlEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_UnRrUDWmEfCaMaUVnFP1TQ" target="_HDA1EDWmEfCaMaUVnFP1TQ" source="_LDVacDWnEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_VYnosDWmEfCaMaUVnFP1TQ" target="_IwFa4DWmEfCaMaUVnFP1TQ" source="_LDVacDWnEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_ijGtADWmEfCaMaUVnFP1TQ" target="_b5910DWmEfCaMaUVnFP1TQ" source="_LDVacDWnEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_c3Jk4DWoEfCaMaUVnFP1TQ" target="_Biqx8DWmEfCaMaUVnFP1TQ" source="_HDA1EDWmEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_d1eOUDWoEfCaMaUVnFP1TQ" target="_Biqx8DWmEfCaMaUVnFP1TQ" source="_b5910DWmEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_esv0kDWoEfCaMaUVnFP1TQ" target="_Biqx8DWmEfCaMaUVnFP1TQ" source="_IwFa4DWmEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_Iyq4ADWqEfCaMaUVnFP1TQ" target="_mx3aMDWrEfCaMaUVnFP1TQ" source="_Biqx8DWmEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_e2ZtkDWtEfCaMaUVnFP1TQ" target="_BuCFsDWsEfCaMaUVnFP1TQ" source="_mx3aMDWrEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_Rj_m4DWuEfCaMaUVnFP1TQ" name="[IsSentMail = Yes]" target="_u7ewMDWsEfCaMaUVnFP1TQ" source="_BuCFsDWsEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_SESQgDWuEfCaMaUVnFP1TQ" name="[IsSentMail = No]" target="_qOaHoDWtEfCaMaUVnFP1TQ" source="_BuCFsDWsEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_TLskgDWuEfCaMaUVnFP1TQ" target="_ptkrcDWtEfCaMaUVnFP1TQ" source="_u7ewMDWsEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_WHrNcDWuEfCaMaUVnFP1TQ" target="_UU3zEDWuEfCaMaUVnFP1TQ" source="_qOaHoDWtEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_W7ny4DWuEfCaMaUVnFP1TQ" target="_UU3zEDWuEfCaMaUVnFP1TQ" source="_ptkrcDWtEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_cO_xADWuEfCaMaUVnFP1TQ" target="_GxXuoDWqEfCaMaUVnFP1TQ" source="_UU3zEDWuEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_gOYAwC6UEfCrMfxJ_VLWMw" outgoing="_zqurwC6UEfCrMfxJ_VLWMw"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_ivmAUC6UEfCrMfxJ_VLWMw" name="Submit registration form, t=1" incoming="_UU5z0DWkEfCaMaUVnFP1TQ" outgoing="_Fbr98DQREfCaFZ5nMamzng"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_Bw35EDQREfCaFZ5nMamzng" name="Validate input data, t=5" incoming="_Fbr98DQREfCaFZ5nMamzng" outgoing="_Y_Co0DQREfCaFZ5nMamzng _gWsKsDWkEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_cV7sIDQREfCaFZ5nMamzng" name="Enter personal information, t=1000" incoming="_zqurwC6UEfCrMfxJ_VLWMw _eVwNsDWkEfCaMaUVnFP1TQ" outgoing="_UU5z0DWkEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_KQ_e4DWkEfCaMaUVnFP1TQ" name="Is information valid?" incoming="_gWsKsDWkEfCaMaUVnFP1TQ" outgoing="_YLzz8DWkEfCaMaUVnFP1TQ _7YdH4DWkEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_ZsT9YDWkEfCaMaUVnFP1TQ" name="Show error message, t = 1" incoming="_YLzz8DWkEfCaMaUVnFP1TQ" outgoing="_eVwNsDWkEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_tgfSgDWkEfCaMaUVnFP1TQ" name="Show error message, t = 1" incoming="_2pHOcDWlEfCaMaUVnFP1TQ" outgoing="_5bE_wDWlEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_ygWewDWkEfCaMaUVnFP1TQ" name="Make Pay membership fee, t=100" incoming="_7YdH4DWkEfCaMaUVnFP1TQ _5bE_wDWlEfCaMaUVnFP1TQ" outgoing="_tUTbMDWlEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:MergeNode" xmi:id="_mXjEcDWlEfCaMaUVnFP1TQ" name="Is payment valid ?" incoming="_tUTbMDWlEfCaMaUVnFP1TQ" outgoing="_2pHOcDWlEfCaMaUVnFP1TQ _EiYrYDWmEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:JoinNode" xmi:id="_Biqx8DWmEfCaMaUVnFP1TQ" name="JoinNode1" incoming="_c3Jk4DWoEfCaMaUVnFP1TQ _d1eOUDWoEfCaMaUVnFP1TQ _esv0kDWoEfCaMaUVnFP1TQ" outgoing="_Iyq4ADWqEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_HDA1EDWmEfCaMaUVnFP1TQ" name="Save member data,t=10" incoming="_UnRrUDWmEfCaMaUVnFP1TQ" outgoing="_c3Jk4DWoEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_IwFa4DWmEfCaMaUVnFP1TQ" name="Save Invoice, t=5" incoming="_VYnosDWmEfCaMaUVnFP1TQ" outgoing="_esv0kDWoEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_b5910DWmEfCaMaUVnFP1TQ" name="Save Point,t=15" incoming="_ijGtADWmEfCaMaUVnFP1TQ" outgoing="_d1eOUDWoEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:ForkNode" xmi:id="_LDVacDWnEfCaMaUVnFP1TQ" name="ForkNode1" incoming="_EiYrYDWmEfCaMaUVnFP1TQ" outgoing="_UnRrUDWmEfCaMaUVnFP1TQ _ijGtADWmEfCaMaUVnFP1TQ _VYnosDWmEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_GxXuoDWqEfCaMaUVnFP1TQ" name="ActivityFinalNode" incoming="_cO_xADWuEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_mx3aMDWrEfCaMaUVnFP1TQ" name="Receive invoice, t = 2" incoming="_Iyq4ADWqEfCaMaUVnFP1TQ" outgoing="_e2ZtkDWtEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_BuCFsDWsEfCaMaUVnFP1TQ" name="Sent Mail ?" incoming="_e2ZtkDWtEfCaMaUVnFP1TQ" outgoing="_Rj_m4DWuEfCaMaUVnFP1TQ _SESQgDWuEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_u7ewMDWsEfCaMaUVnFP1TQ" name="Sent invoice to email, t = 20" incoming="_Rj_m4DWuEfCaMaUVnFP1TQ" outgoing="_TLskgDWuEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_ptkrcDWtEfCaMaUVnFP1TQ" name="Print invoice, t =10" incoming="_TLskgDWuEfCaMaUVnFP1TQ" outgoing="_W7ny4DWuEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_qOaHoDWtEfCaMaUVnFP1TQ" name="Print invoice, t =10" incoming="_SESQgDWuEfCaMaUVnFP1TQ" outgoing="_WHrNcDWuEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:MergeNode" xmi:id="_UU3zEDWuEfCaMaUVnFP1TQ" name="MergeNode1" incoming="_WHrNcDWuEfCaMaUVnFP1TQ _W7ny4DWuEfCaMaUVnFP1TQ" outgoing="_cO_xADWuEfCaMaUVnFP1TQ"/>
+  </packagedElement>
+</uml:Model>

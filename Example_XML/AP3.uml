@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_dRHlcC6UEfCrMfxJ_VLWMw" name="Master">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_dR5okC6UEfCrMfxJ_VLWMw">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Activity" xmi:id="_e6A14C6UEfCrMfxJ_VLWMw" name="Leave Request System" node="_gOYAwC6UEfCrMfxJ_VLWMw _phxzQDivEfC-2tEP0xqMZg _RU7i0DixEfC-2tEP0xqMZg _Q-otQDiyEfC-2tEP0xqMZg _ZCE_QDiyEfC-2tEP0xqMZg _iE8t8DiyEfC-2tEP0xqMZg _1ejm8DiyEfC-2tEP0xqMZg _7TrnQDiyEfC-2tEP0xqMZg _-WVf8DiyEfC-2tEP0xqMZg _A5fZMDizEfC-2tEP0xqMZg _S9ApADizEfC-2tEP0xqMZg _aNRKkDizEfC-2tEP0xqMZg _oZCFsDizEfC-2tEP0xqMZg _8PIGYDizEfC-2tEP0xqMZg _Jb0xMDi0EfC-2tEP0xqMZg _idsTMDi0EfC-2tEP0xqMZg _5-o1ADi0EfC-2tEP0xqMZg _z0ejYDi1EfC-2tEP0xqMZg _26WIIDi1EfC-2tEP0xqMZg _BMHS4Di2EfC-2tEP0xqMZg">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_zqurwC6UEfCrMfxJ_VLWMw" target="_phxzQDivEfC-2tEP0xqMZg" source="_gOYAwC6UEfCrMfxJ_VLWMw"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_U1yacDixEfC-2tEP0xqMZg" target="_RU7i0DixEfC-2tEP0xqMZg" source="_phxzQDivEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_SKIQADiyEfC-2tEP0xqMZg" target="_Q-otQDiyEfC-2tEP0xqMZg" source="_RU7i0DixEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_cLZgoDiyEfC-2tEP0xqMZg" name="[Sufficient Balance = Yes ]" target="_ZCE_QDiyEfC-2tEP0xqMZg" source="_Q-otQDiyEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_jHlPoDiyEfC-2tEP0xqMZg" name="[Sufficient Balance = No ]" target="_iE8t8DiyEfC-2tEP0xqMZg" source="_Q-otQDiyEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_FbrK8DizEfC-2tEP0xqMZg" target="_1ejm8DiyEfC-2tEP0xqMZg" source="_ZCE_QDiyEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_GXc2sDizEfC-2tEP0xqMZg" target="_oZCFsDizEfC-2tEP0xqMZg" source="_1ejm8DiyEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_HHInMDizEfC-2tEP0xqMZg" target="_7TrnQDiyEfC-2tEP0xqMZg" source="_ZCE_QDiyEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_HpYYoDizEfC-2tEP0xqMZg" target="_oZCFsDizEfC-2tEP0xqMZg" source="_7TrnQDiyEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_VYJOsDizEfC-2tEP0xqMZg" target="_idsTMDi0EfC-2tEP0xqMZg" source="_-WVf8DiyEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_ca0nQDizEfC-2tEP0xqMZg" target="_8PIGYDizEfC-2tEP0xqMZg" source="_A5fZMDizEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_3ghCMDizEfC-2tEP0xqMZg" target="_A5fZMDizEfC-2tEP0xqMZg" source="_oZCFsDizEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_Bp4e4Di0EfC-2tEP0xqMZg" name="[Manger Approve =Yes]" target="_aNRKkDizEfC-2tEP0xqMZg" source="_8PIGYDizEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_PwhpcDi0EfC-2tEP0xqMZg" name="[Manger Approve =No]" target="_Jb0xMDi0EfC-2tEP0xqMZg" source="_8PIGYDizEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_gMMKoDi0EfC-2tEP0xqMZg" target="_-WVf8DiyEfC-2tEP0xqMZg" source="_aNRKkDizEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_Hed3MDi1EfC-2tEP0xqMZg" name="[HR Approve =No]" target="_5-o1ADi0EfC-2tEP0xqMZg" source="_idsTMDi0EfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_ITqZ0Di1EfC-2tEP0xqMZg" name="[HR Approve = Yes]" target="_S9ApADizEfC-2tEP0xqMZg" source="_idsTMDi0EfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_4IwcADi1EfC-2tEP0xqMZg" target="_z0ejYDi1EfC-2tEP0xqMZg" source="_S9ApADizEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_4sNHUDi1EfC-2tEP0xqMZg" target="_BMHS4Di2EfC-2tEP0xqMZg" source="_z0ejYDi1EfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_CkrBQDi2EfC-2tEP0xqMZg" target="_BMHS4Di2EfC-2tEP0xqMZg" source="_iE8t8DiyEfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_DP4hcDi2EfC-2tEP0xqMZg" target="_BMHS4Di2EfC-2tEP0xqMZg" source="_Jb0xMDi0EfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_EFjlMDi2EfC-2tEP0xqMZg" target="_BMHS4Di2EfC-2tEP0xqMZg" source="_5-o1ADi0EfC-2tEP0xqMZg"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_JAGMkDi2EfC-2tEP0xqMZg" target="_26WIIDi1EfC-2tEP0xqMZg" source="_BMHS4Di2EfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_gOYAwC6UEfCrMfxJ_VLWMw" name="InitialNode" outgoing="_zqurwC6UEfCrMfxJ_VLWMw"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_phxzQDivEfC-2tEP0xqMZg" name="Fill Leave Request Form, t=60" incoming="_zqurwC6UEfCrMfxJ_VLWMw" outgoing="_U1yacDixEfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_RU7i0DixEfC-2tEP0xqMZg" name="Check Leave Balance, t=5" incoming="_U1yacDixEfC-2tEP0xqMZg" outgoing="_SKIQADiyEfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_Q-otQDiyEfC-2tEP0xqMZg" name="Sufficient Balance ?" incoming="_SKIQADiyEfC-2tEP0xqMZg" outgoing="_cLZgoDiyEfC-2tEP0xqMZg _jHlPoDiyEfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:ForkNode" xmi:id="_ZCE_QDiyEfC-2tEP0xqMZg" name="ForkNode1" incoming="_cLZgoDiyEfC-2tEP0xqMZg" outgoing="_FbrK8DizEfC-2tEP0xqMZg _HHInMDizEfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_iE8t8DiyEfC-2tEP0xqMZg" name="Show message No Leave Balance, t=1" incoming="_jHlPoDiyEfC-2tEP0xqMZg" outgoing="_CkrBQDi2EfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_1ejm8DiyEfC-2tEP0xqMZg" name="Notify HR, t=1" incoming="_FbrK8DizEfC-2tEP0xqMZg" outgoing="_GXc2sDizEfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_7TrnQDiyEfC-2tEP0xqMZg" name="Notify Manager, t=1" incoming="_HHInMDizEfC-2tEP0xqMZg" outgoing="_HpYYoDizEfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_-WVf8DiyEfC-2tEP0xqMZg" name="HR Reviews Request, t=15" incoming="_gMMKoDi0EfC-2tEP0xqMZg" outgoing="_VYJOsDizEfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_A5fZMDizEfC-2tEP0xqMZg" name="Manager Reviews Request, t=15" incoming="_3ghCMDizEfC-2tEP0xqMZg" outgoing="_ca0nQDizEfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_S9ApADizEfC-2tEP0xqMZg" name="Update Leave Data, t=2" incoming="_ITqZ0Di1EfC-2tEP0xqMZg" outgoing="_4IwcADi1EfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_aNRKkDizEfC-2tEP0xqMZg" name="Forward Request, t=1" incoming="_Bp4e4Di0EfC-2tEP0xqMZg" outgoing="_gMMKoDi0EfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:JoinNode" xmi:id="_oZCFsDizEfC-2tEP0xqMZg" name="JoinNode1" incoming="_GXc2sDizEfC-2tEP0xqMZg _HpYYoDizEfC-2tEP0xqMZg" outgoing="_3ghCMDizEfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_8PIGYDizEfC-2tEP0xqMZg" name="Manager Approve ?" incoming="_ca0nQDizEfC-2tEP0xqMZg" outgoing="_Bp4e4Di0EfC-2tEP0xqMZg _PwhpcDi0EfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_Jb0xMDi0EfC-2tEP0xqMZg" name="Sent Email Reject1, t=5" incoming="_PwhpcDi0EfC-2tEP0xqMZg" outgoing="_DP4hcDi2EfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_idsTMDi0EfC-2tEP0xqMZg" name="HR Approve ?" incoming="_VYJOsDizEfC-2tEP0xqMZg" outgoing="_Hed3MDi1EfC-2tEP0xqMZg _ITqZ0Di1EfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_5-o1ADi0EfC-2tEP0xqMZg" name="Sent Email Reject2, t=5" incoming="_Hed3MDi1EfC-2tEP0xqMZg" outgoing="_EFjlMDi2EfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_z0ejYDi1EfC-2tEP0xqMZg" name="Send Email Notification Approved, t=2" incoming="_4IwcADi1EfC-2tEP0xqMZg" outgoing="_4sNHUDi1EfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_26WIIDi1EfC-2tEP0xqMZg" name="ActivityFinalNode" incoming="_JAGMkDi2EfC-2tEP0xqMZg"/>
+    <node xmi:type="uml:MergeNode" xmi:id="_BMHS4Di2EfC-2tEP0xqMZg" name="MergeNode" incoming="_CkrBQDi2EfC-2tEP0xqMZg _DP4hcDi2EfC-2tEP0xqMZg _EFjlMDi2EfC-2tEP0xqMZg _4sNHUDi1EfC-2tEP0xqMZg" outgoing="_JAGMkDi2EfC-2tEP0xqMZg"/>
+  </packagedElement>
+</uml:Model>
