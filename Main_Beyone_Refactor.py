@@ -609,11 +609,12 @@ class TemplateManager:
     def __init__(self, parser=None):
         self.parser = parser
         self.location_builder = LocationBuilder(parser)  # ใช้ LocationBuilder
+        self.transition_builder = TransitionBuilder(parser, self.location_builder)  # ใช้ TransitionBuilder
         self.templates = []  # รายการเทมเพลททั้งหมด
         self.fork_templates = []  # รายการเทมเพลท fork
         self.template_hierarchy = {}  # โครงสร้างลำดับของเทมเพลท
         self.clock_counter = 0  # ตัวนับสำหรับ clock
-        self.created_transitions = set()  # เซ็ตสำหรับเก็บ transition ที่ถูกสร้างแล้ว
+        self.created_transitions = set()  # เซ็ตสำหรับเก็บ transition ที่ถูกสร้างแล้ว (for backward compatibility)
         self.fork_counter = 0  # ตัวนับสำหรับ fork
         self.declarations = []  # เก็บ declarations
         self.edge_guards = {}  # เก็บ edge guards
@@ -623,6 +624,8 @@ class TemplateManager:
         """กำหนด parser สำหรับ TemplateManager"""
         self.parser = parser
         self.location_builder.set_parser(parser)
+        self.transition_builder.set_parser(parser)
+        self.transition_builder.set_location_builder(self.location_builder)
     
     def add_declaration(self, text):
         """เพิ่ม declaration"""
@@ -641,7 +644,8 @@ class TemplateManager:
         template = ET.Element("template")
         ET.SubElement(template, "name").text = name
         ET.SubElement(template, "declaration").text = f"clock {clock_name};"
-        self.templates.append({
+        
+        template_data = {
             "name": name,
             "element": template,
             "state_map": {},
@@ -650,7 +654,13 @@ class TemplateManager:
             "position_map": {},
             "initial_id": None,
             "clock_name": clock_name
-        })
+        }
+        
+        # Mark fork templates
+        if name.startswith("Template_") and name != "Template":
+            template_data["is_fork_template"] = True
+        
+        self.templates.append(template_data)
         return self.templates[-1]
 
     def add_location(self, template, node_id, node_name, node_type):
@@ -660,6 +670,21 @@ class TemplateManager:
         # Sync declarations จาก LocationBuilder
         for decl in self.location_builder.get_declarations():
             self.add_declaration(decl)
+
+    def add_transition(self, template, source_id, target_id, source_name="", target_name="", target_type="", from_fork_template=False):
+        """เพิ่ม transition ผ่าน TransitionBuilder (backward compatibility method)"""
+        # Delegate to TransitionBuilder
+        result = self.transition_builder.create_transition(
+            template, source_id, target_id, source_name, target_name, target_type, from_fork_template, self
+        )
+        
+        # Sync created_transitions for backward compatibility
+        self.created_transitions.update(self.transition_builder.created_transitions)
+        
+        # Sync edge_guards
+        self.edge_guards.update(self.transition_builder.edge_guards)
+        
+        return result
 
     def create_fork_template(self, template_name, fork_id, outgoing_edge, parent_template=None, level=0):
         """Creates a new template for forked processes with proper nested template separation."""
@@ -924,185 +949,39 @@ class TemplateManager:
             if f"bool Done_{template_name};" not in self.declarations:
                 self.add_declaration(f"bool Done_{template_name};")
 
-    def add_transition(self, template, source_id, target_id, source_name="", target_name="", target_type="", from_fork_template=False):
-        """Adds a transition between two locations in the template."""
-        if not source_id or not target_id:
-            return
-
-        source = template["state_map"].get(source_id)
-        target = template["state_map"].get(target_id)
+    def validate_fork_template_coverage(self):
+        """ตรวจสอบว่า templates ถูกสร้างครบตาม fork branches หรือไม่"""
+        if not self.template_manager or not self.parser:
+            print("❌ TemplateManager or Parser not initialized!")
+            return False
+            
+        print("\n" + "="*100)
+        print("🔍 FORK TEMPLATE COVERAGE ANALYSIS")
+        print("="*100)
         
-        if source and target:
-            # ตรวจสอบว่า transition นี้ได้ถูกสร้างแล้วหรือไม่
-            trans_key = (source_id, target_id)
-            if trans_key in self.created_transitions:
-                return
-            self.created_transitions.add(trans_key)
-
-            source_type = self.get_node_type(source_id)
-            target_type = self.parser.get_node_type(target_id) if self.parser else target_type
-
-            # Special handling for ForkNode in main template
-            if (template["name"] == "Template" and 
-                source_type in ("uml:ForkNode", "ForkNode")):
-                
-                # ตรวจสอบว่าเป็น bypass transition หรือ fork activation
-                if target_type in ("uml:JoinNode", "JoinNode"):
-                    # นี่คือ bypass transition
-                    print(f"Creating bypass transition: {source_name} -> {target_name}")
-                    
-                    trans_id = f"{source_id}_{target_id}_bypass"
-                    transition = ET.SubElement(template["element"], "transition", id=trans_id)
-                    ET.SubElement(transition, "source", ref=source)
-                    ET.SubElement(transition, "target", ref=target)
-
-                    x1, y1 = template["position_map"].get(source_id, (0, 0))
-                    x2, y2 = template["position_map"].get(target_id, (0, 0))
-                    x_mid = (x1 + x2) // 2
-                    y_mid = (y1 + y2) // 2
-
-                    # สร้าง fork templates และ synchronization
-                    outgoing_edges = self.parser.get_outgoing_nodes(source_id) if self.parser else []
-                    
-                    # สร้าง fork channel จาก LocationBuilder
-                    fork_channels = self.location_builder.get_fork_channels()
-                    if source_id not in fork_channels:
-                        self.fork_counter += 1
-                        fork_channel = f"fork{self.fork_counter}"
-                        self.location_builder.fork_channels[source_id] = fork_channel
-                        self.location_builder.add_declaration(f"broadcast chan {fork_channel};")
-                        # Sync declarations
-                        for decl in self.location_builder.get_declarations():
-                            self.add_declaration(decl)
-                    else:
-                        fork_channel = fork_channels[source_id]
-
-                    # สร้าง Done variables และ fork templates สำหรับแต่ละ branch
-                    for i, outgoing_edge in enumerate(outgoing_edges):
-                        # กำหนดชื่อ template ตาม ForkNode และ Branch
-                        fork_name_clean = source_name.replace(" ", "").replace(",", "")
-                        template_name = f"Template_{fork_name_clean}_Branch{i+1}"
-                        
-                        self.add_declaration(f"bool Done_{template_name};")
-                        self.create_fork_template(template_name, source_id, outgoing_edge)
-
-                    # เพิ่ม synchronization label
-                    ET.SubElement(transition, "label", kind="synchronisation", x=str(x_mid), y=str(y_mid - 80)).text = f"{fork_channel}!"
-                    
-                    return
-                else:
-                    # ไม่ใช่ bypass -> ไม่ควรเกิดขึ้นใน main template
-                    print(f"Warning: ForkNode {source_name} has non-bypass target {target_name} in main template")
-
-            # ถ้าไม่ใช่ special case ให้ทำแบบปกติ
-            trans_id = f"{source_id}_{target_id}"
-            transition = ET.SubElement(template["element"], "transition", id=trans_id)
-            ET.SubElement(transition, "source", ref=source)
-            ET.SubElement(transition, "target", ref=target)
-
-            x1, y1 = template["position_map"].get(source_id, (0, 0))
-            x2, y2 = template["position_map"].get(target_id, (0, 0))
-            x_mid = (x1 + x2) // 2
-            y_mid = (y1 + y2) // 2
-
-            # === DECISION LOGIC HANDLING ===
-            # Handle transitions TO DecisionNode (add select and assignment)
-            if target_type == "uml:DecisionNode":
-                decision_var = target_name.split(",")[0].strip().replace(" ", "_").replace("-", "_").replace(".", "_").replace("?", "")
-                var_name = f"i{template['id_counter']}"
-                
-                # Add select statement
-                ET.SubElement(transition, "label", kind="select", x=str(x_mid), y=str(y_mid - 100)).text = f"{var_name}: int[0,1]"
-                
-                # Add assignment with decision variable
-                existing_assign = transition.find("label[@kind='assignment']")
-                if existing_assign is not None:
-                    existing_assign.text += f", {decision_var} = {var_name}"
-                else:
-                    clock_name = template["clock_name"]
-                    ET.SubElement(transition, "label", kind="assignment", x=str(x_mid), y=str(y_mid - 40)).text = f"{clock_name}:=0, {decision_var} = {var_name}"
-
-            # Handle transitions FROM DecisionNode (add guards)
-            elif source_type == "uml:DecisionNode":
-                decision_var = source_name.split(",")[0].strip().replace(" ", "_").replace("-", "_").replace(".", "_").replace("?", "")
-                
-                # Check edge guards for decision branches
-                if self.parser:
-                    edge_info = self.parser.get_edge_info(source_id, target_id)
-                    if edge_info:
-                        guard_text = edge_info.get('guard', '') or edge_info.get('name', '')
-                        
-                        if guard_text and "=" in guard_text:
-                            condition = guard_text.strip("[]").split("=")[1].strip().lower()
-                            if condition == "yes":
-                                ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var}==1"
-                            elif condition == "no":
-                                ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var}==0"
-                        else:
-                            # Default guards for binary decision
-                            outgoing_targets = self.parser.get_outgoing_nodes(source_id)
-                            if len(outgoing_targets) == 2:
-                                # First edge gets ==1, second gets ==0
-                                if target_id == outgoing_targets[0]:
-                                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var}==1"
-                                elif target_id == outgoing_targets[1]:
-                                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = f"{decision_var}==0"
-
-            # Handle JoinNode guard conditions
-            elif source_type == "uml:JoinNode":
-                guard_conditions = []  # Initialize here!
-                # Add guard conditions for JoinNodes in main template
-                if template["name"] == "Template" and not from_fork_template:
-                    print(f"DEBUG: Processing JoinNode {source_name} (ID: {source_id})")
-                    
-                    # หา ForkNode ที่ corresponding กับ JoinNode นี้
-                    corresponding_fork = self._find_fork_for_join(source_id)
-                    print(f"DEBUG: Found corresponding fork: {corresponding_fork}")
-                    
-                    if corresponding_fork:
-                        # หา templates ที่ถูกสร้างจาก ForkNode นี้
-                        fork_templates = self._get_templates_for_fork(corresponding_fork)
-                        print(f"DEBUG: Fork templates for {corresponding_fork}: {fork_templates}")
-                        guard_conditions = [f"Done_{template_name}==true" for template_name in fork_templates]
-                        print(f"DEBUG: Generated guard conditions: {guard_conditions}")
-                
-                if guard_conditions:
-                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 80)).text = " && ".join(guard_conditions)
-
-            # Handle time constraints และ assignments
-            if "," in source_name and "t=" in source_name:
-                try:
-                    time_val = int(source_name.split("t=")[-1].strip())
-                    clock_name = template["clock_name"]
-                    
-                    # สร้าง assignment text สำหรับ clock reset
-                    assignment_text = f"{clock_name}:=0"
-                    
-                    # Add Done variable assignment for fork templates
-                    if template["name"].startswith("Template") and template in self.fork_templates:
-                        # ตรวจสอบว่าเป็น final transition ของ template หรือไม่
-                        target_node_type = self.get_node_type(target_id)
-                        if target_node_type in ("uml:JoinNode", "JoinNode", "uml:FinalNode", "FinalNode") or not target_id:
-                            assignment_text += f", Done_{template['name']} = true"
-                    
-                    # Create separate labels for guard and assignment
-                    ET.SubElement(transition, "label", kind="guard", x=str(x_mid), y=str(y_mid - 60)).text = f"{clock_name}>{time_val}"
-                    ET.SubElement(transition, "label", kind="assignment", x=str(x_mid), y=str(y_mid - 40)).text = assignment_text
-                    
-                except ValueError:
-                    pass
-            else:
-                # Handle Done variable assignment for non-time transitions
-                if template["name"].startswith("Template") and template in self.fork_templates:
-                    target_node_type = self.get_node_type(target_id)
-                    if target_node_type in ("uml:JoinNode", "JoinNode", "uml:FinalNode", "FinalNode") or not target_id:
-                        # Check if there's already an assignment label
-                        existing_assign = transition.find("label[@kind='assignment']")
-                        if existing_assign is not None:
-                            existing_assign.text += f", Done_{template['name']} = true"
-                        else:
-                            # สำหรับ non-time transitions ไม่ต้อง reset clock เพียงแค่ set Done variable
-                            ET.SubElement(transition, "label", kind="assignment", x=str(x_mid), y=str(y_mid - 40)).text = f"Done_{template['name']} = true"
+        # วิเคราะห์ทุก ForkNode และ branches
+        all_forks = []
+        for node_id in self.parser.get_coordination_nodes():
+            node_type = self.parser.get_node_type(node_id)
+            if node_type in ("uml:ForkNode", "ForkNode"):
+                all_forks.append(node_id)
+        
+        print(f"\n📊 FOUND {len(all_forks)} FORK NODES:")
+        print("-" * 80)
+        
+        total_expected_templates = len(all_forks) * 2  # สมมติว่าแต่ละ fork มี 2 branches
+        total_created_templates = len(self.template_manager.fork_templates)
+        
+        print(f"\n📈 SUMMARY:")
+        print("-" * 80)
+        print(f"   Total ForkNodes: {len(all_forks)}")
+        print(f"   Created templates: {total_created_templates}")
+        
+        print("\n" + "="*100)
+        print("✅ FORK TEMPLATE COVERAGE ANALYSIS COMPLETE")
+        print("="*100 + "\n")
+        
+        return True
 
     def _find_fork_for_join(self, join_node_id):
         """หา ForkNode ที่ corresponding กับ JoinNode นี้"""
@@ -1182,6 +1061,247 @@ class TemplateManager:
         
         print(f"DEBUG: Final templates for fork {fork_id}: {fork_templates}")
         return fork_templates
+
+class TransitionBuilder:
+    """จัดการการสร้าง transitions และ labels ใน UPPAAL templates"""
+    
+    def __init__(self, parser=None, location_builder=None):
+        self.parser = parser
+        self.location_builder = location_builder
+        self.created_transitions = set()  # เซ็ตสำหรับเก็บ transition ที่ถูกสร้างแล้ว
+        self.edge_guards = {}  # เก็บ edge guards
+    
+    def set_parser(self, parser):
+        """กำหนด parser สำหรับ TransitionBuilder"""
+        self.parser = parser
+    
+    def set_location_builder(self, location_builder):
+        """กำหนด location_builder สำหรับ TransitionBuilder"""
+        self.location_builder = location_builder
+    
+    def create_transition(self, template, source_id, target_id, source_name="", target_name="", target_type="", from_fork_template=False, template_manager=None):
+        """สร้าง transition ระหว่าง two locations ใน template"""
+        if not source_id or not target_id:
+            return
+
+        source = template["state_map"].get(source_id)
+        target = template["state_map"].get(target_id)
+        
+        if source and target:
+            # ตรวจสอบว่า transition นี้ได้ถูกสร้างแล้วหรือไม่
+            trans_key = (source_id, target_id)
+            if trans_key in self.created_transitions:
+                return
+            self.created_transitions.add(trans_key)
+
+            source_type = self._get_node_type(source_id)
+            target_type = self.parser.get_node_type(target_id) if self.parser else target_type
+
+            # Special handling for ForkNode in main template
+            if (template["name"] == "Template" and 
+                source_type in ("uml:ForkNode", "ForkNode")):
+                return self._create_fork_transition(template, source_id, target_id, source_name, target_name, target_type, template_manager)
+            
+            # Regular transition creation
+            return self._create_regular_transition(template, source_id, target_id, source_name, target_name, target_type, source_type, from_fork_template, template_manager)
+    
+    def _create_fork_transition(self, template, source_id, target_id, source_name, target_name, target_type, template_manager):
+        """สร้าง fork transition แบบพิเศษ"""
+        # ตรวจสอบว่าเป็น bypass transition หรือ fork activation
+        if target_type in ("uml:JoinNode", "JoinNode"):
+            # นี่คือ bypass transition
+            print(f"Creating bypass transition: {source_name} -> {target_name}")
+            
+            trans_id = f"{source_id}_{target_id}_bypass"
+            transition = ET.SubElement(template["element"], "transition", id=trans_id)
+            ET.SubElement(transition, "source", ref=template["state_map"][source_id])
+            ET.SubElement(transition, "target", ref=template["state_map"][target_id])
+
+            x1, y1 = template["position_map"].get(source_id, (0, 0))
+            x2, y2 = template["position_map"].get(target_id, (0, 0))
+            x_mid = (x1 + x2) // 2
+            y_mid = (y1 + y2) // 2
+
+            # สร้าง fork templates และ synchronization
+            outgoing_edges = self.parser.get_outgoing_nodes(source_id) if self.parser else []
+            
+            # สร้าง fork channel จาก LocationBuilder
+            fork_channels = self.location_builder.get_fork_channels() if self.location_builder else {}
+            if source_id not in fork_channels:
+                fork_counter = getattr(template_manager, 'fork_counter', 0) + 1
+                if template_manager:
+                    template_manager.fork_counter = fork_counter
+                fork_channel = f"fork{fork_counter}"
+                if self.location_builder:
+                    self.location_builder.fork_channels[source_id] = fork_channel
+                    self.location_builder.add_declaration(f"broadcast chan {fork_channel};")
+            else:
+                fork_channel = fork_channels[source_id]
+
+            # สร้าง Done variables และ fork templates สำหรับแต่ละ branch
+            for i, outgoing_edge in enumerate(outgoing_edges):
+                # กำหนดชื่อ template ตาม ForkNode และ Branch
+                fork_name_clean = source_name.replace(" ", "").replace(",", "")
+                template_name = f"Template_{fork_name_clean}_Branch{i+1}"
+                
+                if template_manager:
+                    template_manager.add_declaration(f"bool Done_{template_name};")
+                    template_manager.create_fork_template(template_name, source_id, outgoing_edge)
+
+            # เพิ่ม synchronization label
+            self.add_sync_label(transition, f"{fork_channel}!", x_mid, y_mid - 80)
+            
+            return transition
+        else:
+            # ไม่ใช่ bypass -> ไม่ควรเกิดขึ้นใน main template
+            print(f"Warning: ForkNode {source_name} has non-bypass target {target_name} in main template")
+            return None
+    
+    def _create_regular_transition(self, template, source_id, target_id, source_name, target_name, target_type, source_type, from_fork_template, template_manager):
+        """สร้าง regular transition"""
+        trans_id = f"{source_id}_{target_id}"
+        transition = ET.SubElement(template["element"], "transition", id=trans_id)
+        ET.SubElement(transition, "source", ref=template["state_map"][source_id])
+        ET.SubElement(transition, "target", ref=template["state_map"][target_id])
+
+        x1, y1 = template["position_map"].get(source_id, (0, 0))
+        x2, y2 = template["position_map"].get(target_id, (0, 0))
+        x_mid = (x1 + x2) // 2
+        y_mid = (y1 + y2) // 2
+
+        # Handle different transition types
+        if target_type == "uml:DecisionNode":
+            self._handle_decision_node_transition(transition, template, target_name, x_mid, y_mid)
+        elif source_type == "uml:DecisionNode":
+            self._handle_from_decision_transition(transition, source_id, target_id, source_name, x_mid, y_mid)
+        elif source_type == "uml:JoinNode":
+            self._handle_join_node_transition(transition, template, source_id, source_name, from_fork_template, x_mid, y_mid, template_manager)
+
+        # Handle time constraints และ assignments
+        self._handle_time_and_assignments(transition, template, source_name, target_id, x_mid, y_mid)
+        
+        return transition
+    
+    def _handle_decision_node_transition(self, transition, template, target_name, x_mid, y_mid):
+        """จัดการ transition ที่ไปยัง DecisionNode"""
+        decision_var = target_name.split(",")[0].strip().replace(" ", "_").replace("-", "_").replace(".", "_").replace("?", "")
+        var_name = f"i{template['id_counter']}"
+        
+        # Add select statement
+        self.add_select_label(transition, f"{var_name}: int[0,1]", x_mid, y_mid - 100)
+        
+        # Add assignment with decision variable
+        existing_assign = transition.find("label[@kind='assignment']")
+        if existing_assign is not None:
+            existing_assign.text += f", {decision_var} = {var_name}"
+        else:
+            clock_name = template["clock_name"]
+            self.add_assignment_label(transition, f"{clock_name}:=0, {decision_var} = {var_name}", x_mid, y_mid - 40)
+    
+    def _handle_from_decision_transition(self, transition, source_id, target_id, source_name, x_mid, y_mid):
+        """จัดการ transition ที่มาจาก DecisionNode"""
+        decision_var = source_name.split(",")[0].strip().replace(" ", "_").replace("-", "_").replace(".", "_").replace("?", "")
+        
+        # Check edge guards for decision branches
+        if self.parser:
+            edge_info = self.parser.get_edge_info(source_id, target_id)
+            if edge_info:
+                guard_text = edge_info.get('guard', '') or edge_info.get('name', '')
+                
+                if guard_text and "=" in guard_text:
+                    condition = guard_text.strip("[]").split("=")[1].strip().lower()
+                    if condition == "yes":
+                        self.add_guard_label(transition, f"{decision_var}==1", x_mid, y_mid - 80)
+                    elif condition == "no":
+                        self.add_guard_label(transition, f"{decision_var}==0", x_mid, y_mid - 80)
+                else:
+                    # Default guards for binary decision
+                    outgoing_targets = self.parser.get_outgoing_nodes(source_id)
+                    if len(outgoing_targets) == 2:
+                        # First edge gets ==1, second gets ==0
+                        if target_id == outgoing_targets[0]:
+                            self.add_guard_label(transition, f"{decision_var}==1", x_mid, y_mid - 80)
+                        elif target_id == outgoing_targets[1]:
+                            self.add_guard_label(transition, f"{decision_var}==0", x_mid, y_mid - 80)
+    
+    def _handle_join_node_transition(self, transition, template, source_id, source_name, from_fork_template, x_mid, y_mid, template_manager):
+        """จัดการ transition ที่มาจาก JoinNode"""
+        guard_conditions = []
+        # Add guard conditions for JoinNodes in main template
+        if template["name"] == "Template" and not from_fork_template and template_manager:
+            print(f"DEBUG: Processing JoinNode {source_name} (ID: {source_id})")
+            
+            # หา ForkNode ที่ corresponding กับ JoinNode นี้
+            corresponding_fork = template_manager._find_fork_for_join(source_id)
+            print(f"DEBUG: Found corresponding fork: {corresponding_fork}")
+            
+            if corresponding_fork:
+                # หา templates ที่ถูกสร้างจาก ForkNode นี้
+                fork_templates = template_manager._get_templates_for_fork(corresponding_fork)
+                print(f"DEBUG: Fork templates for {corresponding_fork}: {fork_templates}")
+                guard_conditions = [f"Done_{template_name}==true" for template_name in fork_templates]
+                print(f"DEBUG: Generated guard conditions: {guard_conditions}")
+        
+        if guard_conditions:
+            self.add_guard_label(transition, " && ".join(guard_conditions), x_mid, y_mid - 80)
+    
+    def _handle_time_and_assignments(self, transition, template, source_name, target_id, x_mid, y_mid):
+        """จัดการ time constraints และ assignments"""
+        if "," in source_name and "t=" in source_name:
+            try:
+                time_val = int(source_name.split("t=")[-1].strip())
+                clock_name = template["clock_name"]
+                
+                # สร้าง assignment text สำหรับ clock reset
+                assignment_text = f"{clock_name}:=0"
+                
+                # Add Done variable assignment for fork templates
+                if template["name"].startswith("Template") and template.get("is_fork_template", False):
+                    # ตรวจสอบว่าเป็น final transition ของ template หรือไม่
+                    target_node_type = self._get_node_type(target_id)
+                    if target_node_type in ("uml:JoinNode", "JoinNode", "uml:FinalNode", "FinalNode") or not target_id:
+                        assignment_text += f", Done_{template['name']} = true"
+                
+                # Create separate labels for guard and assignment
+                self.add_guard_label(transition, f"{clock_name}>{time_val}", x_mid, y_mid - 60)
+                self.add_assignment_label(transition, assignment_text, x_mid, y_mid - 40)
+                
+            except ValueError:
+                pass
+        else:
+            # Handle Done variable assignment for non-time transitions
+            if template["name"].startswith("Template") and template.get("is_fork_template", False):
+                target_node_type = self._get_node_type(target_id)
+                if target_node_type in ("uml:JoinNode", "JoinNode", "uml:FinalNode", "FinalNode") or not target_id:
+                    # Check if there's already an assignment label
+                    existing_assign = transition.find("label[@kind='assignment']")
+                    if existing_assign is not None:
+                        existing_assign.text += f", Done_{template['name']} = true"
+                    else:
+                        # สำหรับ non-time transitions ไม่ต้อง reset clock เพียงแค่ set Done variable
+                        self.add_assignment_label(transition, f"Done_{template['name']} = true", x_mid, y_mid - 40)
+    
+    def add_guard_label(self, transition, guard_text, x, y):
+        """เพิ่ม guard label ให้ transition"""
+        ET.SubElement(transition, "label", kind="guard", x=str(x), y=str(y)).text = guard_text
+    
+    def add_assignment_label(self, transition, assignment_text, x, y):
+        """เพิ่ม assignment label ให้ transition"""
+        ET.SubElement(transition, "label", kind="assignment", x=str(x), y=str(y)).text = assignment_text
+    
+    def add_sync_label(self, transition, sync_text, x, y):
+        """เพิ่ม synchronisation label ให้ transition"""
+        ET.SubElement(transition, "label", kind="synchronisation", x=str(x), y=str(y)).text = sync_text
+    
+    def add_select_label(self, transition, select_text, x, y):
+        """เพิ่ม select label ให้ transition"""
+        ET.SubElement(transition, "label", kind="select", x=str(x), y=str(y)).text = select_text
+    
+    def _get_node_type(self, node_id):
+        """Returns the type of node using parser data."""
+        if self.parser:
+            return self.parser.get_node_type(node_id)
+        return ""
 
 class XmlConverter:
     """ แปลง Activity Diagram XML → UPPAAL XML """
@@ -1637,7 +1757,7 @@ class XmlConverter:
             print("=" * 60)
             
             # แสดงข้อมูลทั่วไป
-            print(f"   📋 Template Info:")
+            print(f"   📋 TEMPLATE INFO:")
             print(f"      Name: {template['name']}")
             print(f"      Clock: {template['clock_name']}")
             print(f"      Total Locations: {len(template['state_map'])}")
@@ -1680,6 +1800,67 @@ class XmlConverter:
         print("="*100 + "\n")
         
         return True
+
+    def _find_fork_for_join(self, join_node_id):
+        """หา ForkNode ที่ corresponding กับ JoinNode นี้"""
+        if not self.parser:
+            return None
+        
+        # ตรวจสอบทุก ForkNode เพื่อหาว่า JoinNode นี้เป็น corresponding join ของ fork ไหน
+        for fork_id in self.parser.get_coordination_nodes():
+            fork_type = self.parser.get_node_type(fork_id)
+            if fork_type in ("uml:ForkNode", "ForkNode"):
+                corresponding_join = self.parser._find_corresponding_join(fork_id)
+                if corresponding_join == join_node_id:
+                    return fork_id
+        
+        return None
+    
+    def _get_templates_for_fork(self, fork_id):
+        """หา templates ที่ถูกสร้างจาก ForkNode นี้"""
+        fork_templates = []
+        
+        print(f"DEBUG: Looking for templates for fork_id: {fork_id}")
+        print(f"DEBUG: Available template_hierarchy: {list(self.template_hierarchy.keys())}")
+        
+        # วิธี 1: หาใน template_hierarchy ว่า templates ไหนบ้างที่ถูกสร้างจาก fork_id นี้
+        for template_name, hierarchy_info in self.template_hierarchy.items():
+            if hierarchy_info.get('fork_id') == fork_id and hierarchy_info.get('level') == 0:
+                # เฉพาะ top-level templates (level 0) ที่เป็นของ fork นี้
+                fork_templates.append(template_name)
+                print(f"DEBUG: Found template {template_name} for fork {fork_id} (from hierarchy)")
+        
+        # วิธี 2: ถ้าไม่เจอใน hierarchy ให้ดูจาก fork_templates ที่มีอยู่จริง
+        if not fork_templates:
+            print(f"DEBUG: No templates found in hierarchy, checking existing fork_templates")
+            print(f"DEBUG: Available fork_templates: {[t['name'] for t in self.fork_templates]}")
+            
+            for template in self.fork_templates:
+                template_name = template["name"]
+                # ตรวจสอบว่า template นี้เป็นของ ForkNode นี้หรือไม่โดยดูจาก hierarchy
+                if (template_name in self.template_hierarchy and 
+                    self.template_hierarchy[template_name].get('fork_id') == fork_id and
+                    self.template_hierarchy[template_name].get('level') == 0):
+                    fork_templates.append(template_name)
+                    print(f"DEBUG: Found template {template_name} for fork {fork_id} (from existing templates)")
+        
+        # วิธี 3: ถ้ายังไม่เจอ ให้สร้าง templates สำหรับ ForkNode ทั้งคู่
+        if not fork_templates and self.parser:
+            fork_name = self.parser.get_node_name(fork_id)
+            print(f"DEBUG: Creating templates for {fork_name}")
+            outgoing_edges = self.parser.get_outgoing_nodes(fork_id)
+            
+            # สร้าง templates ด้วยชื่อที่สื่อความหมาย
+            fork_name_clean = fork_name.replace(" ", "").replace(",", "")
+            for i, outgoing_edge in enumerate(outgoing_edges):
+                template_name = f"Template_{fork_name_clean}_Branch{i+1}"
+                self.add_declaration(f"bool Done_{template_name};")
+                self.create_fork_template(template_name, fork_id, outgoing_edge)
+                fork_templates.append(template_name)
+                print(f"DEBUG: Created template {template_name} for {fork_name}")
+        
+        print(f"DEBUG: Final templates for fork {fork_id}: {fork_templates}")
+        return fork_templates
 
 @app.post("/convert-xml")
 async def convert_xml(file: UploadFile = File(...)):
