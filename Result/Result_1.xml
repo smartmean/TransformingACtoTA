@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+  <declaration>bool Done_ForkNode1_Fork;
+bool Done_Template1;
+bool Done_Template2;
+bool Done_Template3;
+broadcast chan fork_ForkNode1;
+clock total_time=0;
+int Is_information_valid;
+int Is_payment_valid_;
+int Sent_Mail_;</declaration>
+  <template>
+    <name>Template</name>
+    <declaration>clock t;</declaration>
+    <location id="_gOYAwC6UEfCrMfxJ_VLWMw" x="0" y="100">
+      <name x="-50" y="70">InitialNode</name>
+      </location>
+    <location id="_cV7sIDQREfCaFZ5nMamzng" x="300" y="100">
+      <name x="250" y="70">Enter_personal_information</name>
+      </location>
+    <location id="_ivmAUC6UEfCrMfxJ_VLWMw" x="600" y="100">
+      <name x="550" y="70">Submit_registration_form</name>
+      </location>
+    <location id="_Bw35EDQREfCaFZ5nMamzng" x="900" y="100">
+      <name x="850" y="70">Validate_input_data</name>
+      </location>
+    <location id="_KQ_e4DWkEfCaMaUVnFP1TQ" x="1200" y="200">
+      <name x="1150" y="170">Is_information_valid_Decision</name>
+      </location>
+    <location id="_ZsT9YDWkEfCaMaUVnFP1TQ" x="1500" y="200">
+      <name x="1450" y="170">Show_error_message_1</name>
+      </location>
+    <location id="_ygWewDWkEfCaMaUVnFP1TQ" x="1800" y="200">
+      <name x="1750" y="170">Make_Pay_membership_fee</name>
+      </location>
+    <location id="_mLiPQDf2EfCDw5iPNHfOfg" x="2100" y="300">
+      <name x="2050" y="270">Is_payment_valid__Decision</name>
+      </location>
+    <location id="_tgfSgDWkEfCaMaUVnFP1TQ" x="2400" y="300">
+      <name x="2350" y="270">Show_error_message_2</name>
+      </location>
+    <location id="_LDVacDWnEfCaMaUVnFP1TQ" x="2700" y="400">
+      <name x="2650" y="370">ForkNode1_Fork</name>
+      </location>
+    <location id="_Biqx8DWmEfCaMaUVnFP1TQ" x="3900" y="500">
+      <name x="3850" y="470">JoinNode1_Join</name>
+      </location>
+    <location id="_mx3aMDWrEfCaMaUVnFP1TQ" x="4200" y="500">
+      <name x="4150" y="470">Receive_invoice</name>
+      </location>
+    <location id="_BuCFsDWsEfCaMaUVnFP1TQ" x="4500" y="600">
+      <name x="4450" y="570">Sent_Mail__Decision</name>
+      </location>
+    <location id="_u7ewMDWsEfCaMaUVnFP1TQ" x="4800" y="600">
+      <name x="4750" y="570">Sent_invoice_to_email</name>
+      </location>
+    <location id="_qOaHoDWtEfCaMaUVnFP1TQ" x="5100" y="600">
+      <name x="5050" y="570">Print_invoice</name>
+      </location>
+    <location id="_UU3zEDWuEfCaMaUVnFP1TQ" x="5400" y="600">
+      <name x="5350" y="570">MergeNode1</name>
+      </location>
+    <location id="_GxXuoDWqEfCaMaUVnFP1TQ" x="5700" y="600">
+      <name x="5650" y="570">ActivityFinalNode</name>
+      </location>
+    <init ref="_gOYAwC6UEfCrMfxJ_VLWMw" />
+    <transition id="_gOYAwC6UEfCrMfxJ_VLWMw__cV7sIDQREfCaFZ5nMamzng">
+      <source ref="_gOYAwC6UEfCrMfxJ_VLWMw" />
+      <target ref="_cV7sIDQREfCaFZ5nMamzng" />
+      </transition>
+    <transition id="_ivmAUC6UEfCrMfxJ_VLWMw__Bw35EDQREfCaFZ5nMamzng">
+      <source ref="_ivmAUC6UEfCrMfxJ_VLWMw" />
+      <target ref="_Bw35EDQREfCaFZ5nMamzng" />
+      <label kind="guard" x="750" y="40">t&gt;1</label>
+      <label kind="assignment" x="750" y="60">t:=0</label>
+      </transition>
+    <transition id="_cV7sIDQREfCaFZ5nMamzng__ivmAUC6UEfCrMfxJ_VLWMw">
+      <source ref="_cV7sIDQREfCaFZ5nMamzng" />
+      <target ref="_ivmAUC6UEfCrMfxJ_VLWMw" />
+      <label kind="guard" x="450" y="40">t&gt;1000</label>
+      <label kind="assignment" x="450" y="60">t:=0</label>
+      </transition>
+    <transition id="_KQ_e4DWkEfCaMaUVnFP1TQ__ZsT9YDWkEfCaMaUVnFP1TQ">
+      <source ref="_KQ_e4DWkEfCaMaUVnFP1TQ" />
+      <target ref="_ZsT9YDWkEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="1350" y="120">Is_information_valid==0</label>
+      </transition>
+    <transition id="_ZsT9YDWkEfCaMaUVnFP1TQ__cV7sIDQREfCaFZ5nMamzng">
+      <source ref="_ZsT9YDWkEfCaMaUVnFP1TQ" />
+      <target ref="_cV7sIDQREfCaFZ5nMamzng" />
+      </transition>
+    <transition id="_Bw35EDQREfCaFZ5nMamzng__KQ_e4DWkEfCaMaUVnFP1TQ">
+      <source ref="_Bw35EDQREfCaFZ5nMamzng" />
+      <target ref="_KQ_e4DWkEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="1050" y="90">t&gt;5</label>
+      <label kind="assignment" x="1050" y="110">t:=0, Is_information_valid = i20</label>
+      <label kind="select" x="1050" y="50">i20: int[0,1]</label>
+      </transition>
+    <transition id="_KQ_e4DWkEfCaMaUVnFP1TQ__ygWewDWkEfCaMaUVnFP1TQ">
+      <source ref="_KQ_e4DWkEfCaMaUVnFP1TQ" />
+      <target ref="_ygWewDWkEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="1500" y="120">Is_information_valid==1</label>
+      </transition>
+    <transition id="_ygWewDWkEfCaMaUVnFP1TQ__mLiPQDf2EfCDw5iPNHfOfg">
+      <source ref="_ygWewDWkEfCaMaUVnFP1TQ" />
+      <target ref="_mLiPQDf2EfCDw5iPNHfOfg" />
+      <label kind="guard" x="1950" y="190">t&gt;100</label>
+      <label kind="assignment" x="1950" y="210">t:=0, Is_payment_valid_ = i20</label>
+      <label kind="select" x="1950" y="150">i20: int[0,1]</label>
+      </transition>
+    <transition id="_mLiPQDf2EfCDw5iPNHfOfg__tgfSgDWkEfCaMaUVnFP1TQ">
+      <source ref="_mLiPQDf2EfCDw5iPNHfOfg" />
+      <target ref="_tgfSgDWkEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="2250" y="220">Is_payment_valid_==0</label>
+      </transition>
+    <transition id="_tgfSgDWkEfCaMaUVnFP1TQ__ygWewDWkEfCaMaUVnFP1TQ">
+      <source ref="_tgfSgDWkEfCaMaUVnFP1TQ" />
+      <target ref="_ygWewDWkEfCaMaUVnFP1TQ" />
+      </transition>
+    <transition id="_mLiPQDf2EfCDw5iPNHfOfg__LDVacDWnEfCaMaUVnFP1TQ">
+      <source ref="_mLiPQDf2EfCDw5iPNHfOfg" />
+      <target ref="_LDVacDWnEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="2400" y="270">Is_payment_valid_==1</label>
+      </transition>
+    <transition id="_LDVacDWnEfCaMaUVnFP1TQ__HDA1EDWmEfCaMaUVnFP1TQ">
+      <source ref="_LDVacDWnEfCaMaUVnFP1TQ" />
+      <target ref="_Biqx8DWmEfCaMaUVnFP1TQ" />
+      <label kind="synchronisation" x="2850" y="320">fork_ForkNode1!</label>
+      </transition>
+    <transition id="_Biqx8DWmEfCaMaUVnFP1TQ__mx3aMDWrEfCaMaUVnFP1TQ">
+      <source ref="_Biqx8DWmEfCaMaUVnFP1TQ" />
+      <target ref="_mx3aMDWrEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="4050" y="420">Done_Template1==true &amp;&amp; Done_Template2==true &amp;&amp; Done_Template3==true</label>
+      </transition>
+    <transition id="_mx3aMDWrEfCaMaUVnFP1TQ__BuCFsDWsEfCaMaUVnFP1TQ">
+      <source ref="_mx3aMDWrEfCaMaUVnFP1TQ" />
+      <target ref="_BuCFsDWsEfCaMaUVnFP1TQ" />
+      <label kind="select" x="4350" y="450">i20: int[0,1]</label>
+      <label kind="assignment" x="4350" y="510">t:=0, Sent_Mail_ = i20</label>
+      </transition>
+    <transition id="_BuCFsDWsEfCaMaUVnFP1TQ__u7ewMDWsEfCaMaUVnFP1TQ">
+      <source ref="_BuCFsDWsEfCaMaUVnFP1TQ" />
+      <target ref="_u7ewMDWsEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="4650" y="520">Sent_Mail_==1</label>
+      </transition>
+    <transition id="_BuCFsDWsEfCaMaUVnFP1TQ__qOaHoDWtEfCaMaUVnFP1TQ">
+      <source ref="_BuCFsDWsEfCaMaUVnFP1TQ" />
+      <target ref="_qOaHoDWtEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="4800" y="520">Sent_Mail_==0</label>
+      </transition>
+    <transition id="_qOaHoDWtEfCaMaUVnFP1TQ__UU3zEDWuEfCaMaUVnFP1TQ">
+      <source ref="_qOaHoDWtEfCaMaUVnFP1TQ" />
+      <target ref="_UU3zEDWuEfCaMaUVnFP1TQ" />
+      </transition>
+    <transition id="_UU3zEDWuEfCaMaUVnFP1TQ__GxXuoDWqEfCaMaUVnFP1TQ">
+      <source ref="_UU3zEDWuEfCaMaUVnFP1TQ" />
+      <target ref="_GxXuoDWqEfCaMaUVnFP1TQ" />
+      </transition>
+    <transition id="_u7ewMDWsEfCaMaUVnFP1TQ__UU3zEDWuEfCaMaUVnFP1TQ">
+      <source ref="_u7ewMDWsEfCaMaUVnFP1TQ" />
+      <target ref="_UU3zEDWuEfCaMaUVnFP1TQ" />
+      </transition>
+    </template>
+  <template>
+    <name>Template1</name>
+    <declaration>clock t1;</declaration>
+    <location id="fork_Template1" x="0" y="600">
+      <name x="-50" y="570">InitialNode_Template1</name>
+      </location>
+    <location id="_HDA1EDWmEfCaMaUVnFP1TQ" x="300" y="600">
+      <name x="250" y="570">Save_member_data</name>
+      </location>
+    <location id="_Biqx8DWmEfCaMaUVnFP1TQ" x="600" y="700">
+      <name x="550" y="670">JoinNode1_Join</name>
+      </location>
+    <init ref="fork_Template1" />
+    <transition>
+      <source ref="fork_Template1" />
+      <target ref="_HDA1EDWmEfCaMaUVnFP1TQ" />
+      <label kind="synchronisation" x="150" y="520">fork_ForkNode1?</label>
+      </transition>
+    <transition id="_HDA1EDWmEfCaMaUVnFP1TQ__Biqx8DWmEfCaMaUVnFP1TQ">
+      <source ref="_HDA1EDWmEfCaMaUVnFP1TQ" />
+      <target ref="_Biqx8DWmEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="450" y="590">t1&gt;10</label>
+      <label kind="assignment" x="450" y="610">t1:=0</label>
+      <label kind="assignment" x="450" y="610">t1:=0,
+Done_Template1 = true</label>
+      </transition>
+    </template>
+  <template>
+    <name>Template2</name>
+    <declaration>clock t2;</declaration>
+    <location id="fork_Template2" x="0" y="700">
+      <name x="-50" y="670">InitialNode_Template2</name>
+      </location>
+    <location id="_IwFa4DWmEfCaMaUVnFP1TQ" x="300" y="700">
+      <name x="250" y="670">Save_Invoice</name>
+      </location>
+    <location id="_Biqx8DWmEfCaMaUVnFP1TQ" x="600" y="800">
+      <name x="550" y="770">JoinNode1_Join</name>
+      </location>
+    <init ref="fork_Template2" />
+    <transition>
+      <source ref="fork_Template2" />
+      <target ref="_IwFa4DWmEfCaMaUVnFP1TQ" />
+      <label kind="synchronisation" x="150" y="620">fork_ForkNode1?</label>
+      </transition>
+    <transition id="_IwFa4DWmEfCaMaUVnFP1TQ__Biqx8DWmEfCaMaUVnFP1TQ">
+      <source ref="_IwFa4DWmEfCaMaUVnFP1TQ" />
+      <target ref="_Biqx8DWmEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="450" y="690">t2&gt;5</label>
+      <label kind="assignment" x="450" y="710">t2:=0</label>
+      <label kind="assignment" x="450" y="710">t2:=0,
+Done_Template2 = true</label>
+      </transition>
+    </template>
+  <template>
+    <name>Template3</name>
+    <declaration>clock t3;</declaration>
+    <location id="fork_Template3" x="0" y="800">
+      <name x="-50" y="770">InitialNode_Template3</name>
+      </location>
+    <location id="_b5910DWmEfCaMaUVnFP1TQ" x="300" y="800">
+      <name x="250" y="770">Save_Point</name>
+      </location>
+    <location id="_Biqx8DWmEfCaMaUVnFP1TQ" x="600" y="900">
+      <name x="550" y="870">JoinNode1_Join</name>
+      </location>
+    <init ref="fork_Template3" />
+    <transition>
+      <source ref="fork_Template3" />
+      <target ref="_b5910DWmEfCaMaUVnFP1TQ" />
+      <label kind="synchronisation" x="150" y="720">fork_ForkNode1?</label>
+      </transition>
+    <transition id="_b5910DWmEfCaMaUVnFP1TQ__Biqx8DWmEfCaMaUVnFP1TQ">
+      <source ref="_b5910DWmEfCaMaUVnFP1TQ" />
+      <target ref="_Biqx8DWmEfCaMaUVnFP1TQ" />
+      <label kind="guard" x="450" y="790">t3&gt;15</label>
+      <label kind="assignment" x="450" y="810">t3:=0</label>
+      <label kind="assignment" x="450" y="810">t3:=0,
+Done_Template3 = true</label>
+      </transition>
+    </template>
+  <system>T1 = Template();
+T2 = Template1();
+T3 = Template2();
+T4 = Template3();
+system T1, T2, T3, T4;</system>
+  <queries>
+    <query>
+      <formula>A[] not deadlock</formula>
+      <comment>Check for deadlocks</comment>
+      </query>
+    </queries>
+  </nta>

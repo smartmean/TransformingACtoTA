@@ -91,9 +91,8 @@ if __name__ == "__main__":
     import os
     
     # Define input and output folders
-    input_file = "Example_XML/Demo_fork2_simple.xml"
+    input_file = "Example_XML/Demo_fork2_simple2.xml"
     #input_file = "Example_XML/AP2.xml"
-    #input_file = "Example_XML/AppplyMember.xml"
     base_output_file = "Result/Result_Pure_OOP"
     
     # Create Result directory if it doesn't exist
@@ -112,6 +111,7 @@ if __name__ == "__main__":
             xml_content = f.read()
         
         # Create converter and process
+        print(f"🔄 Starting conversion of {input_file}...")
         converter = xmlConverter()
         ta_xml = converter.convert(xml_content)
         
@@ -120,6 +120,7 @@ if __name__ == "__main__":
             f.write(ta_xml)
             
         print(f"Successfully converted {input_file} to {output_file}")
+        print(f"📁 Output file size: {len(ta_xml)} characters")
         
     except Exception as e:
         print(f"Conversion error: {str(e)}")

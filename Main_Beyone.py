@@ -535,7 +535,7 @@ if __name__ == "__main__":
     import os
     
     # Define input and output folders
-    input_file = "Example_XML/AP3.xml"
+    input_file = "Example_XML/AP2.xml"
     base_output_file = "Result/Result"
     
     # Create Result directory if it doesn't exist

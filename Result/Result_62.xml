@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+  <declaration>bool Done_ForkNode1_1_Fork;
+bool Done_ForkNode1_Fork;
+bool Done_ForkNode2_Fork;
+bool Done_Template1;
+bool Done_Template1_NestedTemplate1_1;
+bool Done_Template1_NestedTemplate1_2;
+bool Done_Template2;
+broadcast chan fork_ForkNode1;
+broadcast chan fork_ForkNode1_1;
+broadcast chan fork_ForkNode2;
+clock total_time=0;
+int Decision2;
+int Decision;</declaration>
+  <template>
+    <name>Template</name>
+    <declaration>clock t;</declaration>
+    <location id="_W7GyADvvEfC2HrAYXW124w" x="0" y="200">
+      <name x="-50" y="170">ForkNode1_Fork</name>
+      </location>
+    <location id="_eAEXoDvxEfC2HrAYXW124w" x="300" y="300">
+      <name x="250" y="270">JoinNode1_Join</name>
+      </location>
+    <location id="_-WjMIDy0EfCRrtZ1qqS56A" x="600" y="300">
+      <name x="550" y="270">MergeNode36</name>
+      </location>
+    <location id="_3bOYwDy0EfCRrtZ1qqS56A" x="900" y="300">
+      <name x="850" y="270">Process8</name>
+      </location>
+    <location id="_mh4nsDvxEfC2HrAYXW124w" x="1200" y="300">
+      <name x="1150" y="270">ActivityFinalNode</name>
+      </location>
+    <location id="_jV5sMD1XEfChWoAC68Gvsw" x="1500" y="400">
+      <name x="1450" y="370">JoinNode2_Join</name>
+      </location>
+    <location id="_RBCAQDvvEfC2HrAYXW124w" x="1800" y="400">
+      <name x="1750" y="370">InitialNode</name>
+      </location>
+    <location id="_wX11kDy0EfCRrtZ1qqS56A" x="2100" y="500">
+      <name x="2050" y="470">Decision2_Decision</name>
+      </location>
+    <location id="_Ci4iED1XEfChWoAC68Gvsw" x="2400" y="600">
+      <name x="2350" y="570">ForkNode2_Fork</name>
+      </location>
+    <location id="_8HNfID1WEfChWoAC68Gvsw" x="2700" y="600">
+      <name x="2650" y="570">Process9</name>
+      </location>
+    <location id="_3CRGMDy0EfCRrtZ1qqS56A" x="3000" y="600">
+      <name x="2950" y="570">Process7</name>
+      </location>
+    <location id="_SHdc0DvvEfC2HrAYXW124w" x="3300" y="600">
+      <name x="3250" y="570">Process1</name>
+      </location>
+    <init ref="_RBCAQDvvEfC2HrAYXW124w" />
+    <transition id="_RBCAQDvvEfC2HrAYXW124w__SHdc0DvvEfC2HrAYXW124w">
+      <source ref="_RBCAQDvvEfC2HrAYXW124w" />
+      <target ref="_SHdc0DvvEfC2HrAYXW124w" />
+      </transition>
+    <transition id="_SHdc0DvvEfC2HrAYXW124w__wX11kDy0EfCRrtZ1qqS56A">
+      <source ref="_SHdc0DvvEfC2HrAYXW124w" />
+      <target ref="_wX11kDy0EfCRrtZ1qqS56A" />
+      <label kind="guard" x="2700" y="490">t&gt;1</label>
+      <label kind="assignment" x="2700" y="510">t:=0, Decision2 = i12</label>
+      <label kind="select" x="2700" y="450">i12: int[0,1]</label>
+      </transition>
+    <transition id="_wX11kDy0EfCRrtZ1qqS56A__3CRGMDy0EfCRrtZ1qqS56A">
+      <source ref="_wX11kDy0EfCRrtZ1qqS56A" />
+      <target ref="_3CRGMDy0EfCRrtZ1qqS56A" />
+      <label kind="guard" x="2550" y="470">Decision2==1</label>
+      </transition>
+    <transition id="_wX11kDy0EfCRrtZ1qqS56A__3bOYwDy0EfCRrtZ1qqS56A">
+      <source ref="_wX11kDy0EfCRrtZ1qqS56A" />
+      <target ref="_3bOYwDy0EfCRrtZ1qqS56A" />
+      <label kind="guard" x="1500" y="320">Decision2==0</label>
+      </transition>
+    <transition id="_3CRGMDy0EfCRrtZ1qqS56A__-WjMIDy0EfCRrtZ1qqS56A">
+      <source ref="_3CRGMDy0EfCRrtZ1qqS56A" />
+      <target ref="_-WjMIDy0EfCRrtZ1qqS56A" />
+      <label kind="guard" x="1800" y="390">t&gt;7</label>
+      <label kind="assignment" x="1800" y="410">t:=0</label>
+      </transition>
+    <transition id="_3bOYwDy0EfCRrtZ1qqS56A__-WjMIDy0EfCRrtZ1qqS56A">
+      <source ref="_3bOYwDy0EfCRrtZ1qqS56A" />
+      <target ref="_-WjMIDy0EfCRrtZ1qqS56A" />
+      <label kind="guard" x="750" y="240">t&gt;8</label>
+      <label kind="assignment" x="750" y="260">t:=0</label>
+      </transition>
+    <transition id="_-WjMIDy0EfCRrtZ1qqS56A__W7GyADvvEfC2HrAYXW124w">
+      <source ref="_-WjMIDy0EfCRrtZ1qqS56A" />
+      <target ref="_W7GyADvvEfC2HrAYXW124w" />
+      </transition>
+    <transition id="_eAEXoDvxEfC2HrAYXW124w__8HNfID1WEfChWoAC68Gvsw">
+      <source ref="_eAEXoDvxEfC2HrAYXW124w" />
+      <target ref="_8HNfID1WEfChWoAC68Gvsw" />
+      </transition>
+    <transition id="_8HNfID1WEfChWoAC68Gvsw__Ci4iED1XEfChWoAC68Gvsw">
+      <source ref="_8HNfID1WEfChWoAC68Gvsw" />
+      <target ref="_Ci4iED1XEfChWoAC68Gvsw" />
+      <label kind="guard" x="2550" y="540">t&gt;9</label>
+      <label kind="assignment" x="2550" y="560">t:=0</label>
+      </transition>
+    <transition id="_jV5sMD1XEfChWoAC68Gvsw__mh4nsDvxEfC2HrAYXW124w">
+      <source ref="_jV5sMD1XEfChWoAC68Gvsw" />
+      <target ref="_mh4nsDvxEfC2HrAYXW124w" />
+      </transition>
+    <transition id="_W7GyADvvEfC2HrAYXW124w__eAEXoDvxEfC2HrAYXW124w_bypass">
+      <source ref="_W7GyADvvEfC2HrAYXW124w" />
+      <target ref="_eAEXoDvxEfC2HrAYXW124w" />
+      <label kind="synchronisation" x="150" y="170">fork_ForkNode1!</label>
+      </transition>
+    <transition id="_Ci4iED1XEfChWoAC68Gvsw__jV5sMD1XEfChWoAC68Gvsw_bypass">
+      <source ref="_Ci4iED1XEfChWoAC68Gvsw" />
+      <target ref="_jV5sMD1XEfChWoAC68Gvsw" />
+      <label kind="synchronisation" x="1950" y="420">fork_ForkNode2!</label>
+      </transition>
+    </template>
+  <template>
+    <name>Template1</name>
+    <declaration>clock t1;</declaration>
+    <location id="fork_Template1" x="0" y="600">
+      <name x="-50" y="570">InitialNode_Template1</name>
+      </location>
+    <location id="_XmHL8DvxEfC2HrAYXW124w" x="300" y="700">
+      <name x="250" y="670">JoinNode1_1_Join</name>
+      </location>
+    <location id="_DQU-kDvxEfC2HrAYXW124w" x="600" y="700">
+      <name x="550" y="670">Process2</name>
+      </location>
+    <location id="_KECuEDvxEfC2HrAYXW124w" x="900" y="800">
+      <name x="850" y="770">ForkNode1_1_Fork</name>
+      </location>
+    <location id="Nested_Template1" x="1200" y="900">
+      <name x="1150" y="870">Nested_Template1</name>
+      </location>
+    <init ref="fork_Template1" />
+    <transition>
+      <source ref="fork_Template1" />
+      <target ref="_DQU-kDvxEfC2HrAYXW124w" />
+      <label kind="synchronisation" x="300" y="570">fork_ForkNode1?</label>
+      </transition>
+    <transition id="_DQU-kDvxEfC2HrAYXW124w__KECuEDvxEfC2HrAYXW124w">
+      <source ref="_DQU-kDvxEfC2HrAYXW124w" />
+      <target ref="_KECuEDvxEfC2HrAYXW124w" />
+      <label kind="guard" x="750" y="690">t1&gt;2</label>
+      <label kind="assignment" x="750" y="710">t1:=0</label>
+      </transition>
+    <transition>
+      <source ref="_KECuEDvxEfC2HrAYXW124w" />
+      <target ref="Nested_Template1" />
+      <label kind="synchronisation" x="1050" y="770">fork_ForkNode1_1!</label>
+      </transition>
+    <transition>
+      <source ref="Nested_Template1" />
+      <target ref="_XmHL8DvxEfC2HrAYXW124w" />
+      <label kind="guard" x="750" y="740">Done_Template1_NestedTemplate1_1==true &amp;&amp; Done_Template1_NestedTemplate1_2==true</label>
+      <label kind="assignment" x="750" y="760">t1:=0, Done_Template1 = true</label>
+      </transition>
+    </template>
+  <template>
+    <name>Template2</name>
+    <declaration>clock t4;</declaration>
+    <location id="fork_Template2" x="0" y="1100">
+      <name x="-50" y="1070">InitialNode_Template2</name>
+      </location>
+    <location id="_eAEXoDvxEfC2HrAYXW124w" x="300" y="1200">
+      <name x="250" y="1170">JoinNode1_Join</name>
+      </location>
+    <location id="_F0I_IDvxEfC2HrAYXW124w" x="600" y="1200">
+      <name x="550" y="1170">Process3</name>
+      </location>
+    <init ref="fork_Template2" />
+    <transition>
+      <source ref="fork_Template2" />
+      <target ref="_F0I_IDvxEfC2HrAYXW124w" />
+      <label kind="synchronisation" x="300" y="1070">fork_ForkNode1?</label>
+      </transition>
+    <transition id="_F0I_IDvxEfC2HrAYXW124w__eAEXoDvxEfC2HrAYXW124w">
+      <source ref="_F0I_IDvxEfC2HrAYXW124w" />
+      <target ref="_eAEXoDvxEfC2HrAYXW124w" />
+      <label kind="guard" x="450" y="1140">t4&gt;3</label>
+      <label kind="assignment" x="450" y="1160">t4:=0, Done_Template2 = true</label>
+      </transition>
+    </template>
+  <template>
+    <name>Template1_NestedTemplate1_1</name>
+    <declaration>clock t2;</declaration>
+    <location id="fork_Template1_NestedTemplate1_1" x="0" y="800">
+      <name x="-50" y="770">InitialNode_Template1_NestedTemplate1_1</name>
+      </location>
+    <location id="_P7fCkDvxEfC2HrAYXW124w" x="300" y="800">
+      <name x="250" y="770">Process5</name>
+      </location>
+    <location id="_UB-94DvxEfC2HrAYXW124w" x="600" y="800">
+      <name x="550" y="770">MergeNode1</name>
+      </location>
+    <location id="_XmHL8DvxEfC2HrAYXW124w" x="900" y="900">
+      <name x="850" y="870">JoinNode1_1_Join</name>
+      </location>
+    <location id="_MVFjoDvxEfC2HrAYXW124w" x="1200" y="1000">
+      <name x="1150" y="970">Decision_Decision</name>
+      </location>
+    <location id="_PnGuADvxEfC2HrAYXW124w" x="1500" y="1000">
+      <name x="1450" y="970">Process4</name>
+      </location>
+    <init ref="fork_Template1_NestedTemplate1_1" />
+    <transition>
+      <source ref="fork_Template1_NestedTemplate1_1" />
+      <target ref="_P7fCkDvxEfC2HrAYXW124w" />
+      <label kind="synchronisation" x="150" y="720">fork_ForkNode1_1?</label>
+      </transition>
+    <transition id="_MVFjoDvxEfC2HrAYXW124w__PnGuADvxEfC2HrAYXW124w">
+      <source ref="_MVFjoDvxEfC2HrAYXW124w" />
+      <target ref="_PnGuADvxEfC2HrAYXW124w" />
+      <label kind="guard" x="1350" y="920">Decision==1</label>
+      </transition>
+    <transition id="_MVFjoDvxEfC2HrAYXW124w__P7fCkDvxEfC2HrAYXW124w">
+      <source ref="_MVFjoDvxEfC2HrAYXW124w" />
+      <target ref="_P7fCkDvxEfC2HrAYXW124w" />
+      <label kind="guard" x="750" y="820">Decision==0</label>
+      </transition>
+    <transition id="_PnGuADvxEfC2HrAYXW124w__UB-94DvxEfC2HrAYXW124w">
+      <source ref="_PnGuADvxEfC2HrAYXW124w" />
+      <target ref="_UB-94DvxEfC2HrAYXW124w" />
+      <label kind="guard" x="1050" y="840">t2&gt;4</label>
+      <label kind="assignment" x="1050" y="860">t2:=0</label>
+      </transition>
+    <transition id="_P7fCkDvxEfC2HrAYXW124w__UB-94DvxEfC2HrAYXW124w">
+      <source ref="_P7fCkDvxEfC2HrAYXW124w" />
+      <target ref="_UB-94DvxEfC2HrAYXW124w" />
+      <label kind="guard" x="450" y="740">t2&gt;5</label>
+      <label kind="assignment" x="450" y="760">t2:=0</label>
+      </transition>
+    <transition id="_UB-94DvxEfC2HrAYXW124w__XmHL8DvxEfC2HrAYXW124w">
+      <source ref="_UB-94DvxEfC2HrAYXW124w" />
+      <target ref="_XmHL8DvxEfC2HrAYXW124w" />
+      <label kind="assignment" x="750" y="810">t2:=0, Done_Template1_NestedTemplate1_1 = true</label>
+      </transition>
+    </template>
+  <template>
+    <name>Template1_NestedTemplate1_2</name>
+    <declaration>clock t3;</declaration>
+    <location id="fork_Template1_NestedTemplate1_2" x="0" y="1000">
+      <name x="-50" y="970">InitialNode_Template1_NestedTemplate1_2</name>
+      </location>
+    <location id="_XmHL8DvxEfC2HrAYXW124w" x="300" y="1100">
+      <name x="250" y="1070">JoinNode1_1_Join</name>
+      </location>
+    <location id="_ggfF8DvxEfC2HrAYXW124w" x="600" y="1100">
+      <name x="550" y="1070">Process6</name>
+      </location>
+    <init ref="fork_Template1_NestedTemplate1_2" />
+    <transition>
+      <source ref="fork_Template1_NestedTemplate1_2" />
+      <target ref="_ggfF8DvxEfC2HrAYXW124w" />
+      <label kind="synchronisation" x="300" y="970">fork_ForkNode1_1?</label>
+      </transition>
+    <transition id="_ggfF8DvxEfC2HrAYXW124w__XmHL8DvxEfC2HrAYXW124w">
+      <source ref="_ggfF8DvxEfC2HrAYXW124w" />
+      <target ref="_XmHL8DvxEfC2HrAYXW124w" />
+      <label kind="guard" x="450" y="1040">t3&gt;6</label>
+      <label kind="assignment" x="450" y="1060">t3:=0, Done_Template1_NestedTemplate1_2 = true</label>
+      </transition>
+    </template>
+  <system>T1 = Template();
+T2 = Template1();
+T3 = Template2();
+T4 = Template1_NestedTemplate1_1();
+T5 = Template1_NestedTemplate1_2();
+system T1, T2, T3, T4, T5;</system>
+  <queries>
+    <query>
+      <formula>A[] not deadlock</formula>
+      <comment>Check for deadlocks</comment>
+      </query>
+    </queries>
+  </nta>

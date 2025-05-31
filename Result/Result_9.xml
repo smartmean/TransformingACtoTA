@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+  <declaration>bool Done_ForkNode1_1_Fork;
+bool Done_ForkNode1_Fork;
+bool Done_ForkNode2_Fork;
+broadcast chan fork_ForkNode1;
+broadcast chan fork_ForkNode1_1;
+broadcast chan fork_ForkNode2;
+clock total_time=0;
+int Decision2;</declaration>
+  <template>
+    <name>Template</name>
+    <declaration>clock t;</declaration>
+    <location id="_RBCAQDvvEfC2HrAYXW124w" x="0" y="100">
+      <name x="-50" y="70">InitialNode</name>
+      </location>
+    <location id="_SHdc0DvvEfC2HrAYXW124w" x="300" y="100">
+      <name x="250" y="70">Process1</name>
+      </location>
+    <location id="_W7GyADvvEfC2HrAYXW124w" x="600" y="200">
+      <name x="550" y="170">ForkNode1_Fork</name>
+      </location>
+    <location id="_KECuEDvxEfC2HrAYXW124w" x="900" y="300">
+      <name x="850" y="270">ForkNode1_1_Fork</name>
+      </location>
+    <location id="_PnGuADvxEfC2HrAYXW124w" x="1200" y="300">
+      <name x="1150" y="270">Process4</name>
+      </location>
+    <location id="_P7fCkDvxEfC2HrAYXW124w" x="1500" y="300">
+      <name x="1450" y="270">Process5</name>
+      </location>
+    <location id="_XmHL8DvxEfC2HrAYXW124w" x="1800" y="400">
+      <name x="1750" y="370">JoinNode1_1_Join</name>
+      </location>
+    <location id="_eAEXoDvxEfC2HrAYXW124w" x="2100" y="500">
+      <name x="2050" y="470">JoinNode1_Join</name>
+      </location>
+    <location id="_mh4nsDvxEfC2HrAYXW124w" x="2400" y="500">
+      <name x="2350" y="470">ActivityFinalNode</name>
+      </location>
+    <location id="_wX11kDy0EfCRrtZ1qqS56A" x="2700" y="600">
+      <name x="2650" y="570">Decision2_Decision</name>
+      </location>
+    <location id="_3CRGMDy0EfCRrtZ1qqS56A" x="3000" y="600">
+      <name x="2950" y="570">Process7</name>
+      </location>
+    <location id="_3bOYwDy0EfCRrtZ1qqS56A" x="3300" y="600">
+      <name x="3250" y="570">Process8</name>
+      </location>
+    <location id="_-WjMIDy0EfCRrtZ1qqS56A" x="3600" y="600">
+      <name x="3550" y="570">MergeNode36</name>
+      </location>
+    <location id="_8HNfID1WEfChWoAC68Gvsw" x="3900" y="600">
+      <name x="3850" y="570">Process9</name>
+      </location>
+    <location id="_Ci4iED1XEfChWoAC68Gvsw" x="4200" y="700">
+      <name x="4150" y="670">ForkNode2_Fork</name>
+      </location>
+    <location id="_ZE26MD1XEfChWoAC68Gvsw" x="4500" y="700">
+      <name x="4450" y="670">OpaqueAction48</name>
+      </location>
+    <location id="_ZXGgwD1XEfChWoAC68Gvsw" x="4800" y="700">
+      <name x="4750" y="670">OpaqueAction49</name>
+      </location>
+    <location id="_jV5sMD1XEfChWoAC68Gvsw" x="5100" y="800">
+      <name x="5050" y="770">JoinNode2_Join</name>
+      </location>
+    <init ref="_RBCAQDvvEfC2HrAYXW124w" />
+    <transition id="_RBCAQDvvEfC2HrAYXW124w__SHdc0DvvEfC2HrAYXW124w">
+      <source ref="_RBCAQDvvEfC2HrAYXW124w" />
+      <target ref="_SHdc0DvvEfC2HrAYXW124w" />
+      </transition>
+    <transition id="_SHdc0DvvEfC2HrAYXW124w__wX11kDy0EfCRrtZ1qqS56A">
+      <source ref="_SHdc0DvvEfC2HrAYXW124w" />
+      <target ref="_wX11kDy0EfCRrtZ1qqS56A" />
+      <label kind="guard" x="1500" y="290">t&gt;1</label>
+      <label kind="assignment" x="1500" y="310">t:=0, Decision2 = i18</label>
+      <label kind="select" x="1500" y="250">i18: int[0,1]</label>
+      </transition>
+    <transition id="_XmHL8DvxEfC2HrAYXW124w__eAEXoDvxEfC2HrAYXW124w">
+      <source ref="_XmHL8DvxEfC2HrAYXW124w" />
+      <target ref="_eAEXoDvxEfC2HrAYXW124w" />
+      </transition>
+    <transition id="_wX11kDy0EfCRrtZ1qqS56A__3CRGMDy0EfCRrtZ1qqS56A">
+      <source ref="_wX11kDy0EfCRrtZ1qqS56A" />
+      <target ref="_3CRGMDy0EfCRrtZ1qqS56A" />
+      </transition>
+    <transition id="_wX11kDy0EfCRrtZ1qqS56A__3bOYwDy0EfCRrtZ1qqS56A">
+      <source ref="_wX11kDy0EfCRrtZ1qqS56A" />
+      <target ref="_3bOYwDy0EfCRrtZ1qqS56A" />
+      </transition>
+    <transition id="_3CRGMDy0EfCRrtZ1qqS56A__-WjMIDy0EfCRrtZ1qqS56A">
+      <source ref="_3CRGMDy0EfCRrtZ1qqS56A" />
+      <target ref="_-WjMIDy0EfCRrtZ1qqS56A" />
+      <label kind="guard" x="3300" y="540">t&gt;7</label>
+      <label kind="assignment" x="3300" y="560">t:=0</label>
+      </transition>
+    <transition id="_3bOYwDy0EfCRrtZ1qqS56A__-WjMIDy0EfCRrtZ1qqS56A">
+      <source ref="_3bOYwDy0EfCRrtZ1qqS56A" />
+      <target ref="_-WjMIDy0EfCRrtZ1qqS56A" />
+      <label kind="guard" x="3450" y="540">t&gt;8</label>
+      <label kind="assignment" x="3450" y="560">t:=0</label>
+      </transition>
+    <transition id="_-WjMIDy0EfCRrtZ1qqS56A__W7GyADvvEfC2HrAYXW124w">
+      <source ref="_-WjMIDy0EfCRrtZ1qqS56A" />
+      <target ref="_W7GyADvvEfC2HrAYXW124w" />
+      </transition>
+    <transition id="_eAEXoDvxEfC2HrAYXW124w__8HNfID1WEfChWoAC68Gvsw">
+      <source ref="_eAEXoDvxEfC2HrAYXW124w" />
+      <target ref="_8HNfID1WEfChWoAC68Gvsw" />
+      </transition>
+    <transition id="_8HNfID1WEfChWoAC68Gvsw__Ci4iED1XEfChWoAC68Gvsw">
+      <source ref="_8HNfID1WEfChWoAC68Gvsw" />
+      <target ref="_Ci4iED1XEfChWoAC68Gvsw" />
+      <label kind="guard" x="4050" y="590">t&gt;9</label>
+      <label kind="assignment" x="4050" y="610">t:=0</label>
+      </transition>
+    <transition id="_jV5sMD1XEfChWoAC68Gvsw__mh4nsDvxEfC2HrAYXW124w">
+      <source ref="_jV5sMD1XEfChWoAC68Gvsw" />
+      <target ref="_mh4nsDvxEfC2HrAYXW124w" />
+      </transition>
+    </template>
+  <system>T1 = Template();
+system T1;</system>
+  <queries>
+    <query>
+      <formula>A[] not deadlock</formula>
+      <comment>Check for deadlocks</comment>
+      </query>
+    </queries>
+  </nta>

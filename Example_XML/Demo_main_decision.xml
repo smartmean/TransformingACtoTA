@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_MainDecisionDemo" name="model">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_PkgImport">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Activity" xmi:id="_MainDecisionActivity" name="MainDecisionActivity" node="_Initial1 _Process1 _Decision1 _Process2A _Process2B _Merge1 _Fork1 _Process3 _Process4 _Join1 _Final1">
+    <!-- Main path edges -->
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E1" target="_Process1" source="_Initial1"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E2" target="_Decision1" source="_Process1"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E3" target="_Process2A" source="_Decision1"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E4" target="_Process2B" source="_Decision1"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E5" target="_Merge1" source="_Process2A"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E6" target="_Merge1" source="_Process2B"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E7" target="_Fork1" source="_Merge1"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E8" target="_Process3" source="_Fork1"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E9" target="_Process4" source="_Fork1"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E10" target="_Join1" source="_Process3"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E11" target="_Join1" source="_Process4"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_E12" target="_Final1" source="_Join1"/>
+    
+    <!-- Nodes -->
+    <node xmi:type="uml:InitialNode" xmi:id="_Initial1" name="InitialNode1"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_Process1" name="Process1"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_Decision1" name="DecisionNode1"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_Process2A" name="Process2A"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_Process2B" name="Process2B"/>
+    <node xmi:type="uml:MergeNode" xmi:id="_Merge1" name="MergeNode1"/>
+    <node xmi:type="uml:ForkNode" xmi:id="_Fork1" name="ForkNode1"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_Process3" name="Process3"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_Process4" name="Process4"/>
+    <node xmi:type="uml:JoinNode" xmi:id="_Join1" name="JoinNode1"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_Final1" name="ActivityFinalNode1"/>
+  </packagedElement>
+</uml:Model> 
