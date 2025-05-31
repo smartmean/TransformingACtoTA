@@ -493,22 +493,29 @@ class ActivityDiagramParser:
 class LocationBuilder:
     """จัดการการสร้างและจัดตำแหน่ง location ใน UPPAAL templates"""
     
-    def __init__(self, parser=None):
+    def __init__(self, parser=None, declaration_manager=None):
         self.parser = parser
+        self.declaration_manager = declaration_manager or DeclarationManager()
         self.current_y_offset = 100  # offset สำหรับการวางตำแหน่ง
         self.decision_vars = {}  # เก็บ decision variables
         self.join_nodes = {}  # เก็บ join nodes
         self.fork_channels = {}  # เก็บ fork channels
-        self.declarations = []  # เก็บ declarations สำหรับ location builder
+        self.declarations = []  # เก็บ declarations สำหรับ backward compatibility
     
     def set_parser(self, parser):
         """กำหนด parser สำหรับ LocationBuilder"""
         self.parser = parser
     
+    def set_declaration_manager(self, declaration_manager):
+        """กำหนด DeclarationManager"""
+        self.declaration_manager = declaration_manager
+
     def add_declaration(self, text):
-        """เพิ่ม declaration"""
+        """เพิ่ม declaration (backward compatibility)"""
         if text not in self.declarations:
             self.declarations.append(text)
+        # ส่งต่อไปยัง DeclarationManager
+        self.declaration_manager.merge_from_list([text])
     
     def create_location(self, template, node_id, node_name, node_type):
         """สร้าง location เข้าไปใน template"""
@@ -571,17 +578,27 @@ class LocationBuilder:
         if node_type in ("uml:DecisionNode", "DecisionNode"):
             label_name = f"{clean_name}_Decision"
             self.decision_vars[node_id] = clean_name
+            # ใช้ DeclarationManager สำหรับ decision variables โดยกำหนดช่วงค่า [0,1]
+            self.declaration_manager.add_integer_var(clean_name, 0, 1)
+            # Backward compatibility
             self.add_declaration(f"int {clean_name};")
+            print(f"DEBUG: Created decision variable {clean_name} with range [0,1]")
         elif node_type in ("uml:ForkNode", "ForkNode"):
             label_name = f"{clean_name}_Fork"
             channel_name = f"fork_{clean_name}"
             done_var_name = f"Done_{clean_name}_Fork"
+            # ใช้ DeclarationManager
+            self.declaration_manager.add_channel(channel_name, "broadcast")
+            self.declaration_manager.add_boolean_var(done_var_name)
+            # Backward compatibility
             self.add_declaration(f"broadcast chan {channel_name};")
             self.add_declaration(f"bool {done_var_name};")
             self.fork_channels[node_id] = channel_name
+            print(f"DEBUG: Created fork channel {channel_name} and done variable {done_var_name}")
         elif node_type in ("uml:JoinNode", "JoinNode"):
             label_name = f"{clean_name}_Join"
             self.join_nodes[node_id] = template['name']
+            print(f"DEBUG: Created join node {clean_name} for template {template['name']}")
         else:
             label_name = clean_name
         
@@ -608,7 +625,8 @@ class TemplateManager:
     
     def __init__(self, parser=None):
         self.parser = parser
-        self.location_builder = LocationBuilder(parser)  # ใช้ LocationBuilder
+        self.declaration_manager = DeclarationManager()  # ใช้ DeclarationManager
+        self.location_builder = LocationBuilder(parser, self.declaration_manager)  # ส่ง DeclarationManager
         self.transition_builder = TransitionBuilder(parser, self.location_builder)  # ใช้ TransitionBuilder
         self.templates = []  # รายการเทมเพลททั้งหมด
         self.fork_templates = []  # รายการเทมเพลท fork
@@ -616,7 +634,7 @@ class TemplateManager:
         self.clock_counter = 0  # ตัวนับสำหรับ clock
         self.created_transitions = set()  # เซ็ตสำหรับเก็บ transition ที่ถูกสร้างแล้ว (for backward compatibility)
         self.fork_counter = 0  # ตัวนับสำหรับ fork
-        self.declarations = []  # เก็บ declarations
+        self.declarations = []  # เก็บ declarations (backward compatibility)
         self.edge_guards = {}  # เก็บ edge guards
         self.nested_fork_structure = {}  # เก็บโครงสร้าง nested fork
     
@@ -628,10 +646,12 @@ class TemplateManager:
         self.transition_builder.set_location_builder(self.location_builder)
     
     def add_declaration(self, text):
-        """เพิ่ม declaration"""
+        """เพิ่ม declaration (backward compatibility)"""
         if text not in self.declarations:
             self.declarations.append(text)
-    
+        # ส่งต่อไปยัง DeclarationManager
+        self.declaration_manager.merge_from_list([text])
+
     def create_template(self, name="Template"):
         """Creates a new template with unique name and clock."""
         if any(t["name"] == name for t in self.templates):
@@ -640,6 +660,10 @@ class TemplateManager:
         # Generate unique clock name
         clock_name = "t" if self.clock_counter == 0 else f"t{self.clock_counter}"
         self.clock_counter += 1
+
+        # เพิ่ม clock ผ่าน DeclarationManager เฉพาะ main template เท่านั้น
+        if name == "Template":
+            self.declaration_manager.add_clock(clock_name)
 
         template = ET.Element("template")
         ET.SubElement(template, "name").text = name
@@ -667,9 +691,10 @@ class TemplateManager:
         """เพิ่ม location เข้าไปใน template ผ่าน LocationBuilder"""
         self.location_builder.create_location(template, node_id, node_name, node_type)
         
-        # Sync declarations จาก LocationBuilder
+        # Sync declarations จาก LocationBuilder ไปยัง backward compatibility list
         for decl in self.location_builder.get_declarations():
-            self.add_declaration(decl)
+            if decl not in self.declarations:
+                self.declarations.append(decl)
 
     def add_transition(self, template, source_id, target_id, source_name="", target_name="", target_type="", from_fork_template=False):
         """เพิ่ม transition ผ่าน TransitionBuilder (backward compatibility method)"""
@@ -946,13 +971,16 @@ class TemplateManager:
         """Initialize Done variables for all nested fork templates"""
         for template in self.fork_templates:
             template_name = template["name"]
+            # ใช้ DeclarationManager
+            self.declaration_manager.add_boolean_var(f"Done_{template_name}")
+            # Backward compatibility
             if f"bool Done_{template_name};" not in self.declarations:
                 self.add_declaration(f"bool Done_{template_name};")
 
     def validate_fork_template_coverage(self):
         """ตรวจสอบว่า templates ถูกสร้างครบตาม fork branches หรือไม่"""
-        if not self.template_manager or not self.parser:
-            print("❌ TemplateManager or Parser not initialized!")
+        if not self.parser:
+            print("❌ Parser not initialized!")
             return False
             
         print("\n" + "="*100)
@@ -1026,25 +1054,7 @@ class TemplateManager:
                     fork_templates.append(template_name)
                     print(f"DEBUG: Found template {template_name} for fork {fork_id} (from existing templates)")
         
-        # วิธี 3: ถ้ายังไม่เจอ ให้วิเคราะห์จาก template names ที่เป็น top-level และไม่ใช่ main
-        if not fork_templates:
-            print(f"DEBUG: Still no templates found, checking by pattern")
-            fork_name = self.parser.get_node_name(fork_id) if self.parser else ""
-            print(f"DEBUG: Fork name: {fork_name}")
-            
-            # จับคู่ templates ตามชื่อ ForkNode ใหม่
-            fork_name_clean = fork_name.replace(" ", "").replace(",", "")
-            fork_pattern = f"Template_{fork_name_clean}_"
-            
-            for template in self.templates:
-                template_name = template["name"]
-                if (template_name != "Template" and 
-                    template in self.fork_templates and
-                    fork_pattern in template_name):
-                    fork_templates.append(template_name)
-                    print(f"DEBUG: Found template {template_name} for {fork_name} by pattern")
-        
-        # วิธี 4: ถ้ายังไม่เจอ ให้สร้าง templates สำหรับ ForkNode ทั้งคู่
+        # วิธี 3: ถ้ายังไม่เจอ ให้สร้าง templates สำหรับ ForkNode ทั้งคู่
         if not fork_templates and self.parser:
             fork_name = self.parser.get_node_name(fork_id)
             print(f"DEBUG: Creating templates for {fork_name}")
@@ -1064,6 +1074,9 @@ class TemplateManager:
 
 class TransitionBuilder:
     """จัดการการสร้าง transitions และ labels ใน UPPAAL templates"""
+    
+    # Class variable for global counter
+    global_var_counter = 0
     
     def __init__(self, parser=None, location_builder=None):
         self.parser = parser
@@ -1101,7 +1114,7 @@ class TransitionBuilder:
             if (template["name"] == "Template" and 
                 source_type in ("uml:ForkNode", "ForkNode")):
                 return self._create_fork_transition(template, source_id, target_id, source_name, target_name, target_type, template_manager)
-            
+                
             # Regular transition creation
             return self._create_regular_transition(template, source_id, target_id, source_name, target_name, target_type, source_type, from_fork_template, template_manager)
     
@@ -1150,13 +1163,13 @@ class TransitionBuilder:
 
             # เพิ่ม synchronization label
             self.add_sync_label(transition, f"{fork_channel}!", x_mid, y_mid - 80)
-            
+                    
             return transition
         else:
             # ไม่ใช่ bypass -> ไม่ควรเกิดขึ้นใน main template
             print(f"Warning: ForkNode {source_name} has non-bypass target {target_name} in main template")
             return None
-    
+
     def _create_regular_transition(self, template, source_id, target_id, source_name, target_name, target_type, source_type, from_fork_template, template_manager):
         """สร้าง regular transition"""
         trans_id = f"{source_id}_{target_id}"
@@ -1185,18 +1198,26 @@ class TransitionBuilder:
     def _handle_decision_node_transition(self, transition, template, target_name, x_mid, y_mid):
         """จัดการ transition ที่ไปยัง DecisionNode"""
         decision_var = target_name.split(",")[0].strip().replace(" ", "_").replace("-", "_").replace(".", "_").replace("?", "")
-        var_name = f"i{template['id_counter']}"
         
-        # Add select statement
+        # Use global counter for unique variable names
+        TransitionBuilder.global_var_counter += 1
+        var_name = f"i{TransitionBuilder.global_var_counter}"
+        
+        # Add select statement for unique variable selection
         self.add_select_label(transition, f"{var_name}: int[0,1]", x_mid, y_mid - 100)
         
-        # Add assignment with decision variable
+        # Add assignment with both clock reset and decision variable update
+        clock_name = template["clock_name"]
+        assignment_text = f"{clock_name}:=0, {decision_var} = {var_name}"
+        
+        # Check if there's already an assignment label
         existing_assign = transition.find("label[@kind='assignment']")
         if existing_assign is not None:
             existing_assign.text += f", {decision_var} = {var_name}"
         else:
-            clock_name = template["clock_name"]
-            self.add_assignment_label(transition, f"{clock_name}:=0, {decision_var} = {var_name}", x_mid, y_mid - 40)
+            self.add_assignment_label(transition, assignment_text, x_mid, y_mid - 40)
+            
+        print(f"DEBUG: Created decision transition with {var_name} → {decision_var}")
     
     def _handle_from_decision_transition(self, transition, source_id, target_id, source_name, x_mid, y_mid):
         """จัดการ transition ที่มาจาก DecisionNode"""
@@ -1212,17 +1233,28 @@ class TransitionBuilder:
                     condition = guard_text.strip("[]").split("=")[1].strip().lower()
                     if condition == "yes":
                         self.add_guard_label(transition, f"{decision_var}==1", x_mid, y_mid - 80)
+                        print(f"DEBUG: Added guard {decision_var}==1 for YES branch")
                     elif condition == "no":
                         self.add_guard_label(transition, f"{decision_var}==0", x_mid, y_mid - 80)
+                        print(f"DEBUG: Added guard {decision_var}==0 for NO branch")
                 else:
-                    # Default guards for binary decision
+                    # Default guards for binary decision based on edge order
                     outgoing_targets = self.parser.get_outgoing_nodes(source_id)
-                    if len(outgoing_targets) == 2:
-                        # First edge gets ==1, second gets ==0
-                        if target_id == outgoing_targets[0]:
-                            self.add_guard_label(transition, f"{decision_var}==1", x_mid, y_mid - 80)
-                        elif target_id == outgoing_targets[1]:
-                            self.add_guard_label(transition, f"{decision_var}==0", x_mid, y_mid - 80)
+                    if len(outgoing_targets) >= 2:
+                        target_index = outgoing_targets.index(target_id) if target_id in outgoing_targets else 0
+                        guard_value = target_index % 2  # 0 for first edge, 1 for second edge
+                        self.add_guard_label(transition, f"{decision_var}=={guard_value}", x_mid, y_mid - 80)
+                        print(f"DEBUG: Added default guard {decision_var}=={guard_value} for branch {target_index}")
+            else:
+                # Fallback: try to determine from edge position
+                outgoing_targets = self.parser.get_outgoing_nodes(source_id)
+                if len(outgoing_targets) >= 2 and target_id in outgoing_targets:
+                    target_index = outgoing_targets.index(target_id)
+                    guard_value = target_index % 2
+                    self.add_guard_label(transition, f"{decision_var}=={guard_value}", x_mid, y_mid - 80)
+                    print(f"DEBUG: Added fallback guard {decision_var}=={guard_value}")
+        else:
+            print(f"DEBUG: Parser not available for edge guard analysis")
     
     def _handle_join_node_transition(self, transition, template, source_id, source_name, from_fork_template, x_mid, y_mid, template_manager):
         """จัดการ transition ที่มาจาก JoinNode"""
@@ -1241,10 +1273,10 @@ class TransitionBuilder:
                 print(f"DEBUG: Fork templates for {corresponding_fork}: {fork_templates}")
                 guard_conditions = [f"Done_{template_name}==true" for template_name in fork_templates]
                 print(f"DEBUG: Generated guard conditions: {guard_conditions}")
-        
-        if guard_conditions:
-            self.add_guard_label(transition, " && ".join(guard_conditions), x_mid, y_mid - 80)
-    
+                
+                if guard_conditions:
+                    self.add_guard_label(transition, " && ".join(guard_conditions), x_mid, y_mid - 80)
+
     def _handle_time_and_assignments(self, transition, template, source_name, target_id, x_mid, y_mid):
         """จัดการ time constraints และ assignments"""
         if "," in source_name and "t=" in source_name:
@@ -1302,7 +1334,7 @@ class TransitionBuilder:
         if self.parser:
             return self.parser.get_node_type(node_id)
         return ""
-
+    
 class XmlConverter:
     """ แปลง Activity Diagram XML → UPPAAL XML """
 
@@ -1324,11 +1356,6 @@ class XmlConverter:
         self.parser = ActivityDiagramParser(activity_root)
         self.template_manager = TemplateManager(self.parser)
         
-        # Transfer any temporary declarations
-        if hasattr(self, '_temp_declarations'):
-            for decl in self._temp_declarations:
-                self.template_manager.add_declaration(decl)
-        
         # Debug: แสดงจำนวน main flow nodes
         print(f"Parser created - Total nodes: {len(self.parser.nodes)}")
         print(f"Parser created - Main flow nodes: {len(self.parser.main_flow_nodes)}")
@@ -1342,15 +1369,12 @@ class XmlConverter:
         print()
 
     def add_declaration(self, text):
-        """Adds a declaration to the UPPAAL model."""
+        """Adds a declaration to the UPPAAL model (delegates to TemplateManager)."""
         if self.template_manager:
             self.template_manager.add_declaration(text)
         else:
-            # Fallback for initialization
-            if not hasattr(self, '_temp_declarations'):
-                self._temp_declarations = []
-            if text not in self._temp_declarations:
-                self._temp_declarations.append(text)
+            # Fallback: ไม่ควรเกิดขึ้น
+            print(f"Warning: TemplateManager not initialized, cannot add declaration: {text}")
 
     def process_nodes(self):
         """Processes nodes and creates main template using ActivityDiagramParser."""
@@ -1465,9 +1489,9 @@ class XmlConverter:
         for elem in list(self.nta):
             self.nta.remove(elem)
 
-        # Add declaration
+        # Add declaration using DeclarationManager
         decl_elem = ET.SubElement(self.nta, "declaration")
-        decl_elem.text = "\n".join(sorted(set(self.template_manager.declarations)))
+        decl_elem.text = self.template_manager.declaration_manager.get_declarations_text()
 
         # Add templates in hierarchical order (parent templates first)
         sorted_templates = []
@@ -1769,8 +1793,8 @@ class XmlConverter:
 
     def validate_fork_template_coverage(self):
         """ตรวจสอบว่า templates ถูกสร้างครบตาม fork branches หรือไม่"""
-        if not self.template_manager or not self.parser:
-            print("❌ TemplateManager or Parser not initialized!")
+        if not self.parser:
+            print("❌ Parser not initialized!")
             return False
             
         print("\n" + "="*100)
@@ -1862,6 +1886,269 @@ class XmlConverter:
         print(f"DEBUG: Final templates for fork {fork_id}: {fork_templates}")
         return fork_templates
 
+class DeclarationManager:
+    """จัดการตัวแปรและ declarations ทั้งหมดที่ใช้ในระบบ UPPAAL"""
+    
+    def __init__(self):
+        # หมวดหมู่ของ declarations
+        self.clocks = []  # clock variables
+        self.channels = []  # communication channels
+        self.boolean_vars = []  # boolean variables
+        self.integer_vars = []  # integer variables
+        self.constants = []  # constant declarations
+        self.functions = []  # function declarations
+        self.typedef_declarations = []  # typedef declarations
+        self.global_declarations = []  # global declarations อื่นๆ
+        
+        # เก็บ declarations ทั้งหมดสำหรับ backward compatibility
+        self.all_declarations = []
+        
+        # tracking สำหรับ unique names
+        self.used_names = set()
+        
+        # เพิ่ม global clock declaration
+        self.add_clock("total_time", "0")
+    
+    def add_clock(self, name, init_value="0"):
+        """เพิ่ม clock variable"""
+        if name not in [c['name'] for c in self.clocks]:
+            clock_declaration = {
+                'name': name,
+                'init_value': init_value,
+                'declaration': f"clock {name}={init_value};" if init_value != "0" else f"clock {name};"
+            }
+            self.clocks.append(clock_declaration)
+            self.all_declarations.append(clock_declaration['declaration'])
+            self.used_names.add(name)
+            return True
+        return False
+    
+    def add_channel(self, name, channel_type="broadcast"):
+        """เพิ่ม communication channel"""
+        if name not in [c['name'] for c in self.channels]:
+            channel_declaration = {
+                'name': name,
+                'type': channel_type,
+                'declaration': f"{channel_type} chan {name};"
+            }
+            self.channels.append(channel_declaration)
+            self.all_declarations.append(channel_declaration['declaration'])
+            self.used_names.add(name)
+            return True
+        return False
+    
+    def add_boolean_var(self, name, init_value="false"):
+        """เพิ่ม boolean variable"""
+        if name not in [v['name'] for v in self.boolean_vars]:
+            bool_declaration = {
+                'name': name,
+                'init_value': init_value,
+                'declaration': f"bool {name}={init_value};" if init_value != "false" else f"bool {name};"
+            }
+            self.boolean_vars.append(bool_declaration)
+            self.all_declarations.append(bool_declaration['declaration'])
+            self.used_names.add(name)
+            return True
+        return False
+    
+    def add_integer_var(self, name, min_val=None, max_val=None, init_value="0"):
+        """เพิ่ม integer variable"""
+        if name not in [v['name'] for v in self.integer_vars]:
+            if min_val is not None and max_val is not None:
+                type_spec = f"int[{min_val},{max_val}]"
+            else:
+                type_spec = "int"
+            
+            int_declaration = {
+                'name': name,
+                'type': type_spec,
+                'init_value': init_value,
+                'declaration': f"{type_spec} {name}={init_value};" if init_value != "0" else f"{type_spec} {name};"
+            }
+            self.integer_vars.append(int_declaration)
+            self.all_declarations.append(int_declaration['declaration'])
+            self.used_names.add(name)
+            return True
+        return False
+    
+    def add_constant(self, name, value, data_type="int"):
+        """เพิ่ม constant"""
+        if name not in [c['name'] for c in self.constants]:
+            const_declaration = {
+                'name': name,
+                'value': value,
+                'type': data_type,
+                'declaration': f"const {data_type} {name} = {value};"
+            }
+            self.constants.append(const_declaration)
+            self.all_declarations.append(const_declaration['declaration'])
+            self.used_names.add(name)
+            return True
+        return False
+    
+    def add_function(self, name, return_type, params, body=""):
+        """เพิ่ม function declaration"""
+        if name not in [f['name'] for f in self.functions]:
+            param_str = ", ".join(params) if params else ""
+            func_declaration = {
+                'name': name,
+                'return_type': return_type,
+                'params': params,
+                'body': body,
+                'declaration': f"{return_type} {name}({param_str}){{{body}}}" if body else f"{return_type} {name}({param_str});"
+            }
+            self.functions.append(func_declaration)
+            self.all_declarations.append(func_declaration['declaration'])
+            self.used_names.add(name)
+            return True
+        return False
+    
+    def add_custom_declaration(self, declaration_text):
+        """เพิ่ม custom declaration"""
+        if declaration_text not in self.global_declarations:
+            self.global_declarations.append(declaration_text)
+            self.all_declarations.append(declaration_text)
+            return True
+        return False
+    
+    def generate_unique_name(self, base_name, suffix=""):
+        """สร้างชื่อที่ไม่ซ้ำ"""
+        if suffix:
+            name = f"{base_name}_{suffix}"
+        else:
+            name = base_name
+            
+        counter = 1
+        original_name = name
+        
+        while name in self.used_names:
+            name = f"{original_name}_{counter}"
+            counter += 1
+        
+        return name
+    
+    def get_declarations_by_type(self, declaration_type):
+        """ได้ declarations ตาม type"""
+        type_mapping = {
+            'clocks': self.clocks,
+            'channels': self.channels,
+            'boolean': self.boolean_vars,
+            'integer': self.integer_vars,
+            'constants': self.constants,
+            'functions': self.functions,
+            'custom': self.global_declarations
+        }
+        return type_mapping.get(declaration_type, [])
+    
+    def get_all_declarations(self):
+        """ได้ declarations ทั้งหมดสำหรับ UPPAAL XML"""
+        return sorted(set(self.all_declarations))
+    
+    def get_declarations_text(self):
+        """ได้ declarations ในรูปแบบ text สำหรับใส่ใน XML"""
+        return "\n".join(self.get_all_declarations())
+    
+    def merge_from_list(self, declaration_list):
+        """นำ declarations จาก list มาผสม (สำหรับ backward compatibility)"""
+        for decl in declaration_list:
+            if decl not in self.all_declarations:
+                # วิเคราะห์ประเภทของ declaration
+                if "clock " in decl:
+                    # Extract clock name
+                    parts = decl.replace("clock ", "").replace(";", "").split("=")
+                    name = parts[0].strip()
+                    init_val = parts[1].strip() if len(parts) > 1 else "0"
+                    self.add_clock(name, init_val)
+                elif "chan " in decl:
+                    # Extract channel name
+                    parts = decl.replace(";", "").split(" chan ")
+                    if len(parts) == 2:
+                        channel_type = parts[0].strip()
+                        name = parts[1].strip()
+                        self.add_channel(name, channel_type)
+                elif "bool " in decl:
+                    # Extract boolean variable
+                    parts = decl.replace("bool ", "").replace(";", "").split("=")
+                    name = parts[0].strip()
+                    init_val = parts[1].strip() if len(parts) > 1 else "false"
+                    self.add_boolean_var(name, init_val)
+                elif "int" in decl and "const" not in decl:
+                    # Extract integer variable
+                    if "[" in decl:
+                        # Bounded integer
+                        type_part = decl.split(" ")[0]  # int[min,max]
+                        rest = decl.replace(type_part + " ", "").replace(";", "")
+                        parts = rest.split("=")
+                        name = parts[0].strip()
+                        init_val = parts[1].strip() if len(parts) > 1 else "0"
+                        
+                        # Extract bounds
+                        bounds = type_part.replace("int[", "").replace("]", "").split(",")
+                        min_val = int(bounds[0].strip()) if len(bounds) > 0 else None
+                        max_val = int(bounds[1].strip()) if len(bounds) > 1 else None
+                        self.add_integer_var(name, min_val, max_val, init_val)
+                    else:
+                        # Regular integer
+                        parts = decl.replace("int ", "").replace(";", "").split("=")
+                        name = parts[0].strip()
+                        init_val = parts[1].strip() if len(parts) > 1 else "0"
+                        self.add_integer_var(name, None, None, init_val)
+                else:
+                    # Custom declaration
+                    self.add_custom_declaration(decl)
+    
+    def clear_all(self):
+        """ล้าง declarations ทั้งหมด"""
+        self.clocks.clear()
+        self.channels.clear()
+        self.boolean_vars.clear()
+        self.integer_vars.clear()
+        self.constants.clear()
+        self.functions.clear()
+        self.typedef_declarations.clear()
+        self.global_declarations.clear()
+        self.all_declarations.clear()
+        self.used_names.clear()
+        
+        # เพิ่ม global clock กลับ
+        self.add_clock("total_time", "0")
+    
+    def print_summary(self):
+        """แสดงสรุป declarations"""
+        print("\n" + "="*80)
+        print("📋 DECLARATION MANAGER SUMMARY")
+        print("="*80)
+        print(f"🕒 Clocks: {len(self.clocks)}")
+        for clock in self.clocks:
+            print(f"   • {clock['declaration']}")
+        
+        print(f"\n📡 Channels: {len(self.channels)}")
+        for channel in self.channels:
+            print(f"   • {channel['declaration']}")
+        
+        print(f"\n🔘 Boolean Variables: {len(self.boolean_vars)}")
+        for var in self.boolean_vars:
+            print(f"   • {var['declaration']}")
+        
+        print(f"\n🔢 Integer Variables: {len(self.integer_vars)}")
+        for var in self.integer_vars:
+            print(f"   • {var['declaration']}")
+        
+        print(f"\n📜 Constants: {len(self.constants)}")
+        for const in self.constants:
+            print(f"   • {const['declaration']}")
+        
+        print(f"\n🔧 Functions: {len(self.functions)}")
+        for func in self.functions:
+            print(f"   • {func['declaration']}")
+        
+        print(f"\n🎯 Custom Declarations: {len(self.global_declarations)}")
+        for decl in self.global_declarations:
+            print(f"   • {decl}")
+        
+        print(f"\n📊 Total Declarations: {len(self.all_declarations)}")
+        print("="*80 + "\n")
+
 @app.post("/convert-xml")
 async def convert_xml(file: UploadFile = File(...)):
     try:
@@ -1892,6 +2179,9 @@ async def convert_xml(file: UploadFile = File(...)):
         
         # ตรวจสอบความครบถ้วนของ fork templates
         converter.validate_fork_template_coverage()
+        
+        # แสดงสรุป DeclarationManager
+        converter.template_manager.declaration_manager.print_summary()
         
         # Write to output file
         with open(f"Result/Result_{len(converter.template_manager.templates)}.xml", 'w', encoding='utf-8') as f:
@@ -1956,6 +2246,9 @@ if __name__ == "__main__":
         
         # ตรวจสอบความครบถ้วนของ fork templates
         converter.validate_fork_template_coverage()
+        
+        # แสดงสรุป DeclarationManager
+        converter.template_manager.declaration_manager.print_summary()
         
         # Write to output file
         with open(output_file, 'w', encoding='utf-8') as f:
