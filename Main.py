@@ -1798,7 +1798,6 @@ class XmlConverter:
         return True
 
 
-
 class DeclarationManager:
     """จัดการตัวแปรและ declarations ทั้งหมดที่ใช้ในระบบ UPPAAL"""
     
@@ -2113,7 +2112,7 @@ if __name__ == "__main__":
     import os
     
     # Define input and output folders
-    input_file = "Example_XML/Full_Node_simple.xml"
+    input_file = "Example_XML/2.dicision.xml"
     base_output_file = "Result/Result"
     
     # Create Result directory if it doesn't exist
