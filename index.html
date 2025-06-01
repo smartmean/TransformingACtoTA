@@ -285,29 +285,55 @@
             convertBtn.disabled = true;
             
             try {
-                const response = await fetch('/convert-xml', {
+                const response = await fetch('/convert-xml-download', {
                     method: 'POST',
                     body: formData
                 });
                 
                 if (response.ok) {
-                    const xmlText = await response.text();
+                    const contentType = response.headers.get('content-type');
                     
-                    // Create download blob
-                    const blob = new Blob([xmlText], { type: 'application/xml' });
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = selectedFile.name.replace(/\.(xml|uml)$/i, '_converted.xml');
-                    
-                    showStatus(
-                        'Conversion successful! ' +
-                        `<a href="${url}" download="${a.download}" class="download-btn">Download Result</a>`,
-                        'success'
-                    );
+                    if (contentType && contentType.includes('application/xml')) {
+                        // Handle XML response (successful conversion)
+                        const xmlBlob = await response.blob();
+                        const url = window.URL.createObjectURL(xmlBlob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = selectedFile.name.replace(/\.(xml|uml)$/i, '_converted.xml');
+                        
+                        // Auto download
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                        
+                        showStatus(
+                            '✅ Conversion successful!',
+                            'success'
+                        );
+                    } else {
+                        // Handle text response (legacy fallback)
+                        const xmlText = await response.text();
+                        const blob = new Blob([xmlText], { type: 'application/xml' });
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = selectedFile.name.replace(/\.(xml|uml)$/i, '_converted.xml');
+                        
+                        showStatus(
+                            'Conversion successful! ' +
+                            `<a href="${url}" download="${a.download}" class="download-btn">Download Result</a>`,
+                            'success'
+                        );
+                    }
                 } else {
-                    const errorData = await response.json();
-                    showStatus('Conversion failed: ' + (errorData.error || 'Unknown error'), 'error');
+                    // Handle error response
+                    try {
+                        const errorData = await response.json();
+                        showStatus('❌ Conversion failed: ' + (errorData.error || 'Unknown error'), 'error');
+                    } catch (e) {
+                        showStatus('❌ Conversion failed: Server error', 'error');
+                    }
                 }
             } catch (error) {
                 showStatus('Network error: ' + error.message, 'error');

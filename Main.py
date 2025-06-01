@@ -2061,6 +2061,48 @@ class DeclarationManager:
         print(f"\n📊 Total Declarations: {len(self.all_declarations)}")
         print("="*80 + "\n")
 
+@app.post("/convert-xml-download")
+async def convert_xml_download(file: UploadFile = File(...)):
+    """API endpoint ที่ส่ง XML content กลับโดยตรง"""
+    try:
+        contents = await file.read()
+        activity_root = ET.fromstring(contents)
+
+        converter = XmlConverter()
+        converter.set_activity_root(activity_root)
+        main_template = converter.process_nodes()
+
+        # Initialize variables
+        converter.template_manager.created_transitions = set()
+        
+        # Generate UPPAAL XML
+        result_xml = converter.generate_xml()
+        
+        # ตรวจสอบและแก้ไข main template transitions
+        converter.validate_main_template_transitions()
+        
+        # Generate UPPAAL XML อีกครั้งหลังแก้ไข
+        result_xml = converter.generate_xml()
+        
+        # แสดงสรุป DeclarationManager
+        converter.template_manager.declaration_manager.print_summary()
+        
+        # Write to output file
+        with open(f"Result/Result_{len(converter.template_manager.templates)}.xml", 'w', encoding='utf-8') as f:
+            f.write(result_xml)
+        
+        # ส่ง XML content กลับโดยตรง
+        return Response(content=result_xml, media_type="application/xml", headers={
+            "Content-Disposition": f"attachment; filename={file.filename.replace('.xml', '_converted.xml')}"
+        })
+
+    except ET.ParseError as e:
+        return {"error": f"XML parsing error: {str(e)}"}
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        print(traceback.format_exc())
+        return {"error": f"Unexpected error: {str(e)}"}
+
 @app.post("/convert-xml")
 async def convert_xml(file: UploadFile = File(...)):
     try:
