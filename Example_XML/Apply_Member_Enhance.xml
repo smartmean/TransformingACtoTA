@@ -3,7 +3,7 @@
   <packageImport xmi:type="uml:PackageImport" xmi:id="_dR5okC6UEfCrMfxJ_VLWMw">
     <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
   </packageImport>
-  <packagedElement xmi:type="uml:Activity" xmi:id="_e6A14C6UEfCrMfxJ_VLWMw" name="Apply member" node="_gOYAwC6UEfCrMfxJ_VLWMw _ivmAUC6UEfCrMfxJ_VLWMw _Bw35EDQREfCaFZ5nMamzng _cV7sIDQREfCaFZ5nMamzng _KQ_e4DWkEfCaMaUVnFP1TQ _ZsT9YDWkEfCaMaUVnFP1TQ _tgfSgDWkEfCaMaUVnFP1TQ _ygWewDWkEfCaMaUVnFP1TQ _Biqx8DWmEfCaMaUVnFP1TQ _HDA1EDWmEfCaMaUVnFP1TQ _IwFa4DWmEfCaMaUVnFP1TQ _b5910DWmEfCaMaUVnFP1TQ _LDVacDWnEfCaMaUVnFP1TQ _GxXuoDWqEfCaMaUVnFP1TQ _mx3aMDWrEfCaMaUVnFP1TQ _mLiPQDf2EfCDw5iPNHfOfg _1xrV8D8CEfCwVP3BhYVmPA _4iJ5gD8CEfCwVP3BhYVmPA _95vpQD8CEfCwVP3BhYVmPA _MTxC0D8DEfCwVP3BhYVmPA _Ses7ED8DEfCwVP3BhYVmPA _ZRmLMD8DEfCwVP3BhYVmPA _e0bhoD8DEfCwVP3BhYVmPA _nx2voD8DEfCwVP3BhYVmPA">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_e6A14C6UEfCrMfxJ_VLWMw" name="Apply member" node="_gOYAwC6UEfCrMfxJ_VLWMw _ivmAUC6UEfCrMfxJ_VLWMw _Bw35EDQREfCaFZ5nMamzng _cV7sIDQREfCaFZ5nMamzng _KQ_e4DWkEfCaMaUVnFP1TQ _ZsT9YDWkEfCaMaUVnFP1TQ _tgfSgDWkEfCaMaUVnFP1TQ _ygWewDWkEfCaMaUVnFP1TQ _Biqx8DWmEfCaMaUVnFP1TQ _HDA1EDWmEfCaMaUVnFP1TQ _IwFa4DWmEfCaMaUVnFP1TQ _b5910DWmEfCaMaUVnFP1TQ _LDVacDWnEfCaMaUVnFP1TQ _GxXuoDWqEfCaMaUVnFP1TQ _mx3aMDWrEfCaMaUVnFP1TQ _mLiPQDf2EfCDw5iPNHfOfg _1xrV8D8CEfCwVP3BhYVmPA _4iJ5gD8CEfCwVP3BhYVmPA _95vpQD8CEfCwVP3BhYVmPA _MTxC0D8DEfCwVP3BhYVmPA _Ses7ED8DEfCwVP3BhYVmPA _ZRmLMD8DEfCwVP3BhYVmPA _e0bhoD8DEfCwVP3BhYVmPA _nx2voD8DEfCwVP3BhYVmPA _OKsV8D8IEfCwVP3BhYVmPA _YAWzgD8IEfCwVP3BhYVmPA _eRVCUD8IEfCwVP3BhYVmPA _kp0OYD8IEfCwVP3BhYVmPA">
     <edge xmi:type="uml:ControlFlow" xmi:id="_zqurwC6UEfCrMfxJ_VLWMw" target="_cV7sIDQREfCaFZ5nMamzng" source="_gOYAwC6UEfCrMfxJ_VLWMw"/>
     <edge xmi:type="uml:ControlFlow" xmi:id="_Fbr98DQREfCaFZ5nMamzng" target="_Bw35EDQREfCaFZ5nMamzng" source="_ivmAUC6UEfCrMfxJ_VLWMw"/>
     <edge xmi:type="uml:ControlFlow" xmi:id="_Y_Co0DQREfCaFZ5nMamzng" source="_Bw35EDQREfCaFZ5nMamzng"/>
@@ -20,7 +20,6 @@
     <edge xmi:type="uml:ControlFlow" xmi:id="_VYnosDWmEfCaMaUVnFP1TQ" target="_IwFa4DWmEfCaMaUVnFP1TQ" source="_LDVacDWnEfCaMaUVnFP1TQ"/>
     <edge xmi:type="uml:ControlFlow" xmi:id="_ijGtADWmEfCaMaUVnFP1TQ" target="_b5910DWmEfCaMaUVnFP1TQ" source="_LDVacDWnEfCaMaUVnFP1TQ"/>
     <edge xmi:type="uml:ControlFlow" xmi:id="_c3Jk4DWoEfCaMaUVnFP1TQ" target="_MTxC0D8DEfCwVP3BhYVmPA" source="_HDA1EDWmEfCaMaUVnFP1TQ"/>
-    <edge xmi:type="uml:ControlFlow" xmi:id="_d1eOUDWoEfCaMaUVnFP1TQ" target="_Biqx8DWmEfCaMaUVnFP1TQ" source="_b5910DWmEfCaMaUVnFP1TQ"/>
     <edge xmi:type="uml:ControlFlow" xmi:id="_esv0kDWoEfCaMaUVnFP1TQ" target="_Biqx8DWmEfCaMaUVnFP1TQ" source="_IwFa4DWmEfCaMaUVnFP1TQ"/>
     <edge xmi:type="uml:ControlFlow" xmi:id="_Iyq4ADWqEfCaMaUVnFP1TQ" target="_mx3aMDWrEfCaMaUVnFP1TQ" source="_Biqx8DWmEfCaMaUVnFP1TQ"/>
     <edge xmi:type="uml:ControlFlow" xmi:id="_e2ZtkDWtEfCaMaUVnFP1TQ" source="_mx3aMDWrEfCaMaUVnFP1TQ"/>
@@ -35,6 +34,12 @@
     <edge xmi:type="uml:ControlFlow" xmi:id="_rZI_YD8DEfCwVP3BhYVmPA" target="_nx2voD8DEfCwVP3BhYVmPA" source="_4iJ5gD8CEfCwVP3BhYVmPA"/>
     <edge xmi:type="uml:ControlFlow" xmi:id="_tglNAD8DEfCwVP3BhYVmPA" target="_nx2voD8DEfCwVP3BhYVmPA" source="_95vpQD8CEfCwVP3BhYVmPA"/>
     <edge xmi:type="uml:ControlFlow" xmi:id="_vcHsoD8DEfCwVP3BhYVmPA" target="_GxXuoDWqEfCaMaUVnFP1TQ" source="_nx2voD8DEfCwVP3BhYVmPA"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_V4M0MD8IEfCwVP3BhYVmPA" target="_OKsV8D8IEfCwVP3BhYVmPA" source="_b5910DWmEfCaMaUVnFP1TQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_ipLzYD8IEfCwVP3BhYVmPA" name="[Is Scarlet = No]" target="_YAWzgD8IEfCwVP3BhYVmPA" source="_OKsV8D8IEfCwVP3BhYVmPA"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_jLzYQD8IEfCwVP3BhYVmPA" name="[Is Scarlet = Yes]" target="_eRVCUD8IEfCwVP3BhYVmPA" source="_OKsV8D8IEfCwVP3BhYVmPA"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_no-uMD8IEfCwVP3BhYVmPA" target="_kp0OYD8IEfCwVP3BhYVmPA" source="_YAWzgD8IEfCwVP3BhYVmPA"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_pIG-oD8IEfCwVP3BhYVmPA" target="_kp0OYD8IEfCwVP3BhYVmPA" source="_eRVCUD8IEfCwVP3BhYVmPA"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_pwvr8D8IEfCwVP3BhYVmPA" target="_Biqx8DWmEfCaMaUVnFP1TQ" source="_kp0OYD8IEfCwVP3BhYVmPA"/>
     <node xmi:type="uml:InitialNode" xmi:id="_gOYAwC6UEfCrMfxJ_VLWMw" name="InitialNode" outgoing="_zqurwC6UEfCrMfxJ_VLWMw"/>
     <node xmi:type="uml:OpaqueAction" xmi:id="_ivmAUC6UEfCrMfxJ_VLWMw" name="Submit registration form, t=1" incoming="_UU5z0DWkEfCaMaUVnFP1TQ" outgoing="_Fbr98DQREfCaFZ5nMamzng"/>
     <node xmi:type="uml:OpaqueAction" xmi:id="_Bw35EDQREfCaFZ5nMamzng" name="Validate input data, t=5" incoming="_Fbr98DQREfCaFZ5nMamzng" outgoing="_Y_Co0DQREfCaFZ5nMamzng _gWsKsDWkEfCaMaUVnFP1TQ"/>
@@ -43,10 +48,10 @@
     <node xmi:type="uml:OpaqueAction" xmi:id="_ZsT9YDWkEfCaMaUVnFP1TQ" name="Show error message 1, t = 1" incoming="_YLzz8DWkEfCaMaUVnFP1TQ" outgoing="_eVwNsDWkEfCaMaUVnFP1TQ"/>
     <node xmi:type="uml:OpaqueAction" xmi:id="_tgfSgDWkEfCaMaUVnFP1TQ" name="Show error message 2, t = 1" incoming="_2pHOcDWlEfCaMaUVnFP1TQ" outgoing="_5bE_wDWlEfCaMaUVnFP1TQ"/>
     <node xmi:type="uml:OpaqueAction" xmi:id="_ygWewDWkEfCaMaUVnFP1TQ" name="Make Pay membership fee, t=100" incoming="_7YdH4DWkEfCaMaUVnFP1TQ _5bE_wDWlEfCaMaUVnFP1TQ" outgoing="_tUTbMDWlEfCaMaUVnFP1TQ"/>
-    <node xmi:type="uml:JoinNode" xmi:id="_Biqx8DWmEfCaMaUVnFP1TQ" name="JoinNode1" incoming="_d1eOUDWoEfCaMaUVnFP1TQ _esv0kDWoEfCaMaUVnFP1TQ _kr4dMD8DEfCwVP3BhYVmPA" outgoing="_Iyq4ADWqEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:JoinNode" xmi:id="_Biqx8DWmEfCaMaUVnFP1TQ" name="JoinNode1" incoming="_esv0kDWoEfCaMaUVnFP1TQ _kr4dMD8DEfCwVP3BhYVmPA _pwvr8D8IEfCwVP3BhYVmPA" outgoing="_Iyq4ADWqEfCaMaUVnFP1TQ"/>
     <node xmi:type="uml:OpaqueAction" xmi:id="_HDA1EDWmEfCaMaUVnFP1TQ" name="Save member data,t=10" incoming="_UnRrUDWmEfCaMaUVnFP1TQ" outgoing="_c3Jk4DWoEfCaMaUVnFP1TQ"/>
     <node xmi:type="uml:OpaqueAction" xmi:id="_IwFa4DWmEfCaMaUVnFP1TQ" name="Save Invoice, t=5" incoming="_VYnosDWmEfCaMaUVnFP1TQ" outgoing="_esv0kDWoEfCaMaUVnFP1TQ"/>
-    <node xmi:type="uml:OpaqueAction" xmi:id="_b5910DWmEfCaMaUVnFP1TQ" name="Save Point,t=15" incoming="_ijGtADWmEfCaMaUVnFP1TQ" outgoing="_d1eOUDWoEfCaMaUVnFP1TQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_b5910DWmEfCaMaUVnFP1TQ" name="Check Tier,t=15" incoming="_ijGtADWmEfCaMaUVnFP1TQ" outgoing="_V4M0MD8IEfCwVP3BhYVmPA"/>
     <node xmi:type="uml:ForkNode" xmi:id="_LDVacDWnEfCaMaUVnFP1TQ" name="ForkNode1" incoming="_EiYrYDWmEfCaMaUVnFP1TQ" outgoing="_UnRrUDWmEfCaMaUVnFP1TQ _ijGtADWmEfCaMaUVnFP1TQ _VYnosDWmEfCaMaUVnFP1TQ"/>
     <node xmi:type="uml:ActivityFinalNode" xmi:id="_GxXuoDWqEfCaMaUVnFP1TQ" name="ActivityFinalNode" incoming="_vcHsoD8DEfCwVP3BhYVmPA"/>
     <node xmi:type="uml:OpaqueAction" xmi:id="_mx3aMDWrEfCaMaUVnFP1TQ" name="Receive Invoice, t = 2" incoming="_Iyq4ADWqEfCaMaUVnFP1TQ" outgoing="_e2ZtkDWtEfCaMaUVnFP1TQ _3uK30D8CEfCwVP3BhYVmPA"/>
@@ -59,5 +64,9 @@
     <node xmi:type="uml:OpaqueAction" xmi:id="_ZRmLMD8DEfCwVP3BhYVmPA" name="Save Concent, t=2" incoming="_dzb-sD8DEfCwVP3BhYVmPA" outgoing="_h8qd4D8DEfCwVP3BhYVmPA"/>
     <node xmi:type="uml:JoinNode" xmi:id="_e0bhoD8DEfCwVP3BhYVmPA" name="JoinNode1_1" incoming="_hGK6wD8DEfCwVP3BhYVmPA _h8qd4D8DEfCwVP3BhYVmPA" outgoing="_kr4dMD8DEfCwVP3BhYVmPA"/>
     <node xmi:type="uml:JoinNode" xmi:id="_nx2voD8DEfCwVP3BhYVmPA" name="JoinNode2" incoming="_rZI_YD8DEfCwVP3BhYVmPA _tglNAD8DEfCwVP3BhYVmPA" outgoing="_vcHsoD8DEfCwVP3BhYVmPA"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_OKsV8D8IEfCwVP3BhYVmPA" name="Is Scarlet Tier" incoming="_V4M0MD8IEfCwVP3BhYVmPA" outgoing="_ipLzYD8IEfCwVP3BhYVmPA _jLzYQD8IEfCwVP3BhYVmPA"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_YAWzgD8IEfCwVP3BhYVmPA" name="Skip, t=1" incoming="_ipLzYD8IEfCwVP3BhYVmPA" outgoing="_no-uMD8IEfCwVP3BhYVmPA"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_eRVCUD8IEfCwVP3BhYVmPA" name="Save Point, t=5" incoming="_jLzYQD8IEfCwVP3BhYVmPA" outgoing="_pIG-oD8IEfCwVP3BhYVmPA"/>
+    <node xmi:type="uml:MergeNode" xmi:id="_kp0OYD8IEfCwVP3BhYVmPA" name="MergeNode1" incoming="_no-uMD8IEfCwVP3BhYVmPA _pIG-oD8IEfCwVP3BhYVmPA" outgoing="_pwvr8D8IEfCwVP3BhYVmPA"/>
   </packagedElement>
 </uml:Model>

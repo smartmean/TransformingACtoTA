@@ -2312,7 +2312,7 @@ if __name__ == "__main__":
     import os
     
     # Define input and output folders
-    input_file = "Example_XML/Full_Node_simple.xml"
+    input_file = "Example_XML/Apply_Member_Enhance.xml"
     base_output_file = "Result/Result"
     
     # Create Result directory if it doesn't exist

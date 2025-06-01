@@ -179,10 +179,10 @@ int Sufficient_Balance_;</declaration>
 		</transition>
 	</template>
 	<template>
-		<name>Template1</name>
+		<name>Template_ForkNode1_Branch1</name>
 		<declaration>clock t1;</declaration>
 		<location id="id38" x="0" y="600">
-			<name x="-93" y="561">InitialNode_Template1</name>
+			<name x="-42" y="569">Initial</name>
 		</location>
 		<location id="id39" x="300" y="600">
 			<name x="250" y="570">Notify_HR</name>
@@ -205,10 +205,10 @@ Done_Template1 = true</label>
 		</transition>
 	</template>
 	<template>
-		<name>Template2</name>
+		<name>Template_ForkNode1_Branch2</name>
 		<declaration>clock t2;</declaration>
 		<location id="id43" x="0" y="700">
-			<name x="-93" y="671">InitialNode_Template2</name>
+			<name x="-34" y="663">Initial</name>
 		</location>
 		<location id="id44" x="300" y="700">
 			<name x="250" y="670">Notify_Manager</name>
@@ -231,8 +231,8 @@ Done_Template2 = true</label>
 		</transition>
 	</template>
 	<system>T1 = Template();
-T2 = Template1();
-T3 = Template2();
+T2 = Template_ForkNode1_Branch1();
+T3 = Template_ForkNode1_Branch2();
 system T1, T2, T3;</system>
 	<queries>
 		<query>
