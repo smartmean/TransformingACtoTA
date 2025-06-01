@@ -3,3 +3,5 @@ git commit -m 'xx'
 git push  
 
 uvicorn main:app --reload 
+
+python -m uvicorn Main:app --reload --host 0.0.0.0 --port 8000

@@ -1152,8 +1152,9 @@ class TransitionBuilder:
 
         # Handle different transition types
         if target_type == "uml:DecisionNode":
+            # แก้ไข: ต้องจัดการ time constraints ก่อนถึง DecisionNode ด้วย
+            self._handle_time_and_assignments(transition, template, source_name, target_id, x_mid, y_mid)
             self._handle_decision_node_transition(transition, template, target_name, x_mid, y_mid)
-            # Decision nodes handle their own assignments, skip time handling
         elif source_type == "uml:DecisionNode":
             self._handle_from_decision_transition(transition, source_id, target_id, source_name, x_mid, y_mid)
             # Handle time constraints และ assignments for non-decision transitions
@@ -1179,16 +1180,21 @@ class TransitionBuilder:
         # Add select statement for unique variable selection
         self.add_select_label(transition, f"{var_name}: int[0,1]", x_mid, y_mid - 100)
         
-        # Add assignment with both clock reset and decision variable update
-        clock_name = template["clock_name"]
-        assignment_text = f"{clock_name}:=0, {decision_var} = {var_name}"
-        
-        # สร้าง assignment label เพียงอันเดียว ไม่ทับซ้อน
-        self.add_assignment_label(transition, assignment_text, x_mid, y_mid - 40)
+        # ตรวจสอบว่ามี assignment label จาก time constraints แล้วหรือไม่
+        existing_assign = transition.find("label[@kind='assignment']")
+        if existing_assign is not None:
+            # ถ้ามี assignment แล้ว (จาก time constraints) ให้เพิ่ม decision variable เข้าไป
+            existing_assign.text += f", {decision_var} = {var_name}"
+            print(f"DEBUG: Updated existing assignment: {existing_assign.text}")
+        else:
+            # ถ้าไม่มี assignment ให้สร้างใหม่ (กรณีไม่มี time constraints)
+            clock_name = template["clock_name"]
+            assignment_text = f"{clock_name}:=0, {decision_var} = {var_name}"
+            self.add_assignment_label(transition, assignment_text, x_mid, y_mid - 40)
+            print(f"DEBUG: Created new assignment: {assignment_text}")
             
         print(f"DEBUG: Created decision transition:")
         print(f"       Select: {var_name}: int[0,1]")
-        print(f"       Assignment: {assignment_text}")
         print(f"       Decision variable: {decision_var} = {var_name}")
     
     def _handle_from_decision_transition(self, transition, source_id, target_id, source_name, x_mid, y_mid):
@@ -2154,7 +2160,7 @@ if __name__ == "__main__":
     import os
     
     # Define input and output folders
-    input_file = "Example_XML/2.dicision.xml"
+    input_file = "Example_XML/Online_Package_Delivery_Tracking System.xml"
     base_output_file = "Result/Result"
     
     # Create Result directory if it doesn't exist
