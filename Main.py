@@ -732,7 +732,7 @@ class TemplateManager:
             return fork_template
         
         initial_id = f"fork_{hierarchical_name}"
-        self.add_location(fork_template, initial_id, f"InitialNode_{hierarchical_name}", "InitialNode")
+        self.add_location(fork_template, initial_id, "Initial", "InitialNode")
         
         # เก็บ nodes ของ branch นี้
         branch_nodes = self._get_all_branch_nodes(outgoing_edge, fork_id)
@@ -1797,20 +1797,6 @@ class XmlConverter:
         
         return True
 
-    def _find_fork_for_join(self, join_node_id):
-        """หา ForkNode ที่ corresponding กับ JoinNode นี้"""
-        if not self.parser:
-            return None
-        
-        # ตรวจสอบทุก ForkNode เพื่อหาว่า JoinNode นี้เป็น corresponding join ของ fork ไหน
-        for fork_id in self.parser.get_coordination_nodes():
-            fork_type = self.parser.get_node_type(fork_id)
-            if fork_type in ("uml:ForkNode", "ForkNode"):
-                corresponding_join = self.parser._find_corresponding_join(fork_id)
-                if corresponding_join == join_node_id:
-                    return fork_id
-        
-        return None
 
 
 class DeclarationManager:
