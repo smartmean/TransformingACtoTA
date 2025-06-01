@@ -7,23 +7,23 @@ int Is_Success;</declaration>
   <template>
     <name>Template</name>
     <declaration>clock t;</declaration>
-    <location id="_qvhY4AjEEfC6auwq1Ibwow" x="0" y="200">
-      <name x="-50" y="170">Is_Success_Decision</name>
+    <location id="_P2klcDHBEfCaFZ5nMamzng" x="0" y="100">
+      <name x="-50" y="70">Save_order</name>
       </location>
-    <location id="_czUeoAgSEfCZsMCbbT0p_Q" x="300" y="200">
-      <name x="250" y="170">ActivityFinalNode</name>
+    <location id="_qvhY4AjEEfC6auwq1Ibwow" x="300" y="200">
+      <name x="250" y="170">Is_Success_Decision</name>
       </location>
-    <location id="_P2klcDHBEfCaFZ5nMamzng" x="600" y="200">
-      <name x="550" y="170">Save_order</name>
+    <location id="_PZfWwAgSEfCZsMCbbT0p_Q" x="600" y="200">
+      <name x="550" y="170">InitialNode</name>
       </location>
     <location id="_VxqZwAgSEfCZsMCbbT0p_Q" x="900" y="200">
       <name x="850" y="170">Complete_the_order</name>
       </location>
-    <location id="_z09TYAjEEfC6auwq1Ibwow" x="1200" y="200">
-      <name x="1150" y="170">Re_order</name>
+    <location id="_czUeoAgSEfCZsMCbbT0p_Q" x="1200" y="200">
+      <name x="1150" y="170">ActivityFinalNode</name>
       </location>
-    <location id="_PZfWwAgSEfCZsMCbbT0p_Q" x="1500" y="200">
-      <name x="1450" y="170">InitialNode</name>
+    <location id="_z09TYAjEEfC6auwq1Ibwow" x="1500" y="200">
+      <name x="1450" y="170">Re_order</name>
       </location>
     <init ref="_PZfWwAgSEfCZsMCbbT0p_Q" />
     <transition id="_PZfWwAgSEfCZsMCbbT0p_Q__VxqZwAgSEfCZsMCbbT0p_Q">
@@ -33,30 +33,31 @@ int Is_Success;</declaration>
     <transition id="_qvhY4AjEEfC6auwq1Ibwow__P2klcDHBEfCaFZ5nMamzng">
       <source ref="_qvhY4AjEEfC6auwq1Ibwow" />
       <target ref="_P2klcDHBEfCaFZ5nMamzng" />
-      <label kind="guard" x="300" y="120">Is_Success==1</label>
+      <label kind="guard" x="150" y="70">Is_Success==1</label>
       </transition>
     <transition id="_VxqZwAgSEfCZsMCbbT0p_Q__qvhY4AjEEfC6auwq1Ibwow">
       <source ref="_VxqZwAgSEfCZsMCbbT0p_Q" />
       <target ref="_qvhY4AjEEfC6auwq1Ibwow" />
-      <label kind="select" x="450" y="100">i2: int[0,1]</label>
-      <label kind="assignment" x="450" y="160">t:=0, Is_Success = i2</label>
+      <label kind="guard" x="600" y="140">t&gt;10</label>
+      <label kind="assignment" x="600" y="160">t:=0, Is_Success = i1</label>
+      <label kind="select" x="600" y="100">i1: int[0,1]</label>
       </transition>
     <transition id="_qvhY4AjEEfC6auwq1Ibwow__z09TYAjEEfC6auwq1Ibwow">
       <source ref="_qvhY4AjEEfC6auwq1Ibwow" />
       <target ref="_z09TYAjEEfC6auwq1Ibwow" />
-      <label kind="guard" x="600" y="120">Is_Success==0</label>
+      <label kind="guard" x="900" y="120">Is_Success==0</label>
       </transition>
     <transition id="_z09TYAjEEfC6auwq1Ibwow__VxqZwAgSEfCZsMCbbT0p_Q">
       <source ref="_z09TYAjEEfC6auwq1Ibwow" />
       <target ref="_VxqZwAgSEfCZsMCbbT0p_Q" />
-      <label kind="guard" x="1050" y="140">t&gt;5</label>
-      <label kind="assignment" x="1050" y="160">t:=0</label>
+      <label kind="guard" x="1200" y="140">t&gt;5</label>
+      <label kind="assignment" x="1200" y="160">t:=0</label>
       </transition>
     <transition id="_P2klcDHBEfCaFZ5nMamzng__czUeoAgSEfCZsMCbbT0p_Q">
       <source ref="_P2klcDHBEfCaFZ5nMamzng" />
       <target ref="_czUeoAgSEfCZsMCbbT0p_Q" />
-      <label kind="guard" x="450" y="140">t&gt;7</label>
-      <label kind="assignment" x="450" y="160">t:=0</label>
+      <label kind="guard" x="600" y="90">t&gt;7</label>
+      <label kind="assignment" x="600" y="110">t:=0</label>
       </transition>
     </template>
   <system>T1 = Template();

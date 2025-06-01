@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activity Diagram to Timed Automata Converter</title>
+    <title>TAC To TA Converter</title>
     <style>
         * {
             margin: 0;
@@ -23,77 +23,125 @@
         
         .container {
             background: white;
-            border-radius: 20px;
+            border-radius: 24px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 40px;
-            max-width: 600px;
+            padding: 32px;
+            max-width: 480px;
             width: 100%;
             text-align: center;
         }
         
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        
+        .icon {
+            background: #667eea;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+        
         h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
+            color: #1a1a1a;
+            font-size: 24px;
             font-weight: 600;
+            margin: 0;
         }
         
         .subtitle {
-            color: #666;
-            margin-bottom: 40px;
-            font-size: 1.1em;
+            color: #6b7280;
+            margin-bottom: 32px;
+            font-size: 14px;
+            line-height: 1.4;
         }
         
         .upload-area {
-            border: 3px dashed #667eea;
-            border-radius: 15px;
-            padding: 60px 20px;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 48px 24px;
+            margin-bottom: 24px;
+            transition: all 0.2s ease;
             cursor: pointer;
-            background: #f8f9ff;
+            background: #fafafa;
+            position: relative;
         }
         
         .upload-area:hover, .upload-area.dragover {
-            border-color: #764ba2;
-            background: #f0f2ff;
-            transform: translateY(-2px);
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .upload-area.has-file {
+            border-color: #667eea;
+            background: #f8f9ff;
         }
         
         .upload-icon {
-            font-size: 4em;
-            color: #667eea;
-            margin-bottom: 20px;
+            font-size: 48px;
+            margin-bottom: 16px;
         }
         
         .upload-text {
-            color: #333;
-            font-size: 1.2em;
-            margin-bottom: 10px;
+            color: #4b5563;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: 500;
         }
         
         .upload-subtext {
-            color: #666;
-            font-size: 0.9em;
+            color: #9ca3af;
+            font-size: 14px;
         }
         
         #fileInput {
             display: none;
         }
         
+        .file-info {
+            margin: 16px 0;
+            padding: 16px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            display: none;
+            text-align: left;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .file-size {
+            color: #6b7280;
+            font-size: 12px;
+        }
+        
         .convert-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #667eea;
             color: white;
             border: none;
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-size: 1.1em;
+            padding: 14px 32px;
+            border-radius: 24px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             opacity: 0.5;
             pointer-events: none;
-            margin: 20px 0;
+            margin: 16px 0;
+            width: 120px;
         }
         
         .convert-btn:enabled {
@@ -102,168 +150,169 @@
         }
         
         .convert-btn:enabled:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            background: #5a67d8;
+            transform: translateY(-1px);
         }
         
-        .file-info {
-            background: #f8f9fa;
-            border-radius: 10px;
+        .convert-btn:disabled {
+            cursor: not-allowed;
+        }
+        
+        .result-area {
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            border-radius: 12px;
             padding: 20px;
-            margin: 20px 0;
+            margin-top: 20px;
             display: none;
         }
         
-        .file-name {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
+        .result-text {
+            color: #065f46;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 16px;
         }
         
-        .file-size {
-            color: #666;
-            font-size: 0.9em;
+        .download-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .download-btn:hover {
+            background: #059669;
+            transform: translateY(-1px);
         }
         
         .status {
             margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 16px;
+            border-radius: 12px;
             display: none;
-        }
-        
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            font-size: 14px;
         }
         
         .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
         }
         
         .status.loading {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #dbeafe;
         }
         
         .spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #0c5460;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e5e7eb;
+            border-top: 2px solid #2563eb;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-right: 10px;
+            margin-right: 8px;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .download-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .download-btn:hover {
-            background: #218838;
-            transform: translateY(-1px);
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔄 TAC To TA Converter</h1>
+        <div class="header">
+            <div class="icon">⚡</div>
+            <h1>TAC To TA Converter</h1>
+        </div>
         <p class="subtitle">Convert XML of Timed Activity Diagram to XML of Timed Automata</p>
         
-        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
             <div class="upload-icon">📁</div>
             <div class="upload-text">Click to select file</div>
             <div class="upload-subtext">Supported formats: .xml</div>
         </div>
         
-        <input type="file" id="fileInput" accept=".xml,.uml" />
+        <input type="file" id="fileInput" accept=".xml" />
         
         <div class="file-info" id="fileInfo">
             <div class="file-name" id="fileName"></div>
             <div class="file-size" id="fileSize"></div>
         </div>
         
-        <button class="convert-btn" id="convertBtn" disabled>
-            Convert
-        </button>
+        <button class="convert-btn" id="convertBtn" onclick="convertFile()" disabled>Convert</button>
+        
+        <div class="result-area" id="resultArea">
+            <div class="result-text">Conversion successful!</div>
+            <a href="#" class="download-btn" id="downloadBtn">Download Result</a>
+        </div>
         
         <div class="status" id="status"></div>
     </div>
 
     <script>
+        let selectedFile = null;
+        let convertedXmlBlob = null;
+
         const fileInput = document.getElementById('fileInput');
-        const uploadArea = document.querySelector('.upload-area');
+        const uploadArea = document.getElementById('uploadArea');
         const fileInfo = document.getElementById('fileInfo');
         const fileName = document.getElementById('fileName');
         const fileSize = document.getElementById('fileSize');
         const convertBtn = document.getElementById('convertBtn');
+        const resultArea = document.getElementById('resultArea');
+        const downloadBtn = document.getElementById('downloadBtn');
         const status = document.getElementById('status');
-        
-        let selectedFile = null;
 
-        // Drag & Drop functionality
-        uploadArea.addEventListener('dragover', (e) => {
+        // File input change handler
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+                displayFileInfo(selectedFile);
+            }
+        });
+
+        // Drag and drop handlers
+        uploadArea.addEventListener('dragover', function(e) {
             e.preventDefault();
             uploadArea.classList.add('dragover');
         });
 
-        uploadArea.addEventListener('dragleave', () => {
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
             uploadArea.classList.remove('dragover');
         });
 
-        uploadArea.addEventListener('drop', (e) => {
+        uploadArea.addEventListener('drop', function(e) {
             e.preventDefault();
             uploadArea.classList.remove('dragover');
             
             const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFileSelect(files[0]);
+            if (files.length > 0 && files[0].name.endsWith('.xml')) {
+                selectedFile = files[0];
+                fileInput.files = files;
+                displayFileInfo(selectedFile);
             }
         });
 
-        // File input change
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFileSelect(e.target.files[0]);
-            }
-        });
-
-        function handleFileSelect(file) {
-            const validExtensions = ['.xml', '.uml'];
-            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-            
-            if (!validExtensions.includes(fileExtension)) {
-                showStatus('Please select a valid XML or UML file.', 'error');
-                return;
-            }
-            
-            selectedFile = file;
+        function displayFileInfo(file) {
             fileName.textContent = file.name;
             fileSize.textContent = formatFileSize(file.size);
             fileInfo.style.display = 'block';
             convertBtn.disabled = false;
+            uploadArea.classList.add('has-file');
+            resultArea.style.display = 'none';
             hideStatus();
         }
 
@@ -275,15 +324,18 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
-        convertBtn.addEventListener('click', async () => {
-            if (!selectedFile) return;
-            
+        async function convertFile() {
+            if (!selectedFile) {
+                showStatus('Please select a file first.', 'error');
+                return;
+            }
+
             const formData = new FormData();
             formData.append('file', selectedFile);
-            
-            showStatus('Converting file...', 'loading');
+
+            showStatus('Converting...', 'loading');
             convertBtn.disabled = true;
-            
+
             try {
                 const response = await fetch('/convert-xml-download', {
                     method: 'POST',
@@ -295,58 +347,37 @@
                     
                     if (contentType && contentType.includes('application/xml')) {
                         // Handle XML response (successful conversion)
-                        const xmlBlob = await response.blob();
-                        const url = window.URL.createObjectURL(xmlBlob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = selectedFile.name.replace(/\.(xml|uml)$/i, '_converted.xml');
+                        convertedXmlBlob = await response.blob();
                         
-                        // Auto download
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        window.URL.revokeObjectURL(url);
+                        // Set up download link
+                        const url = window.URL.createObjectURL(convertedXmlBlob);
+                        downloadBtn.href = url;
+                        downloadBtn.download = selectedFile.name.replace(/\.(xml|uml)$/i, '_converted.xml');
                         
-                        showStatus(
-                            '✅ Conversion successful!',
-                            'success'
-                        );
+                        // Show success result
+                        hideStatus();
+                        resultArea.style.display = 'block';
+                        
                     } else {
-                        // Handle text response (legacy fallback)
-                        const xmlText = await response.text();
-                        const blob = new Blob([xmlText], { type: 'application/xml' });
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = selectedFile.name.replace(/\.(xml|uml)$/i, '_converted.xml');
-                        
-                        showStatus(
-                            'Conversion successful! ' +
-                            `<a href="${url}" download="${a.download}" class="download-btn">Download Result</a>`,
-                            'success'
-                        );
+                        // Handle JSON error response
+                        const result = await response.json();
+                        showStatus(`Error: ${result.error || 'Unknown error occurred'}`, 'error');
                     }
                 } else {
-                    // Handle error response
-                    try {
-                        const errorData = await response.json();
-                        showStatus('❌ Conversion failed: ' + (errorData.error || 'Unknown error'), 'error');
-                    } catch (e) {
-                        showStatus('❌ Conversion failed: Server error', 'error');
-                    }
+                    showStatus(`Error: ${response.status} - ${response.statusText}`, 'error');
                 }
             } catch (error) {
-                showStatus('Network error: ' + error.message, 'error');
+                showStatus(`Error: ${error.message}`, 'error');
             } finally {
                 convertBtn.disabled = false;
             }
-        });
+        }
 
         function showStatus(message, type) {
             status.className = `status ${type}`;
             
             if (type === 'loading') {
-                status.innerHTML = '<span class="spinner"></span>' + message;
+                status.innerHTML = `<span class="spinner"></span>${message}`;
             } else {
                 status.innerHTML = message;
             }

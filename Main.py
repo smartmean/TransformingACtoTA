@@ -145,47 +145,110 @@ class ActivityDiagramParser:
             self._trace_main_flow(initial_id)
     
     def _trace_main_flow(self, start_node, visited=None, max_depth=30):
-        """ติดตาม main coordination flow - แยก fork branches ออก"""
+        """ติดตาม main coordination flow - รวม main business processes แต่แยก fork branches"""
         if visited is None:
             visited = set()
             
-        if max_depth <= 0 or start_node in visited:
-            return
+        # ใช้ iterative approach แทน recursive เพื่อจัดการ loops
+        to_process = [(start_node, max_depth)]
+        
+        while to_process:
+            current_node, depth = to_process.pop(0)
             
-        visited.add(start_node)
-        node_type = self.node_types.get(start_node)
-        
-        # เพิ่มเฉพาะ coordination nodes และ main flow nodes
-        if start_node in self.coordination_nodes:
-            # ตรวจสอบว่าเป็น JoinNode ของ nested fork หรือไม่
-            if node_type in ("uml:JoinNode", "JoinNode"):
-                if self._is_nested_fork_join(start_node):
-                    # ข้าม JoinNode ที่เป็นของ nested fork
-                    return
-            self.main_flow_nodes.add(start_node)
-        elif node_type in ("uml:OpaqueAction", "OpaqueAction"):
-            if self._is_main_flow_process(start_node) or self._is_main_coordination_process(start_node):
-                self.main_flow_nodes.add(start_node)
-        elif node_type in ("uml:DecisionNode", "DecisionNode", "uml:MergeNode", "MergeNode"):
-            # รวม Decision2 และ decision nodes ที่เป็นส่วนของ main flow
-            if self._is_main_flow_decision(start_node) or self._is_main_coordination_decision(start_node):
-                self.main_flow_nodes.add(start_node)
-        
-        # ถ้าเป็น ForkNode ให้ข้าม branches และไปที่ corresponding JoinNode
-        if node_type in ("uml:ForkNode", "ForkNode"):
-            join_node = self._find_corresponding_join(start_node)
-            if join_node:
-                # เพิ่ม JoinNode เข้าไปใน main flow และติดตาม path ต่อ
-                if not self._is_nested_fork_join(join_node):
+            if depth <= 0 or current_node in visited:
+                continue
+                
+            visited.add(current_node)
+            node_type = self.node_types.get(current_node)
+            
+            # เพิ่ม coordination nodes เสมอ
+            if current_node in self.coordination_nodes:
+                # ตรวจสอบว่าเป็น JoinNode ของ nested fork หรือไม่
+                if node_type in ("uml:JoinNode", "JoinNode"):
+                    if self._is_nested_fork_join(current_node):
+                        # ข้าม JoinNode ที่เป็นของ nested fork
+                        continue
+                self.main_flow_nodes.add(current_node)
+                
+            # เพิ่ม DecisionNode และ MergeNode ที่เป็น main coordination
+            elif node_type in ("uml:DecisionNode", "DecisionNode", "uml:MergeNode", "MergeNode"):
+                if self._is_pure_coordination_decision(current_node):
+                    self.main_flow_nodes.add(current_node)
+                    
+            # เพิ่ม main business flow processes (ไม่ใช่ fork branch processes)
+            elif node_type in ("uml:OpaqueAction", "OpaqueAction"):
+                if self._is_main_business_flow_process(current_node):
+                    self.main_flow_nodes.add(current_node)
+            
+            # ถ้าเป็น ForkNode ให้ข้าม branches และไปที่ corresponding JoinNode
+            if node_type in ("uml:ForkNode", "ForkNode"):
+                join_node = self._find_corresponding_join(current_node)
+                if join_node and not self._is_nested_fork_join(join_node):
                     self.main_flow_nodes.add(join_node)
-                    # ติดตาม path หลัง JoinNode ต่อไป
+                    # เพิ่ม path หลัง JoinNode ลงใน queue
                     for next_node in self.adjacency_list.get(join_node, []):
-                        self._trace_main_flow(next_node, visited, max_depth - 1)
-                return  # หยุดการ trace path ปกติเพราะเราไปที่ JoinNode แล้ว
-        else:
-            # ติดตาม outgoing edges ปกติ
-            for next_node in self.adjacency_list.get(start_node, []):
-                self._trace_main_flow(next_node, visited, max_depth - 1)
+                        to_process.append((next_node, depth - 1))
+            else:
+                # ติดตาม outgoing edges ปกติ
+                for next_node in self.adjacency_list.get(current_node, []):
+                    to_process.append((next_node, depth - 1))
+    
+    def _is_main_business_flow_process(self, node_id):
+        """ตรวจสอบว่า process node เป็นส่วนของ main business flow หรือไม่"""
+        node_type = self.node_types.get(node_id)
+        if node_type not in ("uml:OpaqueAction", "OpaqueAction"):
+            return False
+            
+        # ถ้าเป็น target โดยตรงของ ForkNode -> ไม่ใช่ main flow (เป็น fork branch)
+        for source in self.reverse_adjacency.get(node_id, []):
+            if self.node_types.get(source) in ("uml:ForkNode", "ForkNode"):
+                return False
+        
+        # ถ้าอยู่ใน fork branch -> ไม่ใช่ main flow
+        if self.is_fork_branch_node(node_id):
+            return False
+            
+        # ตรวจสอบว่าเป็น main business flow patterns
+        node_name = self.node_names.get(node_id, "").lower()
+        
+        # Main business flow keywords
+        main_flow_keywords = [
+            "enter", "submit", "validate", "make pay", "receive", 
+            "show error", "personal information", "registration", 
+            "membership fee", "invoice"
+        ]
+        
+        # ถ้าชื่อมี keywords ของ main flow
+        for keyword in main_flow_keywords:
+            if keyword in node_name:
+                return True
+                
+        # ตรวจสอบ connections กับ coordination structures
+        return self._has_main_flow_connections(node_id)
+    
+    def _has_main_flow_connections(self, node_id):
+        """ตรวจสอบว่ามี connections กับ main flow structures หรือไม่"""
+        # ตรวจสอบ incoming จาก coordination nodes หรือ decision nodes
+        for source in self.reverse_adjacency.get(node_id, []):
+            source_type = self.node_types.get(source)
+            if source_type in ("uml:InitialNode", "InitialNode", "uml:JoinNode", "JoinNode", "uml:DecisionNode", "DecisionNode"):
+                return True
+            # หรือจาก process nodes ที่เป็น main flow
+            elif source_type in ("uml:OpaqueAction", "OpaqueAction") and source in self.main_flow_nodes:
+                return True
+        
+        # ตรวจสอบ outgoing ไปยัง coordination nodes หรือ decision nodes
+        for target in self.adjacency_list.get(node_id, []):
+            target_type = self.node_types.get(target)
+            if target_type in ("uml:ForkNode", "ForkNode", "uml:ActivityFinalNode", "ActivityFinalNode", "uml:DecisionNode", "DecisionNode"):
+                return True
+            # หรือไปยัง process nodes ที่เป็น main flow
+            elif target_type in ("uml:OpaqueAction", "OpaqueAction"):
+                # ตรวจสอบว่า target นำไปสู่ coordination หรือไม่
+                if self._eventually_leads_to_coordination(target, max_depth=3):
+                    return True
+        
+        return False
     
     def _is_main_flow_process(self, node_id):
         """ตรวจสอบว่า process node อยู่ใน main flow หรือไม่ - แยก fork branches"""
@@ -489,6 +552,95 @@ class ActivityDiagramParser:
             return True
         
         return False
+
+    def _is_pure_coordination_decision(self, node_id):
+        """ตรวจสอบว่า decision node เป็น pure coordination หรือไม่"""
+        node_type = self.node_types.get(node_id)
+        if node_type not in ("uml:DecisionNode", "DecisionNode", "uml:MergeNode", "MergeNode"):
+            return False
+            
+        # ถ้าอยู่ใน fork branch -> ไม่ใช่ main coordination
+        if self.is_fork_branch_node(node_id):
+            return False
+            
+        # ตรวจสอบว่ามี direct connection กับ coordination structures หรือไม่
+        incoming_sources = self.reverse_adjacency.get(node_id, [])
+        outgoing_targets = self.adjacency_list.get(node_id, [])
+        
+        # ต้องมี connection กับ coordination structures
+        has_coord_connection = False
+        
+        # ตรวจสอบ incoming จาก coordination nodes หรือ process nodes ที่เชื่อมกับ coordination
+        for source in incoming_sources:
+            source_type = self.node_types.get(source)
+            if source_type in ("uml:InitialNode", "InitialNode", "uml:JoinNode", "JoinNode"):
+                has_coord_connection = True
+                break
+            elif source_type in ("uml:OpaqueAction", "OpaqueAction"):
+                # ถ้ามาจาก process node ให้ตรวจสอบว่า process node นั้นเชื่อมกับ coordination หรือไม่
+                if self._process_connects_to_coordination(source):
+                    has_coord_connection = True
+                    break
+                    
+        # ตรวจสอบ outgoing ไปยัง coordination nodes (ผ่าน process nodes)
+        if not has_coord_connection:
+            for target in outgoing_targets:
+                if self._eventually_leads_to_coordination(target, max_depth=3):
+                    has_coord_connection = True
+                    break
+                    
+        return has_coord_connection
+    
+    def _process_connects_to_coordination(self, process_node_id):
+        """ตรวจสอบว่า process node เชื่อมกับ coordination structures หรือไม่"""
+        # ตรวจสอบ incoming sources ของ process node
+        incoming_sources = self.reverse_adjacency.get(process_node_id, [])
+        for source in incoming_sources:
+            source_type = self.node_types.get(source)
+            if source_type in ("uml:InitialNode", "InitialNode", "uml:JoinNode", "JoinNode"):
+                return True
+                
+        # ตรวจสอบ outgoing targets ของ process node  
+        outgoing_targets = self.adjacency_list.get(process_node_id, [])
+        for target in outgoing_targets:
+            target_type = self.node_types.get(target)
+            if target_type in ("uml:ForkNode", "ForkNode", "uml:ActivityFinalNode", "ActivityFinalNode"):
+                return True
+                
+        return False
+    
+    def _is_main_flow_process(self, node_id):
+        """ตรวจสอบว่า process node เป็นส่วนของ main business flow หรือไม่"""
+        node_type = self.node_types.get(node_id)
+        if node_type not in ("uml:OpaqueAction", "OpaqueAction"):
+            return False
+            
+        # ถ้าเป็น target โดยตรงของ ForkNode -> ไม่ใช่ main flow (เป็น fork branch)
+        for source in self.reverse_adjacency.get(node_id, []):
+            if self.node_types.get(source) in ("uml:ForkNode", "ForkNode"):
+                return False
+        
+        # ถ้าอยู่ใน fork branch -> ไม่ใช่ main flow
+        if self.is_fork_branch_node(node_id):
+            return False
+            
+        # ตรวจสอบว่าเป็น main business flow patterns
+        node_name = self.node_names.get(node_id, "").lower()
+        
+        # Main business flow keywords
+        main_flow_keywords = [
+            "enter", "submit", "validate", "make pay", "receive", 
+            "show error", "personal information", "registration", 
+            "membership fee", "invoice"
+        ]
+        
+        # ถ้าชื่อมี keywords ของ main flow
+        for keyword in main_flow_keywords:
+            if keyword in node_name:
+                return True
+                
+        # ตรวจสอบ connections กับ coordination structures
+        return self._has_main_flow_connections(node_id)
 
 class LocationBuilder:
     """จัดการการสร้างและจัดตำแหน่ง location ใน UPPAAL templates"""
@@ -2160,7 +2312,7 @@ if __name__ == "__main__":
     import os
     
     # Define input and output folders
-    input_file = "Example_XML/Online_Package_Delivery_Tracking System.xml"
+    input_file = "Example_XML/Full_Node_simple.xml"
     base_output_file = "Result/Result"
     
     # Create Result directory if it doesn't exist
