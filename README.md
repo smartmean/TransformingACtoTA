@@ -1,6 +1,100 @@
-# Activity Diagram to UPPAAL Converter
+# XML to UPPAAL Converter
 
-🔄 เครื่องมือแปลง Activity Diagram XML เป็น UPPAAL Timed Automata XML
+A web application for converting XML Activity Diagrams to UPPAAL format.
+
+## 🏗️ Project Structure
+
+```
+TransformingACtoTA/
+├── backend/                 # Backend API (FastAPI)
+│   ├── app/
+│   │   ├── main.py         # FastAPI application entry point
+│   │   ├── config.py       # Configuration settings
+│   │   ├── routes/
+│   │   │   └── api.py      # API endpoints
+│   │   └── services/
+│   │       └── converter.py # XML to UPPAAL conversion logic
+│   └── requirements.txt    # Python dependencies
+├── frontend/               # Frontend (HTML/CSS/JS)
+│   └── index.html         # Main frontend interface
+├── shared/                 # Shared resources
+│   ├── Example_XML/       # Example XML files
+│   └── Result/            # Generated UPPAAL files
+└── README.md              # This file
+```
+
+## 🚀 Quick Start
+
+### Backend Setup
+
+1. **Navigate to backend directory:**
+   ```bash
+   cd backend
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run the server:**
+   ```bash
+   python -m app.main
+   ```
+
+### Frontend Access
+
+- **Main Interface:** http://127.0.0.1:8000/
+- **API Documentation:** http://127.0.0.1:8000/docs
+
+## 📁 Directory Structure Explained
+
+### Backend (`/backend`)
+- **`app/main.py`** - FastAPI application setup and server configuration
+- **`app/config.py`** - Application settings and configuration
+- **`app/routes/api.py`** - API endpoints for XML conversion
+- **`app/services/converter.py`** - Core conversion logic
+
+### Frontend (`/frontend`)
+- **`index.html`** - User interface for file upload and conversion
+
+### Shared (`/shared`)
+- **`Example_XML/`** - Sample XML files for testing
+- **`Result/`** - Generated UPPAAL files
+
+## 🔧 API Endpoints
+
+- **`GET /`** - Serve frontend interface
+- **`POST /convert-xml`** - Convert XML to UPPAAL (returns JSON)
+- **`POST /convert-xml-download`** - Convert XML to UPPAAL (downloads file)
+
+## 🎯 Benefits of This Structure
+
+1. **Separation of Concerns** - Backend and frontend are clearly separated
+2. **Scalability** - Easy to add new features to either backend or frontend
+3. **Maintainability** - Clear organization makes code easier to maintain
+4. **Deployment Flexibility** - Can deploy backend and frontend separately
+5. **Team Collaboration** - Different teams can work on different parts
+
+## 🛠️ Development
+
+### Adding New API Endpoints
+1. Add new routes in `backend/app/routes/api.py`
+2. Import and include in `backend/app/main.py`
+
+### Adding New Services
+1. Create new service files in `backend/app/services/`
+2. Import and use in routes
+
+### Frontend Changes
+1. Modify files in `frontend/` directory
+2. Access via `http://127.0.0.1:8000/`
+
+## 📝 Notes
+
+- The backend serves the frontend static files
+- All generated files are saved in `shared/Result/`
+- Example files are available in `shared/Example_XML/`
 
 ## ✨ คุณสมบัติ
 
